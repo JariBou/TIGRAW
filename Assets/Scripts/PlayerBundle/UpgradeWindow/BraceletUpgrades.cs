@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum UpgradeType
+{
+        
+}
+
 public class BraceletUpgrades
 {
-    public enum UpgradeType
-    {
-        
-    }
+  
 
     private List<UpgradeType> unlockedUpgradesTypeList;
 
