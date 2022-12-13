@@ -8,23 +8,15 @@ public class Projectile : MonoBehaviour
     public Spell spell;
 
     private bool _hasCollided = false;
-    
+
+    public List<int> collidedEnnemiesId;
+
     // Start is called before the first frame update
     void Start()
     {
-
-        RaycastHit2D hit = Physics2D.Raycast(Player.instance.GetPosition(), spell.direction,
-            new Vector2(spell.direction.x, spell.direction.y).sqrMagnitude, spell.wallLayer);
+        collidedEnnemiesId = new List<int>();
         
-
-        if (hit.transform.gameObject != null)
-        {
-            if (hit.transform.gameObject.CompareTag("Wall"))
-            {
-
-                Destroy(this);
-            }
-        }
+        
         Player.instance.heatAmount += spell.heatProduction;
 
         
@@ -44,31 +36,48 @@ public class Projectile : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collider)
     {
         
+        if(_hasCollided) {return;}
+        
         
         if (collider.CompareTag("Enemy") )
         {
-            Debug.Log("HIT ENNEMY!");
-            collider.GetComponent<MeleeEnemyScript>().Damage(spell.damage);
+            // Debug.Log("HIT ENNEMY!");
+            EnnemyInterface enemyScript = collider.GetComponent<EnnemyInterface>();
+            if (collidedEnnemiesId.Contains(enemyScript.id))
+            {
+                return;
+            }
+            else
+            {
+                collidedEnnemiesId.Add(enemyScript.id);
+                StartCoroutine(DelayedRemoval(spell.interactionInterval, enemyScript.id));
+
+            }
+            enemyScript.Damage(spell.damage);
             if (!spell.isInfPierce)
             {
-                Debug.Log("Somehow it's not infinite dude");
                 _hasCollided = true;
+                Destroy(gameObject, 0.1f); // Actually only destroy if hasCollided
+
             }
         } else if (collider.CompareTag("Wall") )
         {
-            Debug.Log("Hits wall!!!");
+            // Debug.Log("Hits wall!!!");
             if (!spell.phantom)
             {
-                Debug.Log("No phantom fucker");
+                // Debug.Log("No phantom fucker");
                 _hasCollided = true;
+                Destroy(gameObject, 0.1f); // Actually only destroy if hasCollided
             }
         }
         
-        if (_hasCollided)
-        {
-            Destroy(gameObject, 0.1f); // Actually only destroy if hasCollided
-        }
         
+    }
+    
+    IEnumerator DelayedRemoval(float delay, int id)
+    {
+        yield return new WaitForSeconds(delay);
+        collidedEnnemiesId.Remove(id);
     }
     
 }

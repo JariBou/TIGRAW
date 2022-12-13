@@ -11,13 +11,13 @@ public class Teleport : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
-        if (!Player.instance.floor.bounds.Contains(transform.position))
+        if (!spell.groundTilemap.HasTile(spell.groundTilemap.WorldToCell(spell.mousePos)))
         {
             Debug.Log("DESTROYING");
             Destroy(gameObject);
             return;
         }
+        
         Player.instance.isTeleporting = true;
         Player.instance.sprite.enabled = false;
         Player.instance.SetVelocity(Vector2.zero);

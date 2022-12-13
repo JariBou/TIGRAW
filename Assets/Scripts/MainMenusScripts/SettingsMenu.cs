@@ -7,12 +7,16 @@ using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
+using Slider = UnityEngine.UI.Slider;
+using Toggle = UnityEngine.UI.Toggle;
 
 public class SettingsMenu : MonoBehaviour
 {
 
     public AudioMixer audioMixer;
     public TMP_Dropdown resolutionDropdown;
+    public Toggle fullscreenToggle;
+    public Slider volumeSlider;
 
     private Resolution[] _resolutions;
     
@@ -21,6 +25,13 @@ public class SettingsMenu : MonoBehaviour
         _resolutions = Screen.resolutions;
         resolutionDropdown.ClearOptions();
         List<string> options = new List<string>();
+        
+        Resolution savedRes = GetSavedResolution();
+        fullscreenToggle.isOn = SimpleSaveManager.GetBool("Fullscreen");
+        audioMixer.SetFloat("MasterVolume", SimpleSaveManager.GetFloat("Volume", 0f));
+        volumeSlider.value = GetVolumeSliderValue();
+        print(GetVolumeSliderValue());
+
 
         int currentResolutionIndex = 0;
         for (int i = 0; i < _resolutions.Length; i++)
@@ -28,12 +39,15 @@ public class SettingsMenu : MonoBehaviour
             String option = _resolutions[i].width + "x" + _resolutions[i].height + "@" + _resolutions[i].refreshRate;
             options.Add(option);
 
-            if (_resolutions[i].width == Screen.currentResolution.width && _resolutions[i].height == Screen.currentResolution.height)
+            if (_resolutions[i].width == savedRes.width && 
+                _resolutions[i].height == savedRes.height && 
+                _resolutions[i].refreshRate == savedRes.refreshRate)
             {
                 currentResolutionIndex = i;
             }
         }
-        
+
+        SetResolution(currentResolutionIndex);
         resolutionDropdown.AddOptions(options);
         resolutionDropdown.value = currentResolutionIndex;
         resolutionDropdown.RefreshShownValue();
@@ -41,9 +55,16 @@ public class SettingsMenu : MonoBehaviour
 
     public void SetVolume(float volume)
     {
-        float value = Mathf.Log10(volume) * 20;
+        float value = Mathf.Log10(volume+80) * 20; // -80 offset on slider
         audioMixer.SetFloat("MasterVolume", value); // Volume mixer is not linear
         SimpleSaveManager.SaveFloat("Volume", value);
+    }
+
+    public float GetVolumeSliderValue()
+    {
+        float audioValue = SimpleSaveManager.GetFloat("Volume", 0f);
+        Debug.LogWarning($"audioValue: {audioValue}");
+        return Mathf.Pow(10, audioValue / 20) - 80;
     }
 
     public void SetFullscreen(bool isFullscreen)
@@ -63,6 +84,17 @@ public class SettingsMenu : MonoBehaviour
         SimpleSaveManager.SaveInt("screenHeight", resolution.height);
         SimpleSaveManager.SaveInt("screenRefreshRate", resolution.refreshRate);
         
+    }
+
+    public Resolution GetSavedResolution()
+    {
+        Resolution res = new Resolution();
+        
+        res.width = SimpleSaveManager.GetInt("screenWidth");
+        res.height = SimpleSaveManager.GetInt("screenHeight");
+        res.refreshRate = SimpleSaveManager.GetInt("screenRefreshRate");
+
+        return res;
     }
 
     public void Back()

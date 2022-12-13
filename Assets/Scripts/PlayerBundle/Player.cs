@@ -1,11 +1,17 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
+using UnityEngine.Tilemaps;
 using Quaternion = UnityEngine.Quaternion;
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
+
+//TODO: Put Every bracelet mechanic related stuff in another script
+//TODO: Put Everything related to the pause menu in another script
 
 public class Player : MonoBehaviour
 {
@@ -34,6 +40,14 @@ public class Player : MonoBehaviour
     private Rigidbody2D body;
     private CircleCollider2D circleCollider;
     private PlayerActions playerActions;
+    [HideInInspector]
+    public bool gamePaused = false;
+
+    public LayerMask interactableLayers;
+
+    [SerializeField]
+    private float interactionRange;
+    public Tilemap groundTilemap;
 
     [HideInInspector]
     public Vector3 circleColliderOffset;
@@ -49,7 +63,9 @@ public class Player : MonoBehaviour
 
     [Header("Heat Mechanic")]
     public float heatRecoveryRate = 2f;
-    [SerializeField] public float heatAmount = 0;
+    public float heatAmount = 0;
+    [SerializeField]
+    private bool infiniteHeat = false;
     private float timer = 0;
     private bool isCasting = false;
     private static readonly int Facing = Animator.StringToHash("facing");
@@ -103,6 +119,11 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (infiniteHeat)
+        {
+            heatAmount = 0;
+        }
+        
         running = false;
         
         if (Input.GetKey(KeyCode.LeftShift)) {
@@ -110,11 +131,10 @@ public class Player : MonoBehaviour
         } 
     }
 
-    public void Move(InputAction.CallbackContext context) {
-
+    public void Move(InputAction.CallbackContext context) 
+    {
         moveVector = context.ReadValue<Vector2>().normalized;
-
-
+    
         if ((int)moveVector.x == 1 && (int)moveVector.y == 0)
         {
             animator.SetInteger(Facing, 3);
@@ -151,6 +171,7 @@ public class Player : MonoBehaviour
         if (timer >= 3) {
             if (heatAmount > 0) heatAmount -= heatRecoveryRate * Time.fixedDeltaTime * 2;
         }
+
         body.velocity = new Vector2(moveVector.x, moveVector.y) * ((running ? sprintspeed : movespeed) * Time.fixedDeltaTime);
     }
     
@@ -159,7 +180,7 @@ public class Player : MonoBehaviour
         if (isTeleporting) {return;}
         if (isDashing) {return;}
         if (moveVector.magnitude < 0.01) {return;}
-        
+    
         
         SpellCasting.CastSpell(context, 4);
         return;
@@ -187,7 +208,7 @@ public class Player : MonoBehaviour
         if (heatAmount > 100) {return;}
         if (isTeleporting) {return;}
         if (!context.performed){return;}
-        
+     
         SpellCasting.CastSpell(context, 3);
     }
 
@@ -212,40 +233,23 @@ public class Player : MonoBehaviour
     public void ResetTimer() {
         timer = 0;
     }
-    
-    
-    // Work on Casting spells by type:
-    public void CastSpell(InputAction.CallbackContext context, int spellId)
+
+    public Canvas pauseMenuCanvas;
+    public void PauseGame(InputAction.CallbackContext context)
     {
-        if (isTeleporting) return;
         if (!context.performed) return;
-        
-        ResetTimer();
-        
-        GameObject spellPrefab = SpellsList.getSpell(spellId);
-        playerSpell spellPrefabScript = spellPrefab.GetComponent<playerSpell>();
-        mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-        
-        if (spellPrefabScript.isProjectile)
+        if (gamePaused)
         {
-            Vector2 direction = (mousePos - transform.position);
-            direction /= direction.magnitude;
-
-            GameObject spell = Instantiate(spellPrefab, transform.position, Quaternion.identity);
-            playerSpell spellScript = spell.GetComponent<playerSpell>();
-
-            spellScript.SetDirection(direction);
-            heatAmount += spellScript.getHeat();
+            Time.timeScale = 1;
         }
         else
         {
-            GameObject spell = Instantiate(spellPrefab, mousePos, Quaternion.identity);
-            playerSpell spellScript = spell.GetComponent<playerSpell>();
-
-            spellScript.SetPosition(mousePos);
-            heatAmount += spellScript.getHeat();
+            Time.timeScale = 0;
         }
+
+        gamePaused = !gamePaused;
+        pauseMenuCanvas.enabled = gamePaused;
+        moveVector = Vector2.zero;
     }
 
 
@@ -257,5 +261,27 @@ public class Player : MonoBehaviour
     public void ApplyForce(Vector2 testVec)
     {
         body.AddForce(testVec, ForceMode2D.Impulse);
+    }
+
+    public void TryInteracting(InputAction.CallbackContext context)
+    {
+        if (!context.performed) {return;}
+        
+        Collider2D[] results = Physics2D.OverlapCircleAll(GetPosition(), interactionRange, interactableLayers);
+
+        foreach (Collider2D col in results)
+        {
+            Debug.LogWarning(col.name);
+            if (col.CompareTag("Interactable"))
+            {
+                col.GetComponent<Interactable>().Interact();
+            }
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.white;
+        Gizmos.DrawWireSphere(transform.position + new Vector3(0f, -0.88f, 0f), interactionRange);
     }
 }

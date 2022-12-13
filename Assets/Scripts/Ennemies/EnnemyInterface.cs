@@ -12,7 +12,14 @@ public class EnnemyInterface : MonoBehaviour
     public bool isInRange;
     public static EnnemyInterface Instance;
 
-   
+    public int id;
+
+    public void Awake()
+    {
+        id = gameObject.GetInstanceID();
+    }
+
+
     public void Damage(float amount)
     {
         health -= amount;

@@ -963,7 +963,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!1 &585441621
 GameObject:
   m_ObjectHideFlags: 0
@@ -995,6 +995,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioMixer: {fileID: 24100000, guid: e2173cc39a45b5e49999132178f954e3, type: 2}
   resolutionDropdown: {fileID: 2087043098}
+  fullscreenToggle: {fileID: 558004427}
+  volumeSlider: {fileID: 21927146}
 --- !u!4 &585441623
 Transform:
   m_ObjectHideFlags: 0

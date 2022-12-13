@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public enum SpellsType
 {
@@ -21,9 +22,13 @@ public class Spell : MonoBehaviour
     public float damage = 10;
     public int id;
     public float heatProduction = 2f;
+
+    public float interactionInterval;
     
     public LayerMask enemyLayer;
     public LayerMask wallLayer;
+
+    internal Tilemap groundTilemap;
 
     
     [HideInInspector]
@@ -56,13 +61,14 @@ public class Spell : MonoBehaviour
     // Represents the direction Vector from player to mouse
     [NonSerialized]
     public Vector2 direction = Vector2.zero;
-    
-    private Vector3 mousePos;
+
+    internal Vector3 mousePos;
 
     private bool hasCollided;
     // Start is called before the first frame update
     void Start()
     {
+        groundTilemap = Player.instance.groundTilemap;
         damageZone = GetComponent<CircleCollider2D>();
         
         mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -85,6 +91,25 @@ public class Spell : MonoBehaviour
             
             case SpellsType.Projectile :
                 isProjectile = true;
+                
+                RaycastHit2D hit = Physics2D.Raycast(Player.instance.GetPosition(), direction,
+                    new Vector2(direction.x, direction.y).sqrMagnitude, wallLayer);
+        
+                Debug.DrawRay(new Vector3(Player.instance.GetPosition().x, Player.instance.GetPosition().y, 0), new Vector3(direction.x, direction.y, 0), Color.red, 1f);
+                if (hit)
+                {
+                    Debug.LogError("Hit");
+                    if (hit.transform.gameObject != null)
+                    {
+                        Debug.LogError("Has GameObject");
+                        if (hit.transform.gameObject.CompareTag("Wall"))
+                        {
+                            Debug.LogError("Destroying");
+                            Destroy(gameObject);
+                        }
+                    }
+                }
+                
                 gameObject.AddComponent<Projectile>().spell = this;
                 break;
 

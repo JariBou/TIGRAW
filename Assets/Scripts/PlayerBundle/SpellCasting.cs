@@ -14,11 +14,12 @@ public class SpellCasting
         Player player = Player.instance;
         if (player.isTeleporting) return;
         if (!context.performed) return;
+        if (player.gamePaused) return;
         
         player.ResetTimer();
         
         GameObject spellPrefab = SpellsList.getSpell(spellId);
-        Debug.Log(spellPrefab.name);
+        Debug.Log($"Casting Spell: {spellPrefab.name}");
         Spell spellPrefabScript = spellPrefab.GetComponent<Spell>();
         if (player.heatAmount + spellPrefabScript.heatProduction <= 100)
         {

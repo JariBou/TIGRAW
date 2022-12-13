@@ -48,9 +48,14 @@ MonoBehaviour:
   damage: 0
   id: 3
   heatProduction: 20
+  interactionInterval: 0
   enemyLayer:
     serializedVersion: 2
     m_Bits: 256
+  wallLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  groundTilemap: {fileID: 0}
   startParticles: {fileID: 4114864165837733784, guid: 56c68f8516c387c41b306100d73c48f9, type: 3}
   endParticles: {fileID: 4114864165837733784, guid: 56c68f8516c387c41b306100d73c48f9, type: 3}
   spellType: 1

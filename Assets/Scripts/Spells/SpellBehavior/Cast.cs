@@ -16,12 +16,15 @@ public class Cast : MonoBehaviour
         
         StartCoroutine(DelayedDestroy(spell.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length));
 
-        DealDamage();
+        if (spell.damage > 0)
+        {
+            DealDamage();
+        }
     }
 
     void DealDamage()
     {
-        Collider2D[] results = Physics2D.OverlapCircleAll(transform.position, spell.damageZone.radius, LayerMask.GetMask("Enemy"));
+        Collider2D[] results = Physics2D.OverlapCircleAll(transform.position, spell.DamageRadius, spell.enemyLayer);
 
         for (int i = 0; i < results.Length; i++)
         {
@@ -32,7 +35,7 @@ public class Cast : MonoBehaviour
             }
             catch (Exception e)
             {
-                Debug.LogError($"PROBLEM WITH {results[i]}");
+                Debug.LogError($"PROBLEM WITH {results[i]} Stacktrace: {e}");
             }
         }
     }
@@ -47,10 +50,9 @@ public class Cast : MonoBehaviour
         }
     }*/
     
-    IEnumerator DelayedDestroy(float _delay = 0)
+    IEnumerator DelayedDestroy(float delay = 0)
     {
-        yield return new WaitForSeconds(_delay);
-        //Show Dead UI..
+        yield return new WaitForSeconds(delay);
         Destroy(gameObject);
     }
 }

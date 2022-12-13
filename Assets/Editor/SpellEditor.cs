@@ -23,7 +23,23 @@ public class SpellEditor : Editor
         } else if (spell.spellType == SpellsType.Dash)
         {
             DrawDashParameters(spell);
+        } else if (spell.spellType == SpellsType.AoeCast)
+        {
+            DrawCastParameters(spell);
         }
+    }
+
+    private void DrawCastParameters(Spell spell)
+    {
+        EditorGUILayout.Space();
+        EditorGUILayout.LabelField("Parameters", EditorStyles.boldLabel);
+        
+        if (spell.damage > 0)
+        {
+            spell.DamageRadius = EditorGUILayout.Slider("Damage Radius", spell.DamageRadius, 0, 8);
+        }
+
+        SceneView.RepaintAll();
     }
 
     private void DrawDashParameters(Spell spell)
@@ -56,6 +72,12 @@ public class SpellEditor : Editor
                 Handles.DrawWireDisc(spell.transform.position, Vector3.back, spell.DamageRadius);
             }
         } else if (spell.spellType == SpellsType.Dash)
+        {
+            if (spell.damage > 0)
+            {
+                Handles.DrawWireDisc(spell.transform.position, Vector3.back, spell.DamageRadius);
+            }
+        } else if (spell.spellType == SpellsType.AoeCast)
         {
             if (spell.damage > 0)
             {

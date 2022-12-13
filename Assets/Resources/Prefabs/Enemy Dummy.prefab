@@ -141,7 +141,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 200
   targetEntity: {fileID: 0}
-  updateRate: 70
+  updateRate: 30
   updateFrameCount: 0
   rb: {fileID: 0}
 --- !u!114 &902154081949910571
@@ -160,6 +160,7 @@ MonoBehaviour:
   health: 20
   _self: {fileID: 0}
   isInRange: 0
+  id: 0
   playerDetection: {fileID: 902154081949910570}
 --- !u!58 &902154081949910570
 CircleCollider2D:

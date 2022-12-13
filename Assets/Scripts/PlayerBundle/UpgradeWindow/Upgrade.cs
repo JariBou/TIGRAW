@@ -18,7 +18,7 @@ public class Upgrade
         return level < maxLevel;
     }
 
-    public int Reset() // Resets skill level and return number of times it was upgraded
+    public int Reset() // Resets upgrade level and return number of times it was upgraded
     {
         int levelsUpgraded = level;
         level = 0;

@@ -71,6 +71,24 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Escape"",
+                    ""type"": ""Button"",
+                    ""id"": ""25f4f4a1-4bba-484e-8197-eff558953bdd"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Interact"",
+                    ""type"": ""Button"",
+                    ""id"": ""bbd279a1-415c-4e77-8b78-90168c7c1e59"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -172,6 +190,28 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
                     ""action"": ""ThunderStrike"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6faedec7-ed17-46b2-a778-5fcbab3440f0"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Escape"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3cc21c2e-b80c-4734-b188-45979479526e"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -185,6 +225,8 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
         m_Playermaps_Dash = m_Playermaps.FindAction("Dash", throwIfNotFound: true);
         m_Playermaps_BasicAttack = m_Playermaps.FindAction("BasicAttack", throwIfNotFound: true);
         m_Playermaps_ThunderStrike = m_Playermaps.FindAction("ThunderStrike", throwIfNotFound: true);
+        m_Playermaps_Escape = m_Playermaps.FindAction("Escape", throwIfNotFound: true);
+        m_Playermaps_Interact = m_Playermaps.FindAction("Interact", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -249,6 +291,8 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Playermaps_Dash;
     private readonly InputAction m_Playermaps_BasicAttack;
     private readonly InputAction m_Playermaps_ThunderStrike;
+    private readonly InputAction m_Playermaps_Escape;
+    private readonly InputAction m_Playermaps_Interact;
     public struct PlayermapsActions
     {
         private @PlayerActions m_Wrapper;
@@ -258,6 +302,8 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
         public InputAction @Dash => m_Wrapper.m_Playermaps_Dash;
         public InputAction @BasicAttack => m_Wrapper.m_Playermaps_BasicAttack;
         public InputAction @ThunderStrike => m_Wrapper.m_Playermaps_ThunderStrike;
+        public InputAction @Escape => m_Wrapper.m_Playermaps_Escape;
+        public InputAction @Interact => m_Wrapper.m_Playermaps_Interact;
         public InputActionMap Get() { return m_Wrapper.m_Playermaps; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -282,6 +328,12 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
                 @ThunderStrike.started -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnThunderStrike;
                 @ThunderStrike.performed -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnThunderStrike;
                 @ThunderStrike.canceled -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnThunderStrike;
+                @Escape.started -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnEscape;
+                @Escape.performed -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnEscape;
+                @Escape.canceled -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnEscape;
+                @Interact.started -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnInteract;
+                @Interact.performed -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnInteract;
+                @Interact.canceled -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnInteract;
             }
             m_Wrapper.m_PlayermapsActionsCallbackInterface = instance;
             if (instance != null)
@@ -301,6 +353,12 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
                 @ThunderStrike.started += instance.OnThunderStrike;
                 @ThunderStrike.performed += instance.OnThunderStrike;
                 @ThunderStrike.canceled += instance.OnThunderStrike;
+                @Escape.started += instance.OnEscape;
+                @Escape.performed += instance.OnEscape;
+                @Escape.canceled += instance.OnEscape;
+                @Interact.started += instance.OnInteract;
+                @Interact.performed += instance.OnInteract;
+                @Interact.canceled += instance.OnInteract;
             }
         }
     }
@@ -312,5 +370,7 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
         void OnDash(InputAction.CallbackContext context);
         void OnBasicAttack(InputAction.CallbackContext context);
         void OnThunderStrike(InputAction.CallbackContext context);
+        void OnEscape(InputAction.CallbackContext context);
+        void OnInteract(InputAction.CallbackContext context);
     }
 }
