@@ -22,9 +22,11 @@ public class Player : MonoBehaviour
     bool running;
     public Vector3 Position ;
 
-
-    [Header("Dash Variables")]
-    public int dashDistance;
+    [Header("Entity Variables")] 
+    public float health = 50f;
+    public float atkMultiplier = 0.9f;
+    public int armor = 0;
+    
 
     [HideInInspector]
     public bool isDashing;
@@ -52,14 +54,12 @@ public class Player : MonoBehaviour
     [HideInInspector]
     public Vector3 circleColliderOffset;
 
+    public StatsWindow playerStatsScript;
+
     [HideInInspector]
     public SpriteRenderer sprite;
-    private CameraFollow cameraScript;
     private Animator animator;
     public static Player instance;
-    
-    // For TP and checking if in bounds
-    public CompositeCollider2D floor;
 
     [Header("Heat Mechanic")]
     public float heatRecoveryRate = 2f;
@@ -77,7 +77,6 @@ public class Player : MonoBehaviour
         playerActions = new PlayerActions();
         body = GetComponent<Rigidbody2D>();
         sprite = GetComponent<SpriteRenderer>();
-        cameraScript = cameraObj.GetComponent<CameraFollow>();
         animator = GetComponent<Animator>();
         circleCollider = GetComponent<CircleCollider2D>();
         circleColliderOffset = new Vector3(circleCollider.offset.x, circleCollider.offset.y, 0);
@@ -111,10 +110,6 @@ public class Player : MonoBehaviour
 
     }
 
-    public Vector2 GetMoveDirection()
-    {
-        return moveVector;
-    }
     
     // Update is called once per frame
     void Update()
@@ -183,17 +178,6 @@ public class Player : MonoBehaviour
     
         
         SpellCasting.CastSpell(context, 4);
-        return;
-
-        isDashing = true;
-
-        heatAmount += 10;
-
-        Debug.Log($"{moveVector.x}, {moveVector.y}");
-
-        body.velocity = new Vector2(moveVector.x, moveVector.y ) * dashDistance * Time.fixedDeltaTime;
-
-        Invoke("EndDash", 0.25f);
     }
 
     public void EndDash() {
@@ -276,6 +260,18 @@ public class Player : MonoBehaviour
             {
                 col.GetComponent<Interactable>().Interact();
             }
+        }
+    }
+
+    public void ShowStats(InputAction.CallbackContext context)
+    {
+        if(context.performed) // the key has been pressed
+        {
+            playerStatsScript.Enable();
+        }
+        if(context.canceled) //the key has been released
+        {
+            playerStatsScript.Disable();
         }
     }
 

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 115305262560522731}
   - component: {fileID: 2136255814269215843}
   m_Layer: 0
-  m_Name: Thunder Strike 1
+  m_Name: Thunder Strike
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27,12 +27,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 115305262560522728}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.2036555, y: -7.139291, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 2.8583, y: 3.5582, z: 0}
+  m_LocalScale: {x: 1.0851176, y: 1.1135452, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &115305262560522730
 SpriteRenderer:
@@ -136,5 +136,5 @@ MonoBehaviour:
   damageZone: {fileID: 0}
   pierce: 1
   phantom: 0
-  DamageRadius: 0
+  DamageRadius: 0.8
   dashDistance: 0

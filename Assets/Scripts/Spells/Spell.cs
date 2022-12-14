@@ -40,6 +40,12 @@ public class Spell : MonoBehaviour
     
     [HideInInspector]
     public bool isInfPierce;
+
+    [HideInInspector]
+    public bool zoneSpell;
+    
+    [HideInInspector]
+    public float spellDuration;
     
     [HideInInspector]
     public CircleCollider2D damageZone;

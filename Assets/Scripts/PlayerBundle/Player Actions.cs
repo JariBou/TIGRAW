@@ -89,6 +89,15 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""OpenStats"",
+                    ""type"": ""Button"",
+                    ""id"": ""e882aab9-8bc8-45d1-a03c-e3078b7319e9"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -212,6 +221,17 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
                     ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a97cb5ef-d4b9-47d6-97bc-8aa0c179dcbe"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenStats"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -227,6 +247,7 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
         m_Playermaps_ThunderStrike = m_Playermaps.FindAction("ThunderStrike", throwIfNotFound: true);
         m_Playermaps_Escape = m_Playermaps.FindAction("Escape", throwIfNotFound: true);
         m_Playermaps_Interact = m_Playermaps.FindAction("Interact", throwIfNotFound: true);
+        m_Playermaps_OpenStats = m_Playermaps.FindAction("OpenStats", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -293,6 +314,7 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Playermaps_ThunderStrike;
     private readonly InputAction m_Playermaps_Escape;
     private readonly InputAction m_Playermaps_Interact;
+    private readonly InputAction m_Playermaps_OpenStats;
     public struct PlayermapsActions
     {
         private @PlayerActions m_Wrapper;
@@ -304,6 +326,7 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
         public InputAction @ThunderStrike => m_Wrapper.m_Playermaps_ThunderStrike;
         public InputAction @Escape => m_Wrapper.m_Playermaps_Escape;
         public InputAction @Interact => m_Wrapper.m_Playermaps_Interact;
+        public InputAction @OpenStats => m_Wrapper.m_Playermaps_OpenStats;
         public InputActionMap Get() { return m_Wrapper.m_Playermaps; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -334,6 +357,9 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
                 @Interact.started -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnInteract;
                 @Interact.performed -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnInteract;
                 @Interact.canceled -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnInteract;
+                @OpenStats.started -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnOpenStats;
+                @OpenStats.performed -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnOpenStats;
+                @OpenStats.canceled -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnOpenStats;
             }
             m_Wrapper.m_PlayermapsActionsCallbackInterface = instance;
             if (instance != null)
@@ -359,6 +385,9 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
                 @Interact.started += instance.OnInteract;
                 @Interact.performed += instance.OnInteract;
                 @Interact.canceled += instance.OnInteract;
+                @OpenStats.started += instance.OnOpenStats;
+                @OpenStats.performed += instance.OnOpenStats;
+                @OpenStats.canceled += instance.OnOpenStats;
             }
         }
     }
@@ -372,5 +401,6 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
         void OnThunderStrike(InputAction.CallbackContext context);
         void OnEscape(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
+        void OnOpenStats(InputAction.CallbackContext context);
     }
 }

@@ -33,6 +33,13 @@ public class SpellEditor : Editor
     {
         EditorGUILayout.Space();
         EditorGUILayout.LabelField("Parameters", EditorStyles.boldLabel);
+
+        spell.zoneSpell = EditorGUILayout.Toggle("has Zone Duration", spell.zoneSpell);
+
+        if (spell.zoneSpell)
+        {
+            spell.spellDuration = EditorGUILayout.Slider("Spell Duration", spell.spellDuration, 0, 16);
+        }
         
         if (spell.damage > 0)
         {

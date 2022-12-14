@@ -129,6 +129,11 @@ public class AIMeleeScript : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D col)
     {
         if (col.gameObject.CompareTag("Enemy")) {return;}
+
+        if (col.gameObject.CompareTag("Player"))
+        {
+            rb.AddForce(Vector2.MoveTowards(transform.position, col.transform.position, 1f));
+        }
         UpdatePath();
         updateFrameCount = 0;
     }

@@ -47,12 +47,9 @@ public class Projectile : MonoBehaviour
             {
                 return;
             }
-            else
-            {
-                collidedEnnemiesId.Add(enemyScript.id);
-                StartCoroutine(DelayedRemoval(spell.interactionInterval, enemyScript.id));
 
-            }
+            collidedEnnemiesId.Add(enemyScript.id);
+            StartCoroutine(DelayedRemoval(spell.interactionInterval, enemyScript.id));
             enemyScript.Damage(spell.damage);
             if (!spell.isInfPierce)
             {
