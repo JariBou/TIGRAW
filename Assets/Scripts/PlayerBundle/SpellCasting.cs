@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Object = UnityEngine.Object;
 
 public class SpellCasting
 {
@@ -17,8 +19,19 @@ public class SpellCasting
         if (player.gamePaused) return;
         
         player.ResetTimer();
+        GameObject spellPrefab;
+
+        try
+        {
+            spellPrefab = SpellsList.getSpell(spellId);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return;
+        }
         
-        GameObject spellPrefab = SpellsList.getSpell(spellId);
+        
         Debug.Log($"Casting Spell: {spellPrefab.name}");
         Spell spellPrefabScript = spellPrefab.GetComponent<Spell>();
         if (player.heatAmount + spellPrefabScript.heatProduction <= 100)

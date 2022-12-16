@@ -22,6 +22,11 @@ public class PlayerUpgrade : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Refresh();
+    }
+
+    public void Refresh()
+    {
         switch (upgrade)
         {
             case PlayerUpgrades.AtkMultiplier:

@@ -30,7 +30,6 @@ public class StatsWindow : MonoBehaviour
         player = Player.instance;
         canvas.enabled = true;
 
-        Debug.Log("OnEnable called");
         healthText.text = player.health.ToString();
         atkMultiplierText.text = player.atkMultiplier.ToString();
         armorText.text = player.armor.ToString();

@@ -23,11 +23,15 @@ public class Teleport : MonoBehaviour
         Player.instance.SetVelocity(Vector2.zero);
 
         Player.instance.heatAmount += spell.heatProduction;
+        
+        //TODO: Remove assign and coroutine when everything will revert back to normal
+        GameObject thingy = Instantiate(spell.startParticles, Player.instance.transform.position, Quaternion.identity);
+        Destroy(thingy.gameObject, 0.5f);
 
-        Instantiate(spell.startParticles, Player.instance.transform.position, Quaternion.identity);
         Invoke("DoTeleport", spell.projectileSpeed);
 
     }
+
 
     void DoTeleport()
     {
@@ -35,7 +39,11 @@ public class Teleport : MonoBehaviour
         Debug.Log(Player.instance.transform.position);
         Debug.Log(transform.position);
         Player.instance.transform.position = transform.position;
-        Instantiate(spell.endParticles, transform.position, Quaternion.identity);
+        
+        //TODO: Remove assign and coroutine when everything will revert back to normal
+        GameObject thingy = Instantiate(spell.endParticles, transform.position, Quaternion.identity);
+        Destroy(thingy.gameObject, 0.5f);
+
         Player.instance.isTeleporting = false;
         Player.instance.sprite.enabled = true;
 
