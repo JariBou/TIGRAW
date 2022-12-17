@@ -10,6 +10,8 @@ public class SpellCasting
     //TODO: Make DAsh and TP spells, maybe an enum with the types and make this a super script that handles everything
     //TODO: so that it makes the player script lighter
     
+    //TODO: Add checkers for if spells can be casted on spell scripts to make a simpler player movement script
+    
     // Work on Casting spells by type:
     public static void CastSpell(InputAction.CallbackContext context, int spellId)
     {

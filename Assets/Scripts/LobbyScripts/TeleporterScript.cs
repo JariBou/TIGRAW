@@ -41,6 +41,7 @@ public class TeleporterScript : Interactable
     {
         Debug.Log($"Interacting with {name}");
 
-        SceneManager.LoadScene(4);
+        //SceneManager.LoadScene(4);
+        SceneLoader.instance.LoadScene(4);
     }
 }

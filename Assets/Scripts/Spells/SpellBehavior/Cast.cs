@@ -37,7 +37,6 @@ public class Cast : MonoBehaviour
 
     void DealDamage()
     {
-        Debug.Log("Trying to Deal Damage");
         Collider2D[] results = Physics2D.OverlapCircleAll(transform.position, spell.DamageRadius, spell.enemyLayer);
 
         for (int i = 0; i < results.Length; i++)

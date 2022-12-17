@@ -13,6 +13,7 @@ using Vector3 = UnityEngine.Vector3;
 //TODO: Put Every bracelet mechanic related stuff in another script
 //TODO: Put Everything related to the pause menu in another script
 
+[RequireComponent(typeof(Rigidbody2D), typeof(CircleCollider2D), typeof(PlayerInput))]
 public class Player : MonoBehaviour
 {
     [Header("Movement Variables")]
@@ -20,7 +21,6 @@ public class Player : MonoBehaviour
     public int sprintspeed;
     private Vector2 moveVector;
     bool running;
-    public Vector3 Position ;
 
     [Header("Entity Variables")] 
     public float health = 50f;
@@ -46,9 +46,10 @@ public class Player : MonoBehaviour
     public bool gamePaused = false;
 
     public LayerMask interactableLayers;
+    public Canvas pauseMenuCanvas;
 
-    [SerializeField]
-    private float interactionRange;
+
+    [SerializeField] public float interactionRange;
     public Tilemap groundTilemap;
 
     [HideInInspector]
@@ -58,7 +59,7 @@ public class Player : MonoBehaviour
 
     [HideInInspector]
     public SpriteRenderer sprite;
-    private Animator animator;
+    public Animator animator { get; private set; }
     public static Player instance;
 
     [Header("Heat Mechanic")]
@@ -68,7 +69,7 @@ public class Player : MonoBehaviour
     private bool infiniteHeat = false;
     private float timer = 0;
     private bool isCasting = false;
-    private static readonly int Facing = Animator.StringToHash("facing");
+    public readonly int Facing = Animator.StringToHash("facing");
     private BraceletUpgrades _braceletUpgrades;
     
     void Awake() {
@@ -110,6 +111,11 @@ public class Player : MonoBehaviour
 
     }
 
+
+    public void SetMoveVector(Vector2 vector)
+    {
+        moveVector = vector;
+    }
     
     // Update is called once per frame
     void Update()
@@ -218,7 +224,6 @@ public class Player : MonoBehaviour
         timer = 0;
     }
 
-    public Canvas pauseMenuCanvas;
     public void PauseGame(InputAction.CallbackContext context)
     {
         if (!context.performed) return;
