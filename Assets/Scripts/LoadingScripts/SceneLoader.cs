@@ -11,10 +11,7 @@ public class SceneLoader : MonoBehaviour
     public Image loadingBarFill;
     public static SceneLoader instance;
 
-    private void Awake()
-    {
-        instance = this;
-    }
+    
 
     public void LoadScene(int sceneId)
     {
