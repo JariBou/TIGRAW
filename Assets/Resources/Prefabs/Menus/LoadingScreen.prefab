@@ -350,7 +350,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_TargetDisplay: 0
 --- !u!114 &4725591451682966749
 MonoBehaviour:
@@ -364,10 +364,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -404,5 +404,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1aa2478836945e74eb583f308ee4f44a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  loadingScreen: {fileID: 7352172703712114854}
-  loadiingBarFill: {fileID: 5228293538828746240}
+  loadingScreen: {fileID: 2250191047392871388}
+  loadingBarFill: {fileID: 5228293538828746240}
