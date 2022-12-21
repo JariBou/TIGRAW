@@ -97,9 +97,15 @@ public class SettingsMenu : MonoBehaviour
         return res;
     }
 
+    public void LoadKeybindsMenu()
+    {
+        // SceneManager.LoadScene....  
+        // /!\ Must be in additive
+    }
+
     public void Back()
     {
-        SceneManager.LoadScene(1);
+        SceneManager.UnloadSceneAsync(2);
     }
     
 }
