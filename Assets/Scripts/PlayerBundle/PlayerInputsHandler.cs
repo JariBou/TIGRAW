@@ -1,6 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Linq.Expressions;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,14 +12,73 @@ public class PlayerInputsHandler : MonoBehaviour
 {
     private PlayerActions playerActions;
     private Player player;
+
+    public Dictionary<string, Delegate> bindingLinks; // Dictionnary of <InputAction.name>
+    // TODO: Problem if is composite like wasd, using InputAction.name should resolve that
+    
+    public Dictionary<string, int> spellLinks;
+
+    public static event Action<InputAction.CallbackContext> KeyPressedEvent; 
+    
     private void Awake()
     {
+        bindingLinks = new Dictionary<string, Delegate>();
+        spellLinks = new Dictionary<string, int>();
         playerActions = new PlayerActions();
+        bindingLinks.Add("A", new Action<InputAction.CallbackContext>(Move));
+        // bindingLinks.Add("RightClick", new Action<InputAction.CallbackContext, int>(SpellCasting.CastSpell));
+        // bindingLinks["A"].DynamicInvoke(new InputAction.CallbackContext());
+        Debug.Log(bindingLinks["A"].Method.Name); // Returns 'Move'
+        //Debug.Log(bindingLinks["RightClick"].Method.Name); // Returns 'CastSpell'
+
+
+        // This goes through the bindings without composite duplicates
+        // This should be only movement with sprint and menus and stuff
+
+        List<InputAction> spellsInputActions = new List<InputAction>();
+
+        foreach (var action in playerActions.Playermaps.Get().actions)
+        {
+            Debug.Log(action.name);
+            if (action.name.StartsWith("Spell"))
+            {
+                spellsInputActions.Add(action);
+                Debug.LogWarning($"{action.name} :|:");
+            }
+
+            
+            // Could have those in static functions
+            switch (action.name)
+            {
+                case "Movement":
+                    bindingLinks[action.name] = new Action<InputAction.CallbackContext>(Move);
+                    break;
+                case "Dash":
+                    bindingLinks[action.name] = new Action<InputAction.CallbackContext>(Dash);
+                    break;
+                case "Escape":
+                    bindingLinks[action.name] = new Action<InputAction.CallbackContext>(PauseGame);
+                    break;
+                case "Interact":
+                    bindingLinks[action.name] = new Action<InputAction.CallbackContext>(TryInteracting);
+                    break;
+                case "OpenStats":
+                    bindingLinks[action.name] = new Action<InputAction.CallbackContext>(ShowStats);
+                    break;
+                case not null when action.name.StartsWith("Spell"):
+                    spellLinks[action.name] = action.name[^1]; // Get the number of the spell, won't work with 2 digits tho so need to change
+                    bindingLinks[action.name] = new Action<InputAction.CallbackContext>(ResolveSpellCasted);
+                    break;
+            }
+            
+            
+        }
     }
 
     private void Start()
     {
         player = Player.instance;
+        KeyPressedEvent += ResolveKeyPressed;
     }
 
     private void OnEnable()
@@ -27,9 +90,9 @@ public class PlayerInputsHandler : MonoBehaviour
     {
         playerActions.Playermaps.Disable();
     }
-    
-    
-    public void Move(InputAction.CallbackContext context) 
+
+
+    private void Move(InputAction.CallbackContext context) 
     {
         Vector2 moveVector = context.ReadValue<Vector2>().normalized;
         player.SetMoveVector(moveVector);
@@ -52,7 +115,7 @@ public class PlayerInputsHandler : MonoBehaviour
 
     }
     
-    public void Dash(InputAction.CallbackContext context) {
+    private void Dash(InputAction.CallbackContext context) {
         if (!context.performed){return;}
         
         SpellCasting.CastSpell(context, 4);
@@ -75,20 +138,14 @@ public class PlayerInputsHandler : MonoBehaviour
         
         SpellCasting.CastSpell(context, 1);
     }
+
     
     //TODO: Game PAusing should be handled by a script 
     public void PauseGame(InputAction.CallbackContext context)
     {
         if (!context.performed) return;
         
-        if (player.gamePaused)
-        {
-            Time.timeScale = 1;
-        }
-        else
-        {
-            Time.timeScale = 0;
-        }
+        Time.timeScale = player.gamePaused ? 1 : 0;
 
         player.gamePaused = !player.gamePaused;
         player.pauseMenuCanvas.enabled = player.gamePaused;
@@ -122,6 +179,46 @@ public class PlayerInputsHandler : MonoBehaviour
             player.playerStatsScript.Disable();
         }
     }
+
+    private void ResolveSpellCasted(InputAction.CallbackContext context)
+    {
+        int spellId = spellLinks[context.action.name];
+        SpellCasting.CastSpell(context, spellId);
+    }
+
+
+    private void ResolveKeyPressed(InputAction.CallbackContext context)
+    {
+        //string functionName = bindingLinks[action.bindings[0].name].Method.Name;
+        string actionName = context.action.name; // This returns the good thing
+        
+
+        spellLinks[context.action.name] = 2;
+        //actionName = "Move";
+        // This works biatch
+
+        bindingLinks[context.action.name].DynamicInvoke(context);
+        
+        // switch (actionName)
+        // {
+        //     case "Move":
+        //         // Theoretically:
+        //         // bindingLinks[functionName].DynamicInvoke(context);
+        //         Move(context);
+        //         break;
+        //     case "CastSpell":
+        //         // Theoretically also:
+        //         // bindingLinks[functionName].DynamicInvoke(context);
+        //         // With function being ResolveSpellCasted
+        //         int spellId = spellLinks[context.action.name];
+        //         SpellCasting.CastSpell(context, spellId);
+        //         break;
+        // }
+        
+    }
     
-    
+    public void OnKeyPressedTriggerEvent(InputAction.CallbackContext context)
+    {
+        KeyPressedEvent?.Invoke(context);
+    }
 }

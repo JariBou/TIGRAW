@@ -98,6 +98,24 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Spell 0"",
+                    ""type"": ""Button"",
+                    ""id"": ""aa4dd6c0-7a28-48f3-9e26-b77220a7a3be"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Spell 1"",
+                    ""type"": ""Button"",
+                    ""id"": ""4f54ab65-63a9-4864-8f86-d8b806ce69d2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -232,6 +250,56 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
                     ""action"": ""OpenStats"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3d4111e0-dc70-4a47-9ce3-bc7d8d7d380d"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Spell 0"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""873cf3bb-a619-4263-9691-dde2d1b60614"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Spell 1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""SpellCastingMap"",
+            ""id"": ""2ad9643e-bc30-4892-aca0-ab58fd97e2ed"",
+            ""actions"": [
+                {
+                    ""name"": ""SpellCastingMap"",
+                    ""type"": ""Button"",
+                    ""id"": ""7fdc5a16-6659-4735-920d-94e69adf04e9"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""80e1f094-f445-4d6f-b8ed-756a67155450"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SpellCastingMap"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -248,6 +316,11 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
         m_Playermaps_Escape = m_Playermaps.FindAction("Escape", throwIfNotFound: true);
         m_Playermaps_Interact = m_Playermaps.FindAction("Interact", throwIfNotFound: true);
         m_Playermaps_OpenStats = m_Playermaps.FindAction("OpenStats", throwIfNotFound: true);
+        m_Playermaps_Spell0 = m_Playermaps.FindAction("Spell 0", throwIfNotFound: true);
+        m_Playermaps_Spell1 = m_Playermaps.FindAction("Spell 1", throwIfNotFound: true);
+        // SpellCastingMap
+        m_SpellCastingMap = asset.FindActionMap("SpellCastingMap", throwIfNotFound: true);
+        m_SpellCastingMap_SpellCastingMap = m_SpellCastingMap.FindAction("SpellCastingMap", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -315,6 +388,8 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Playermaps_Escape;
     private readonly InputAction m_Playermaps_Interact;
     private readonly InputAction m_Playermaps_OpenStats;
+    private readonly InputAction m_Playermaps_Spell0;
+    private readonly InputAction m_Playermaps_Spell1;
     public struct PlayermapsActions
     {
         private @PlayerActions m_Wrapper;
@@ -327,6 +402,8 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
         public InputAction @Escape => m_Wrapper.m_Playermaps_Escape;
         public InputAction @Interact => m_Wrapper.m_Playermaps_Interact;
         public InputAction @OpenStats => m_Wrapper.m_Playermaps_OpenStats;
+        public InputAction @Spell0 => m_Wrapper.m_Playermaps_Spell0;
+        public InputAction @Spell1 => m_Wrapper.m_Playermaps_Spell1;
         public InputActionMap Get() { return m_Wrapper.m_Playermaps; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -360,6 +437,12 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
                 @OpenStats.started -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnOpenStats;
                 @OpenStats.performed -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnOpenStats;
                 @OpenStats.canceled -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnOpenStats;
+                @Spell0.started -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnSpell0;
+                @Spell0.performed -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnSpell0;
+                @Spell0.canceled -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnSpell0;
+                @Spell1.started -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnSpell1;
+                @Spell1.performed -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnSpell1;
+                @Spell1.canceled -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnSpell1;
             }
             m_Wrapper.m_PlayermapsActionsCallbackInterface = instance;
             if (instance != null)
@@ -388,10 +471,49 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
                 @OpenStats.started += instance.OnOpenStats;
                 @OpenStats.performed += instance.OnOpenStats;
                 @OpenStats.canceled += instance.OnOpenStats;
+                @Spell0.started += instance.OnSpell0;
+                @Spell0.performed += instance.OnSpell0;
+                @Spell0.canceled += instance.OnSpell0;
+                @Spell1.started += instance.OnSpell1;
+                @Spell1.performed += instance.OnSpell1;
+                @Spell1.canceled += instance.OnSpell1;
             }
         }
     }
     public PlayermapsActions @Playermaps => new PlayermapsActions(this);
+
+    // SpellCastingMap
+    private readonly InputActionMap m_SpellCastingMap;
+    private ISpellCastingMapActions m_SpellCastingMapActionsCallbackInterface;
+    private readonly InputAction m_SpellCastingMap_SpellCastingMap;
+    public struct SpellCastingMapActions
+    {
+        private @PlayerActions m_Wrapper;
+        public SpellCastingMapActions(@PlayerActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @SpellCastingMap => m_Wrapper.m_SpellCastingMap_SpellCastingMap;
+        public InputActionMap Get() { return m_Wrapper.m_SpellCastingMap; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(SpellCastingMapActions set) { return set.Get(); }
+        public void SetCallbacks(ISpellCastingMapActions instance)
+        {
+            if (m_Wrapper.m_SpellCastingMapActionsCallbackInterface != null)
+            {
+                @SpellCastingMap.started -= m_Wrapper.m_SpellCastingMapActionsCallbackInterface.OnSpellCastingMap;
+                @SpellCastingMap.performed -= m_Wrapper.m_SpellCastingMapActionsCallbackInterface.OnSpellCastingMap;
+                @SpellCastingMap.canceled -= m_Wrapper.m_SpellCastingMapActionsCallbackInterface.OnSpellCastingMap;
+            }
+            m_Wrapper.m_SpellCastingMapActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @SpellCastingMap.started += instance.OnSpellCastingMap;
+                @SpellCastingMap.performed += instance.OnSpellCastingMap;
+                @SpellCastingMap.canceled += instance.OnSpellCastingMap;
+            }
+        }
+    }
+    public SpellCastingMapActions @SpellCastingMap => new SpellCastingMapActions(this);
     public interface IPlayermapsActions
     {
         void OnMovement(InputAction.CallbackContext context);
@@ -402,5 +524,11 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
         void OnEscape(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
         void OnOpenStats(InputAction.CallbackContext context);
+        void OnSpell0(InputAction.CallbackContext context);
+        void OnSpell1(InputAction.CallbackContext context);
+    }
+    public interface ISpellCastingMapActions
+    {
+        void OnSpellCastingMap(InputAction.CallbackContext context);
     }
 }
