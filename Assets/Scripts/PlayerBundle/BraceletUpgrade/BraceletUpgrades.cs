@@ -1,31 +1,32 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
-public enum UpgradeType
+namespace PlayerBundle.BraceletUpgrade
 {
+    public enum UpgradeType
+    {
         
-}
+    }
 
-public class BraceletUpgrades
-{
+    public class BraceletUpgrades
+    {
   
 
-    private List<UpgradeType> unlockedUpgradesTypeList;
+        private List<UpgradeType> unlockedUpgradesTypeList;
 
-    public BraceletUpgrades()
-    {
-        unlockedUpgradesTypeList = new List<UpgradeType>();
+        public BraceletUpgrades()
+        {
+            unlockedUpgradesTypeList = new List<UpgradeType>();
+        }
+
+        public void UnlockUpgrade(UpgradeType upgradeType)
+        {
+            unlockedUpgradesTypeList.Add(upgradeType);
+        }
+
+        public bool IsUpgradeUnlocked(UpgradeType upgradeType)
+        {
+            return unlockedUpgradesTypeList.Contains(upgradeType);
+        }
+
     }
-
-    public void UnlockUpgrade(UpgradeType upgradeType)
-    {
-        unlockedUpgradesTypeList.Add(upgradeType);
-    }
-
-    public bool IsUpgradeUnlocked(UpgradeType upgradeType)
-    {
-        return unlockedUpgradesTypeList.Contains(upgradeType);
-    }
-
 }

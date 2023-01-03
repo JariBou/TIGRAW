@@ -1,6 +1,5 @@
-using UnityEngine;
 using System.Collections;
-
+using UnityEngine;
 
 namespace TMPro.Examples
 {
@@ -8,7 +7,7 @@ namespace TMPro.Examples
     public class Benchmark01 : MonoBehaviour
     {
 
-        public int BenchmarkType = 0;
+        public int BenchmarkType;
 
         public TMP_FontAsset TMProFont;
         public Font TextMeshFont;
@@ -99,7 +98,7 @@ namespace TMPro.Examples
 
                 }
                 else if (BenchmarkType == 1)
-                    m_textMesh.text = label02 + (i % 1000).ToString();
+                    m_textMesh.text = label02 + (i % 1000);
 
                 yield return null;
             }

@@ -1,14 +1,14 @@
-using System.Collections;
 using System.Collections.Generic;
+using Enemies.EnemiesAI;
 using UnityEngine;
 
-public class AutoEnnemySpawning : MonoBehaviour
+public class AutoEnemySpawning : MonoBehaviour
 {
     public List<Transform> spawningPoints;
     public GameObject ennemyPrefab;
     public GameObject player;
 
-    public bool Spawn = false;
+    public bool Spawn;
     public int mobCap = 20;
 
     [SerializeField] private float Timer;

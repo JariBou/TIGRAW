@@ -14,6 +14,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
+using Object = UnityEngine.Object;
 
 public partial class @PlayerActions : IInputActionCollection2, IDisposable
 {
@@ -112,6 +113,24 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
                     ""name"": ""Spell 1"",
                     ""type"": ""Button"",
                     ""id"": ""4f54ab65-63a9-4864-8f86-d8b806ce69d2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Spell 2"",
+                    ""type"": ""Button"",
+                    ""id"": ""7be2b693-35f2-4b5c-8cb4-d7ed8f09beff"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Spell 3"",
+                    ""type"": ""Button"",
+                    ""id"": ""a53756c2-1e7e-4df4-ba5e-8c982a2bb1c0"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -254,7 +273,7 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""3d4111e0-dc70-4a47-9ce3-bc7d8d7d380d"",
-                    ""path"": """",
+                    ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -265,11 +284,33 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""873cf3bb-a619-4263-9691-dde2d1b60614"",
-                    ""path"": """",
+                    ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Spell 1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d7604c4b-65b3-4b86-ba26-a53da6234efe"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Spell 2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b21ba3f7-4848-4204-9e1b-b32c7955622c"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Spell 3"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -318,6 +359,8 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
         m_Playermaps_OpenStats = m_Playermaps.FindAction("OpenStats", throwIfNotFound: true);
         m_Playermaps_Spell0 = m_Playermaps.FindAction("Spell 0", throwIfNotFound: true);
         m_Playermaps_Spell1 = m_Playermaps.FindAction("Spell 1", throwIfNotFound: true);
+        m_Playermaps_Spell2 = m_Playermaps.FindAction("Spell 2", throwIfNotFound: true);
+        m_Playermaps_Spell3 = m_Playermaps.FindAction("Spell 3", throwIfNotFound: true);
         // SpellCastingMap
         m_SpellCastingMap = asset.FindActionMap("SpellCastingMap", throwIfNotFound: true);
         m_SpellCastingMap_SpellCastingMap = m_SpellCastingMap.FindAction("SpellCastingMap", throwIfNotFound: true);
@@ -325,7 +368,7 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
 
     public void Dispose()
     {
-        UnityEngine.Object.Destroy(asset);
+        Object.Destroy(asset);
     }
 
     public InputBinding? bindingMask
@@ -390,6 +433,8 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Playermaps_OpenStats;
     private readonly InputAction m_Playermaps_Spell0;
     private readonly InputAction m_Playermaps_Spell1;
+    private readonly InputAction m_Playermaps_Spell2;
+    private readonly InputAction m_Playermaps_Spell3;
     public struct PlayermapsActions
     {
         private @PlayerActions m_Wrapper;
@@ -404,6 +449,8 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
         public InputAction @OpenStats => m_Wrapper.m_Playermaps_OpenStats;
         public InputAction @Spell0 => m_Wrapper.m_Playermaps_Spell0;
         public InputAction @Spell1 => m_Wrapper.m_Playermaps_Spell1;
+        public InputAction @Spell2 => m_Wrapper.m_Playermaps_Spell2;
+        public InputAction @Spell3 => m_Wrapper.m_Playermaps_Spell3;
         public InputActionMap Get() { return m_Wrapper.m_Playermaps; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -443,6 +490,12 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
                 @Spell1.started -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnSpell1;
                 @Spell1.performed -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnSpell1;
                 @Spell1.canceled -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnSpell1;
+                @Spell2.started -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnSpell2;
+                @Spell2.performed -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnSpell2;
+                @Spell2.canceled -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnSpell2;
+                @Spell3.started -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnSpell3;
+                @Spell3.performed -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnSpell3;
+                @Spell3.canceled -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnSpell3;
             }
             m_Wrapper.m_PlayermapsActionsCallbackInterface = instance;
             if (instance != null)
@@ -477,6 +530,12 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
                 @Spell1.started += instance.OnSpell1;
                 @Spell1.performed += instance.OnSpell1;
                 @Spell1.canceled += instance.OnSpell1;
+                @Spell2.started += instance.OnSpell2;
+                @Spell2.performed += instance.OnSpell2;
+                @Spell2.canceled += instance.OnSpell2;
+                @Spell3.started += instance.OnSpell3;
+                @Spell3.performed += instance.OnSpell3;
+                @Spell3.canceled += instance.OnSpell3;
             }
         }
     }
@@ -526,6 +585,8 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
         void OnOpenStats(InputAction.CallbackContext context);
         void OnSpell0(InputAction.CallbackContext context);
         void OnSpell1(InputAction.CallbackContext context);
+        void OnSpell2(InputAction.CallbackContext context);
+        void OnSpell3(InputAction.CallbackContext context);
     }
     public interface ISpellCastingMapActions
     {

@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectileSpeed: 0.5
   damage: 0
-  id: 3
+  id: 2
   heatProduction: 20
   interactionInterval: 0
   enemyLayer:
@@ -55,11 +55,12 @@ MonoBehaviour:
   wallLayer:
     serializedVersion: 2
     m_Bits: 128
-  groundTilemap: {fileID: 0}
   startParticles: {fileID: 4114864165837733784, guid: 56c68f8516c387c41b306100d73c48f9, type: 3}
   endParticles: {fileID: 4114864165837733784, guid: 56c68f8516c387c41b306100d73c48f9, type: 3}
   spellType: 1
   isInfPierce: 0
+  zoneSpell: 0
+  spellDuration: 0
   damageZone: {fileID: 0}
   pierce: 1
   phantom: 0

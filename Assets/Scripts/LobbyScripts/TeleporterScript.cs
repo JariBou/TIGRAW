@@ -1,48 +1,47 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-public class TeleporterScript : Interactable
+namespace LobbyScripts
 {
-    private bool playerInRange;
-    // Start is called before the first frame update
-    void Start()
+    public class TeleporterScript : Interactable
     {
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (playerInRange)
+        private bool playerInRange;
+        // Start is called before the first frame update
+        void Start()
         {
-            // Show Tooltip of key to press
         }
-    }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player"))
+        // Update is called once per frame
+        void Update()
         {
-            playerInRange = true;
+            if (playerInRange)
+            {
+                // Show Tooltip of key to press
+            }
         }
-    }
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
+        private void OnTriggerEnter(Collider other)
         {
-            playerInRange = false;
+            if (other.CompareTag("Player"))
+            {
+                playerInRange = true;
+            }
         }
-    }
 
-    public override void Interact()
-    {
-        Debug.Log($"Interacting with {name}");
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.CompareTag("Player"))
+            {
+                playerInRange = false;
+            }
+        }
 
-        //SceneManager.LoadScene(4);
-        //SceneLoader.instance.LoadScene(4);
-        GameManager.LoadScene(4);
+        public override void Interact()
+        {
+            Debug.Log($"Interacting with {name}");
+
+            //SceneManager.LoadScene(4);
+            //SceneLoader.instance.LoadScene(4);
+            GameManager.LoadScene(4);
+        }
     }
 }

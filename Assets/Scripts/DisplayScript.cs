@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using PlayerBundle;
 using TMPro;
+using UnityEngine;
 
 public class DisplayScript : MonoBehaviour
 {

@@ -1,10 +1,10 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-
-public class UpgradeTree : MonoBehaviour
+namespace PlayerBundle.BraceletUpgrade
 {
-    public List<Upgrade> allUpgrades;
+    public class UpgradeTree : MonoBehaviour
+    {
+        public List<Upgrade> allUpgrades;
+    }
 }

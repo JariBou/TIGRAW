@@ -1212,8 +1212,8 @@ MonoBehaviour:
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 7267870841138018907}
-        m_TargetAssemblyTypeName: PlayerMovement, Assembly-CSharp
-        m_MethodName: Move
+        m_TargetAssemblyTypeName: PlayerInputsHandler, Assembly-CSharp
+        m_MethodName: OnKeyPressedTriggerEvent
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1226,58 +1226,26 @@ MonoBehaviour:
     m_ActionId: 3b9e562d-d13f-44ba-8f96-f3aaadb82948
     m_ActionName: Player maps/Movement[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 7267870841138018907}
-        m_TargetAssemblyTypeName: PlayerMovement, Assembly-CSharp
-        m_MethodName: Teleport
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: 8549b579-0c2e-40b3-a304-16077530dcff
     m_ActionName: Player maps/Teleport[/Keyboard/c]
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 7267870841138018907}
-        m_TargetAssemblyTypeName: PlayerMovement, Assembly-CSharp
-        m_MethodName: Dash
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: 330a8cbf-d462-43f6-a254-15022c70daa1
     m_ActionName: Player maps/Dash[/Keyboard/space]
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 7267870841138018907}
-        m_TargetAssemblyTypeName: PlayerMovement, Assembly-CSharp
-        m_MethodName: DoBasicAttack
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: 451a998e-5756-4e2f-9a5a-053a822b5b27
     m_ActionName: Player maps/BasicAttack[/Mouse/leftButton]
   - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 4225d3a2-fd9b-4b7f-b488-1967ce310cac
+    m_ActionName: Player maps/ThunderStrike[/Mouse/rightButton]
+  - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 7267870841138018907}
-        m_TargetAssemblyTypeName: PlayerMovement, Assembly-CSharp
-        m_MethodName: DoThunderStrike
+        m_TargetAssemblyTypeName: PlayerInputsHandler, Assembly-CSharp
+        m_MethodName: OnKeyPressedTriggerEvent
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1287,17 +1255,13 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_ActionId: 4225d3a2-fd9b-4b7f-b488-1967ce310cac
-    m_ActionName: Player maps/ThunderStrike[/Mouse/rightButton]
-  - m_PersistentCalls:
-      m_Calls: []
     m_ActionId: 25f4f4a1-4bba-484e-8197-eff558953bdd
     m_ActionName: Player maps/Escape[/Keyboard/escape]
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 7267870841138018907}
-        m_TargetAssemblyTypeName: PlayerMovement, Assembly-CSharp
-        m_MethodName: TryInteracting
+        m_TargetAssemblyTypeName: PlayerInputsHandler, Assembly-CSharp
+        m_MethodName: OnKeyPressedTriggerEvent
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1312,8 +1276,8 @@ MonoBehaviour:
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 7267870841138018907}
-        m_TargetAssemblyTypeName: PlayerMovement, Assembly-CSharp
-        m_MethodName: ShowStats
+        m_TargetAssemblyTypeName: PlayerInputsHandler, Assembly-CSharp
+        m_MethodName: OnKeyPressedTriggerEvent
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1325,6 +1289,74 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: e882aab9-8bc8-45d1-a03c-e3078b7319e9
     m_ActionName: Player maps/OpenStats[/Keyboard/tab]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7267870841138018907}
+        m_TargetAssemblyTypeName: PlayerInputsHandler, Assembly-CSharp
+        m_MethodName: OnKeyPressedTriggerEvent
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: aa4dd6c0-7a28-48f3-9e26-b77220a7a3be
+    m_ActionName: Player maps/Spell 0
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7267870841138018907}
+        m_TargetAssemblyTypeName: PlayerInputsHandler, Assembly-CSharp
+        m_MethodName: OnKeyPressedTriggerEvent
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 4f54ab65-63a9-4864-8f86-d8b806ce69d2
+    m_ActionName: Player maps/Spell 1
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 7fdc5a16-6659-4735-920d-94e69adf04e9
+    m_ActionName: SpellCastingMap/SpellCastingMap
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7267870841138018907}
+        m_TargetAssemblyTypeName: PlayerInputsHandler, Assembly-CSharp
+        m_MethodName: OnKeyPressedTriggerEvent
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 7be2b693-35f2-4b5c-8cb4-d7ed8f09beff
+    m_ActionName: Player maps/Spell 2[/Keyboard/c]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7267870841138018907}
+        m_TargetAssemblyTypeName: PlayerInputsHandler, Assembly-CSharp
+        m_MethodName: OnKeyPressedTriggerEvent
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: a53756c2-1e7e-4df4-ba5e-8c982a2bb1c0
+    m_ActionName: Player maps/Spell 3[/Keyboard/space]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player maps
