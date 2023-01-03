@@ -14,6 +14,8 @@ namespace Spells.SpellBehavior
     
         public Spell spell;
         public List<int> collidedEnemiesId;
+        // ReSharper disable once FieldCanBeMadeReadOnly.Local
+        private Collider2D[] _results = { };
 
 
     
@@ -42,23 +44,24 @@ namespace Spells.SpellBehavior
 
         void DealDamage()
         {
-            Collider2D[] results = Physics2D.OverlapCircleAll(transform.position, spell.DamageRadius, spell.enemyLayer);
+            var size = Physics2D.OverlapCircleNonAlloc(transform.position, spell.damageRadius, _results, spell.enemyLayer);
 
-            for (int i = 0; i < results.Length; i++)
+            for (int i = 0; i < size; i++)
             {
                 try
                 {
-                    results[i].GetComponent<MeleeEnemyScript>().Damage(spell.damage);
+                    _results[i].GetComponent<MeleeEnemyScript>().Damage(spell.damage);
 
                 }
                 catch (Exception e)
                 {
-                    Debug.LogError($"PROBLEM WITH {results[i]} Stacktrace: {e}");
+                    Debug.LogError($"PROBLEM WITH {_results[i]} Stacktrace: {e}");
                 }
             }
         }
 
-    
+
+
         IEnumerator DelayedDestroy(float delay = 0)
         {
             yield return new WaitForSeconds(delay);

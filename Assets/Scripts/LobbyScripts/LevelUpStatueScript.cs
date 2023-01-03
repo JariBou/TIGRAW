@@ -11,13 +11,7 @@ namespace LobbyScripts
         {
             canvas.enabled = false;
         }
-
-        // Update is called once per frame
-        void Update()
-        {
         
-        }
-
         public override void Interact()
         {
             if (canvas.enabled)

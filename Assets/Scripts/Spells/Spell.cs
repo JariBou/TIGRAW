@@ -29,7 +29,7 @@ namespace Spells
         public LayerMask enemyLayer;
         public LayerMask wallLayer;
 
-        internal Tilemap groundTilemap;
+        internal Tilemap GroundTilemap;
 
     
         [HideInInspector]
@@ -37,8 +37,6 @@ namespace Spells
 
         public SpellsType spellType;
 
-        [NonSerialized] public bool isProjectile, isAOE; 
-    
         [HideInInspector]
         public bool isInfPierce;
 
@@ -60,29 +58,28 @@ namespace Spells
         public bool phantom;
     
         //TEst for dynamic dis^play of radius
-        [HideInInspector] public float DamageRadius;
+        [HideInInspector] public float damageRadius;
 
         [HideInInspector] public int dashDistance;
     
 
         // Represents the direction Vector from player to mouse
         [NonSerialized]
-        public Vector2 direction = Vector2.zero;
+        public Vector2 Direction = Vector2.zero;
 
-        internal Vector3 mousePos;
+        internal Vector3 MousePos;
 
-        private bool hasCollided;
         // Start is called before the first frame update
         void Start()
         {
-            groundTilemap = Player.instance.groundTilemap;
+            GroundTilemap = Player.instance.groundTilemap;
             damageZone = GetComponent<CircleCollider2D>();
         
-            mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            mousePos += new Vector3(0, 0, 10); // z camera offset
+            MousePos = Camera.main!.ScreenToWorldPoint(Input.mousePosition);
+            MousePos += new Vector3(0, 0, 10); // z camera offset
             transform.position = Player.instance.GetPosition();
-            direction = (mousePos - Player.instance.GetPosition());
-            direction /= direction.magnitude;
+            Direction = (MousePos - Player.instance.GetPosition());
+            Direction /= Direction.magnitude;
 
             switch (spellType)
             {
@@ -92,17 +89,16 @@ namespace Spells
                     break;
             
                 case SpellsType.Teleport :
-                    transform.position = mousePos;
+                    transform.position = MousePos;
                     gameObject.AddComponent<Teleport>().spell = this;
                     break;
             
                 case SpellsType.Projectile :
-                    isProjectile = true;
-                
-                    RaycastHit2D hit = Physics2D.Raycast(Player.instance.GetPosition(), direction,
-                        new Vector2(direction.x, direction.y).sqrMagnitude, wallLayer);
+
+                    RaycastHit2D hit = Physics2D.Raycast(Player.instance.GetPosition(), Direction,
+                        new Vector2(Direction.x, Direction.y).sqrMagnitude, wallLayer);
         
-                    Debug.DrawRay(new Vector3(Player.instance.GetPosition().x, Player.instance.GetPosition().y, 0), new Vector3(direction.x, direction.y, 0), Color.red, 1f);
+                    Debug.DrawRay(new Vector3(Player.instance.GetPosition().x, Player.instance.GetPosition().y, 0), new Vector3(Direction.x, Direction.y, 0), Color.red, 1f);
                     if (hit)
                     {
                         Debug.LogError("Hit");
@@ -120,29 +116,26 @@ namespace Spells
                     gameObject.AddComponent<Projectile>().spell = this;
                     break;
 
-                case SpellsType.AoeCast : 
-                    isAOE = true;
-                    transform.position = mousePos;
+                case SpellsType.AoeCast :
+                    transform.position = MousePos;
                     gameObject.AddComponent<Cast>().spell = this;
                     break;
             
-                case SpellsType.AoePlayer : 
-                    isAOE = true;
+                case SpellsType.AoePlayer :
                     gameObject.AddComponent<Cast>().spell = this;
                     break;
-            };
-
+            }
         }
 
         public void SetDirection(Vector2 direction) {
-            this.direction = direction;
+            Direction = direction;
         }
 
         public void SetPosition(Vector2 position) {
             transform.position = position;
         }
 
-        public float getHeat() {
+        public float GetHeat() {
             return heatProduction;
         }
     

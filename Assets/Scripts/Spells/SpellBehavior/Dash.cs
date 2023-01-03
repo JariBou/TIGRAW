@@ -7,7 +7,7 @@ namespace Spells.SpellBehavior
     {
         public Spell spell;
 
-        private Vector2 TestVec;
+        private Vector2 _testVec;
         // Start is called before the first frame update
         void Start()
         {
@@ -16,9 +16,9 @@ namespace Spells.SpellBehavior
             // Problem when dashing towards positive x
             // Player's body velocity set to 0 when pressing spacebar somehow?? and only affecting towards positive x
             Debug.LogWarning($"moveVector={moveVector}");
-            TestVec = new Vector2(moveVector.x, moveVector.y) * spell.dashDistance * Time.fixedDeltaTime;
-            Debug.LogWarning($"testVec={TestVec}");
-            Player.instance.ApplyForce(TestVec);
+            _testVec = new Vector2(moveVector.x, moveVector.y) * spell.dashDistance * Time.fixedDeltaTime;
+            Debug.LogWarning($"testVec={_testVec}");
+            Player.instance.ApplyForce(_testVec);
             Invoke("EndDash", 0.25f);
         }
 
@@ -26,11 +26,6 @@ namespace Spells.SpellBehavior
         {
             Player.instance.isDashing = false;
             Destroy(gameObject);
-        }
-
-        private void FixedUpdate()
-        {
-            //Player.instance.SetVelocity(new Vector2(20, 0));
         }
 
         // Update is called once per frame

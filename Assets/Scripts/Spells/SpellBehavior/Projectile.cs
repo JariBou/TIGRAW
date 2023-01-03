@@ -24,7 +24,7 @@ namespace Spells.SpellBehavior
 
         
         
-            gameObject.transform.position += new Vector3(spell.direction.x, spell.direction.y, 0); // Offset so it casts a bit in front of you
+            gameObject.transform.position += new Vector3(spell.Direction.x, spell.Direction.y, 0); // Offset so it casts a bit in front of you
             // That way you can cast while next to a wall lol
             //TODO: You can cast through a small enough wall, fix it 
         }
@@ -32,8 +32,9 @@ namespace Spells.SpellBehavior
         // Update is called once per frame
         void FixedUpdate()
         {
-            Vector3 transformVector = transform.position;
-            transform.position = new Vector2(transformVector.x, transformVector.y) + spell.direction * (spell.projectileSpeed * Time.fixedDeltaTime);
+            var transform1 = transform;
+            Vector3 transformVector = transform1.position;
+            transform1.position = new Vector2(transformVector.x, transformVector.y) + spell.Direction * (spell.projectileSpeed * Time.fixedDeltaTime);
         }
     
         private void OnTriggerEnter2D(Collider2D collider)

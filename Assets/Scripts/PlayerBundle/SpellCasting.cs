@@ -26,7 +26,7 @@ namespace PlayerBundle
 
             try
             {
-                spellPrefab = SpellsList.getSpell(spellId);
+                spellPrefab = SpellsList.GetSpell(spellId);
             }
             catch (Exception e)
             {

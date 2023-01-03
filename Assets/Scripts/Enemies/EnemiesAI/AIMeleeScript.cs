@@ -19,14 +19,14 @@ namespace Enemies.EnemiesAI
         [SerializeField]
         private float updateFrameCount;
 
-        private EnemyInterface ennemyInstance;
+        private EnemyInterface _enemyInstance;
     
         public Rigidbody2D rb;
 
         private void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
-            ennemyInstance = GetComponent<EnemyInterface>();
+            _enemyInstance = GetComponent<EnemyInterface>();
         }
 
         // Start is called before the first frame update
@@ -39,7 +39,7 @@ namespace Enemies.EnemiesAI
     
         void Update()
         {
-            if (ennemyInstance.isInRange) {            
+            if (_enemyInstance.isInRange) {            
                 _previousPos = transform.position;
                 return;
             }
@@ -53,7 +53,7 @@ namespace Enemies.EnemiesAI
 
         void FixedUpdate()
         {
-            if (ennemyInstance.health <= 0)
+            if (_enemyInstance.health <= 0)
             {
                 Destroy(gameObject);
             }

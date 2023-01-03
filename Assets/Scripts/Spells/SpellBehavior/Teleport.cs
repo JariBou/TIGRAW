@@ -12,7 +12,7 @@ namespace Spells.SpellBehavior
         // Start is called before the first frame update
         void Start()
         {
-            if (!spell.groundTilemap.HasTile(spell.groundTilemap.WorldToCell(spell.mousePos)))
+            if (!spell.GroundTilemap.HasTile(spell.GroundTilemap.WorldToCell(spell.MousePos)))
             {
                 Debug.Log("DESTROYING");
                 Destroy(gameObject);
@@ -38,22 +38,19 @@ namespace Spells.SpellBehavior
         {
             Debug.Log("TELEPORTING");
             Debug.Log(Player.instance.transform.position);
-            Debug.Log(transform.position);
-            Player.instance.transform.position = transform.position;
+            
+            var position = transform.position;
+            Debug.Log(position);
+            Player.instance.transform.position = position;
         
             //TODO: Remove assign and coroutine when everything will revert back to normal
-            GameObject thingy = Instantiate(spell.endParticles, transform.position, Quaternion.identity);
+            GameObject thingy = Instantiate(spell.endParticles, position, Quaternion.identity);
             Destroy(thingy.gameObject, 0.5f);
 
             Player.instance.isTeleporting = false;
             Player.instance.sprite.enabled = true;
 
             Destroy(this);
-        }
-        // Update is called once per frame
-        void Update()
-        {
-        
         }
     }
 }

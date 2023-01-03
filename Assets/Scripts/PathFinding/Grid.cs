@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace PathFinding
 {
@@ -28,10 +29,10 @@ namespace PathFinding
         public Node[,] NodesGrid;
         public CompositeCollider2D floorCollider;
 
-        public bool DEBUG_MODE;
+        [FormerlySerializedAs("DEBUG_MODE")] public bool debugMode;
     
-        public int Right { get { return width; } }
-        public int Top { get { return height; } }
+        public int right => width;
+        public int top => height;
 
         public static Grid Instance;
 

@@ -7,7 +7,7 @@ namespace Enemies
         public float attack;
 
         public float health;
-        public GameObject _self;
+        public GameObject self;
         public bool isInRange;
         public static EnemyInterface Instance;
 

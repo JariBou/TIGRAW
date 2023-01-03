@@ -1,14 +1,16 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Spells
 {
     public class SpellsList : MonoBehaviour
     {
-        private static List<GameObject> spells = new List<GameObject>();
+        // ReSharper disable once FieldCanBeMadeReadOnly.Local
+        private static List<GameObject> _spells = new();
 
-        public bool LoadSpells = true;
+        [FormerlySerializedAs("LoadSpells")] public bool loadSpells = true;
         public string path = "Prefabs/Spells";
     
         /// <summary>
@@ -17,7 +19,7 @@ namespace Spells
         private void Awake()
         {
 
-            if (!LoadSpells)
+            if (!loadSpells)
             {
                 return;
             
@@ -25,25 +27,25 @@ namespace Spells
 
             // Create space for 64 spells
             for (int i = 0; i < 63; i++) {
-                spells.Add(null);
+                _spells.Add(null);
             }
 
             GameObject[] prefabs = Resources.LoadAll<GameObject>(path);
             foreach (GameObject obj in prefabs)
             {
-                spells[obj.GetComponent<Spell>().id] = obj;
+                _spells[obj.GetComponent<Spell>().id] = obj;
             }
         }
 
-        public static GameObject getSpell(int id) {
-            if (id is > 63 or < 0) {return spells[0];}
+        public static GameObject GetSpell(int id) {
+            if (id is > 63 or < 0) {return _spells[0];}
 
-            if (spells[id] == null)
+            if (_spells[id] == null)
             {
                 Debug.LogError($"Error loading spell id: {id}");
                 throw new NotImplementedException();
             }
-            return spells[id];
+            return _spells[id];
         }
 
     }

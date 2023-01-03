@@ -10,19 +10,12 @@ namespace Enemies.EnemyScript
         // Start is called before the first frame update
         void Start()
         {
-            _self = gameObject;
+            self = gameObject;
             Instance = this;
         }
     
     
-
-    
-        // Update is called once per frame
-
-        void Update()
-        {
-        }
-
+        
         private void OnTriggerEnter2D(Collider2D col)
         {
             if (col.CompareTag("Player"))

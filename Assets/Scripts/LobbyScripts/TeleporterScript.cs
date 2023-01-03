@@ -4,16 +4,12 @@ namespace LobbyScripts
 {
     public class TeleporterScript : Interactable
     {
-        private bool playerInRange;
-        // Start is called before the first frame update
-        void Start()
-        {
-        }
-
+        private bool _playerInRange;
+        
         // Update is called once per frame
         void Update()
         {
-            if (playerInRange)
+            if (_playerInRange)
             {
                 // Show Tooltip of key to press
             }
@@ -23,7 +19,7 @@ namespace LobbyScripts
         {
             if (other.CompareTag("Player"))
             {
-                playerInRange = true;
+                _playerInRange = true;
             }
         }
 
@@ -31,7 +27,7 @@ namespace LobbyScripts
         {
             if (other.CompareTag("Player"))
             {
-                playerInRange = false;
+                _playerInRange = false;
             }
         }
 

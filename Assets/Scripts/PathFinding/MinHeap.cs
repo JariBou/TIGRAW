@@ -13,7 +13,7 @@ namespace PathFinding
 		private T[] _array;
 		private T[] _tempArray;
 	
-		public int Count => _count;
+		public int count => _count;
 
 		public MinHeap() : this(16) { }
 	

@@ -25,7 +25,7 @@ namespace PathFinding
 		public NodeConnection BottomLeft;	
 		public NodeConnection BottomRight;
 
-		private CompositeCollider2D floor;
+		private CompositeCollider2D _floor;
 		// DEBUG PURPOSES
 		public NodeHelper Helper;
     
@@ -35,7 +35,7 @@ namespace PathFinding
 			_y = y;
 			GridPos = new Vector2(x, y);
 			Position = new Vector3(pos.x, pos.y);
-			floor = floorCollider;
+			_floor = floorCollider;
 
 
 			Create(pos, parent);
@@ -50,7 +50,7 @@ namespace PathFinding
 		{
 			_self = Object.Instantiate(Resources.Load ("Prefabs/Node"), parent.transform, instantiateInWorldSpace:true) as GameObject;
 
-			_self!.GetComponent<SpriteRenderer>().enabled = Grid.Instance.DEBUG_MODE;
+			_self!.GetComponent<SpriteRenderer>().enabled = Grid.Instance.debugMode;
 	    
 			// _self = Object.Instantiate(Resources.Load ("Prefabs/Node")) as GameObject;
 			if (_self != null) _self.transform.position = pos;
@@ -181,7 +181,7 @@ namespace PathFinding
 		public void CheckIfBadNode()
 		{
 			Helper.isInbounds = false;
-			if (!floor.bounds.Contains(Position)) 
+			if (!_floor.bounds.Contains(Position)) 
 			{
 				// Debug.Log("IS INBOUNDS");
 				Helper.isInbounds = true;

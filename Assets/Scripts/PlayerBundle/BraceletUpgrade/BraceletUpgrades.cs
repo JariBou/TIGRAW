@@ -11,21 +11,21 @@ namespace PlayerBundle.BraceletUpgrade
     {
   
 
-        private List<UpgradeType> unlockedUpgradesTypeList;
+        private readonly List<UpgradeType> _unlockedUpgradesTypeList;
 
         public BraceletUpgrades()
         {
-            unlockedUpgradesTypeList = new List<UpgradeType>();
+            _unlockedUpgradesTypeList = new List<UpgradeType>();
         }
 
         public void UnlockUpgrade(UpgradeType upgradeType)
         {
-            unlockedUpgradesTypeList.Add(upgradeType);
+            _unlockedUpgradesTypeList.Add(upgradeType);
         }
 
         public bool IsUpgradeUnlocked(UpgradeType upgradeType)
         {
-            return unlockedUpgradesTypeList.Contains(upgradeType);
+            return _unlockedUpgradesTypeList.Contains(upgradeType);
         }
 
     }

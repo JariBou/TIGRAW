@@ -27,6 +27,7 @@ namespace PathFinding
             if (!Valid) return;
             if (_parent == null || Node == null) return;
         
+            // ReSharper disable once Unity.UnknownResource
             _line = Object.Instantiate (Resources.Load ("Line")) as GameObject;
             if (_line == null) return;
             LineRenderer lineRenderer = _line.GetComponent<LineRenderer> ();

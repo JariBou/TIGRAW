@@ -43,7 +43,7 @@ namespace PathFinding
 			MinHeap<BreadCrumb> openList = new MinHeap<BreadCrumb>(256);
 			// Create a version of the nodeGrid with BreadCrumbs instead that will contain the best possible path for their pos
 			// I mean for now it's empty, but that's kind of the end goal, like that's how the algorithm works lol
-			BreadCrumb[,] brWorld = new BreadCrumb[world.Right, world.Top];
+			BreadCrumb[,] brWorld = new BreadCrumb[world.right, world.top];
 			BreadCrumb node;
 			Point tmp;
 			int cost;
@@ -56,7 +56,7 @@ namespace PathFinding
 			brWorld[current.Position.X, current.Position.Y] = current;
 			openList.Add(current);
 	
-			while (openList.Count > 0)
+			while (openList.count > 0)
 			{
 				// Find best item and switch it to the closedList
 				// closedList means that the best path for that Spot has been found
