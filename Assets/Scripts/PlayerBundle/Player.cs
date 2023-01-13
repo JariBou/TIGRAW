@@ -54,7 +54,7 @@ namespace PlayerBundle
 
         [HideInInspector]
         public SpriteRenderer sprite;
-        public Animator animator { get; private set; }
+        public Animator animator { get; set; }
         public static Player instance;
 
         [Header("Heat Mechanic")]
@@ -68,6 +68,7 @@ namespace PlayerBundle
         private BraceletUpgrades _braceletUpgrades;
     
         void Awake() {
+            Debug.Log("AWAKENING PLAYER");
             instance = this;
         
             playerActions = new PlayerActions();

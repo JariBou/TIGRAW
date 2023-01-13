@@ -14,6 +14,9 @@ namespace PlayerBundle
         // TODO: Problem if is composite like wasd, using InputAction.name should resolve that
     
         public Dictionary<string, int> spellLinks;
+        private static readonly int XMovement = Animator.StringToHash("xMovement");
+        private static readonly int YMovement = Animator.StringToHash("yMovement");
+        private static readonly int Speed = Animator.StringToHash("speed");
 
         public static event Action<InputAction.CallbackContext> KeyPressedEvent; 
     
@@ -73,17 +76,20 @@ namespace PlayerBundle
         private void Start()
         {
             player = Player.instance;
-            KeyPressedEvent += ResolveKeyPressed;
+            Debug.Log(player);
+            Debug.Log($"Player Animator: {player.animator}");
         }
 
         private void OnEnable()
         {
             playerActions.Playermaps.Enable();
+            KeyPressedEvent += ResolveKeyPressed;
         }
 
         private void OnDisable()
         {
             playerActions.Playermaps.Disable();
+            KeyPressedEvent -= ResolveKeyPressed;
         }
 
 
@@ -91,22 +97,49 @@ namespace PlayerBundle
         {
             Vector2 moveVector = context.ReadValue<Vector2>().normalized;
             player.SetMoveVector(moveVector);
-    
-            if ((int)moveVector.x == 1 && (int)moveVector.y == 0)
+
+            // TODO: Problem, the script is apparently destroyed here??
+            try
             {
-                player.animator.SetInteger(player.Facing, 3);
-            } else if ((int)moveVector.x == -1 && (int)moveVector.y == 0)
-            {
-                player.animator.SetInteger(player.Facing, 9);
-            } else if (Mathf.Abs((int)moveVector.y) == 1)
-            {
-                player.animator.SetInteger(player.Facing, 9 + 3*(int)moveVector.y);
-            } 
+                if ((int)moveVector.x == 1 && (int)moveVector.y == 0)
+                {
+                    player.animator.SetInteger(player.Facing, 3);
+                } else if ((int)moveVector.x == -1 && (int)moveVector.y == 0)
+                {
+                    player.animator.SetInteger(player.Facing, 9);
+                } else if (Mathf.Abs((int)moveVector.y) == 1)
+                {
+                    player.animator.SetInteger(player.Facing, 9 + 3*(int)moveVector.y);
+                } 
         
 
-            player.animator.SetFloat("xMovement", moveVector.x);
-            player.animator.SetFloat("yMovement", moveVector.y);
-            player.animator.SetFloat("speed", moveVector.sqrMagnitude);
+                player.animator.SetFloat(XMovement, moveVector.x);
+                player.animator.SetFloat(YMovement, moveVector.y);
+                player.animator.SetFloat(Speed, moveVector.sqrMagnitude);
+            }
+            catch (Exception e)
+            {
+                // TODO: We need to remake an animator????
+                player.animator = GetComponent<Animator>();
+                
+                
+                if ((int)moveVector.x == 1 && (int)moveVector.y == 0)
+                {
+                    player.animator.SetInteger(player.Facing, 3);
+                } else if ((int)moveVector.x == -1 && (int)moveVector.y == 0)
+                {
+                    player.animator.SetInteger(player.Facing, 9);
+                } else if (Mathf.Abs((int)moveVector.y) == 1)
+                {
+                    player.animator.SetInteger(player.Facing, 9 + 3*(int)moveVector.y);
+                } 
+        
+
+                player.animator.SetFloat(XMovement, moveVector.x);
+                player.animator.SetFloat(YMovement, moveVector.y);
+                player.animator.SetFloat(Speed, moveVector.sqrMagnitude);
+            }
+            
 
         }
     
