@@ -45,7 +45,7 @@ namespace PlayerBundle
                 }
 
             
-                // Could have those in static functions
+                // Could have those in static functions, yeah whatever we'll see
                 switch (action.name)
                 {
                     case "Movement":
@@ -76,7 +76,7 @@ namespace PlayerBundle
         private void Start()
         {
             player = Player.instance;
-            Debug.Log(player);
+            Debug.Log("PlayerInputHandler Start method Called");
             Debug.Log($"Player Animator: {player.animator}");
         }
 

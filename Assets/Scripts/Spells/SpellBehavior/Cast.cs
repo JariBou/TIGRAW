@@ -15,7 +15,7 @@ namespace Spells.SpellBehavior
         public Spell spell;
         public List<int> collidedEnemiesId;
         // ReSharper disable once FieldCanBeMadeReadOnly.Local
-        private Collider2D[] _results = { };
+        private Collider2D[] _results = new Collider2D[32];
 
 
     
@@ -42,7 +42,7 @@ namespace Spells.SpellBehavior
         
         }
 
-        void DealDamage()
+        private void DealDamage()
         {
             var size = Physics2D.OverlapCircleNonAlloc(transform.position, spell.damageRadius, _results, spell.enemyLayer);
 
@@ -50,7 +50,7 @@ namespace Spells.SpellBehavior
             {
                 try
                 {
-                    _results[i].GetComponent<MeleeEnemyScript>().Damage(spell.damage);
+                    _results[i].GetComponent<EnemyInterface>().Damage(spell.damage);
 
                 }
                 catch (Exception e)

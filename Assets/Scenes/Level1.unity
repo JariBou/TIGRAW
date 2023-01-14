@@ -943,13 +943,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e14286f5a93798f41afac7c35dbfd9c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  list:
-  - ID: 0
-    name: 
-    animator: {fileID: 0}
-  - ID: 0
-    name: 
-    animator: {fileID: 0}
 --- !u!4 &468831982
 Transform:
   m_ObjectHideFlags: 0
@@ -980,13 +973,13 @@ MonoBehaviour:
   spawningPoints:
   - {fileID: 1445853395}
   - {fileID: 1074336623}
-  ennemyPrefab: {fileID: 902154081949910579, guid: c9fc0a6ec5564ac458bef3b1ccf7a703, type: 3}
+  enemyPrefab: {fileID: 902154081949910579, guid: c9fc0a6ec5564ac458bef3b1ccf7a703, type: 3}
   player: {fileID: 1699763672}
-  Spawn: 1
+  spawn: 1
   mobCap: 20
-  Timer: 0
+  timer: 0
   respawnTime: 5
-  numberOfEnnemies: 2
+  numberOfEnemies: 2
 --- !u!114 &468831984
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -100290,7 +100283,7 @@ MonoBehaviour:
   width: 0
   height: 0
   floorCollider: {fileID: 1713726452}
-  DEBUG_MODE: 0
+  debugMode: 0
 --- !u!212 &1777285126
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -100409,7 +100402,7 @@ MonoBehaviour:
   damageZone: {fileID: 0}
   pierce: 1
   phantom: 0
-  DamageRadius: 0.98
+  damageRadius: 0
   dashDistance: 0
 --- !u!95 &1816997748
 Animator:

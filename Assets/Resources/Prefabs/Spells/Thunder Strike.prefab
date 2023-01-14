@@ -133,8 +133,10 @@ MonoBehaviour:
   endParticles: {fileID: 0}
   spellType: 3
   isInfPierce: 0
+  zoneSpell: 0
+  spellDuration: 0
   damageZone: {fileID: 0}
   pierce: 1
   phantom: 0
-  DamageRadius: 0.8
+  damageRadius: 0.77
   dashDistance: 0
