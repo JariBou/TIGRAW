@@ -165,8 +165,6 @@ namespace PathFinding
         
             float mag = 1000;
 
-            // Bug here somewhere, WTF IS THIS SHITE??? nvm... just be careful of prefabs loading
-        
             if (x < Instance.width && !Instance.NodesGrid[x + 1, y].BadNode)
             {
                 float mag1 = (Instance.NodesGrid[x + 1, y].Position - worldPosition).magnitude;

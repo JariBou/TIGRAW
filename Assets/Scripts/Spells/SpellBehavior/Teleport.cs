@@ -24,8 +24,7 @@ namespace Spells.SpellBehavior
             Player.instance.SetVelocity(Vector2.zero);
 
             Player.instance.heatAmount += spell.heatProduction;
-        
-            //TODO: Remove assign and coroutine when everything will revert back to normal
+            
             GameObject thingy = Instantiate(spell.startParticles, Player.instance.transform.position, Quaternion.identity);
             Destroy(thingy.gameObject, 0.5f);
 
@@ -42,8 +41,7 @@ namespace Spells.SpellBehavior
             var position = transform.position;
             Debug.Log(position);
             Player.instance.transform.position = position;
-        
-            //TODO: Remove assign and coroutine when everything will revert back to normal
+            
             GameObject thingy = Instantiate(spell.endParticles, position, Quaternion.identity);
             Destroy(thingy.gameObject, 0.5f);
 
