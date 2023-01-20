@@ -1,20 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-public class PauseMenuScript : MonoBehaviour
+namespace MainMenusScripts
 {
-    public void ReturnToLobby()
+    public class PauseMenuScript : MonoBehaviour
     {
-        //TODO: TimeScale stays at 0 when going from scene to scene
-        Time.timeScale = 1;
-        GameManager.LoadScene(3);
-    }
+        public void ReturnToLobby()
+        {
+            Time.timeScale = 1;
+            GameManager.LoadScene(3);
+        }
 
-    public void ReturnToMenu()
-    {
-        Time.timeScale = 1;
-        GameManager.LoadScene(1);
+        public void ReturnToMenu()
+        {
+            Time.timeScale = 1;
+            GameManager.LoadScene(1);
+        }
     }
 }

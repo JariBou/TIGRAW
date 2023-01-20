@@ -1,9 +1,5 @@
 ﻿using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.EventSystems;
-using System.Collections;
-using System.Collections.Generic;
-
 
 #pragma warning disable 0618 // Disabled warning due to SetVertices being deprecated until new release with SetMesh() is available.
 
@@ -48,7 +44,7 @@ namespace TMPro.Examples
                 m_Camera = m_Canvas.worldCamera;
 
             // Create pop-up text object which is used to show the link information.
-            m_TextPopup_RectTransform = Instantiate(TextPopup_Prefab_01) as RectTransform;
+            m_TextPopup_RectTransform = Instantiate(TextPopup_Prefab_01);
             m_TextPopup_RectTransform.SetParent(m_Canvas.transform, false);
             m_TextPopup_TMPComponent = m_TextPopup_RectTransform.GetComponentInChildren<TextMeshProUGUI>();
             m_TextPopup_RectTransform.gameObject.SetActive(false);

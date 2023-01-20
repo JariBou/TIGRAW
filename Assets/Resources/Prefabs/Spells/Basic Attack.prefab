@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 9017050495353775125}
   - component: {fileID: 6710110928584508389}
   m_Layer: 0
-  m_Name: Basic Attack 2
+  m_Name: Basic Attack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -137,8 +137,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectileSpeed: 10
   damage: 10
-  id: 2
-  heatProduction: 2
+  id: 0
+  heatProduction: 1
   interactionInterval: 0
   enemyLayer:
     serializedVersion: 2
@@ -150,8 +150,10 @@ MonoBehaviour:
   endParticles: {fileID: 0}
   spellType: 2
   isInfPierce: 0
+  zoneSpell: 0
+  spellDuration: 0
   damageZone: {fileID: 0}
   pierce: 1
   phantom: 0
-  DamageRadius: 0
+  damageRadius: 0
   dashDistance: 0

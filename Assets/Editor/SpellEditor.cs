@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Spells;
 using UnityEditor;
 using UnityEditor.TerrainTools;
 using UnityEngine;
@@ -43,7 +44,7 @@ public class SpellEditor : Editor
         
         if (spell.damage > 0)
         {
-            spell.DamageRadius = EditorGUILayout.Slider("Damage Radius", spell.DamageRadius, 0, 8);
+            spell.damageRadius = EditorGUILayout.Slider("Damage Radius", spell.damageRadius, 0, 8);
         }
 
         SceneView.RepaintAll();
@@ -58,7 +59,7 @@ public class SpellEditor : Editor
         
         if (spell.damage > 0)
         {
-            spell.DamageRadius = EditorGUILayout.Slider("Damage Radius", spell.DamageRadius, 0, 8);
+            spell.damageRadius = EditorGUILayout.Slider("Damage Radius", spell.damageRadius, 0, 8);
         }
 
         SceneView.RepaintAll();
@@ -76,19 +77,19 @@ public class SpellEditor : Editor
         {
             if (spell.damage > 0)
             {
-                Handles.DrawWireDisc(spell.transform.position, Vector3.back, spell.DamageRadius);
+                Handles.DrawWireDisc(spell.transform.position, Vector3.back, spell.damageRadius);
             }
         } else if (spell.spellType == SpellsType.Dash)
         {
             if (spell.damage > 0)
             {
-                Handles.DrawWireDisc(spell.transform.position, Vector3.back, spell.DamageRadius);
+                Handles.DrawWireDisc(spell.transform.position, Vector3.back, spell.damageRadius);
             }
         } else if (spell.spellType == SpellsType.AoeCast)
         {
             if (spell.damage > 0)
             {
-                Handles.DrawWireDisc(spell.transform.position, Vector3.back, spell.DamageRadius);
+                Handles.DrawWireDisc(spell.transform.position, Vector3.back, spell.damageRadius);
             }
         }
 
@@ -104,7 +105,7 @@ public class SpellEditor : Editor
         
         if (spell.damage > 0)
         {
-            spell.DamageRadius = EditorGUILayout.Slider("Damage Radius", spell.DamageRadius, 0, 8);
+            spell.damageRadius = EditorGUILayout.Slider("Damage Radius", spell.damageRadius, 0, 8);
         }
 
         SceneView.RepaintAll();

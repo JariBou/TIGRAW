@@ -1,13 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+// ReSharper disable InconsistentNaming
 
-public class NodeHelper : MonoBehaviour
+namespace PathFinding
 {
-    public int X;
-    public int Y;
-    public Vector3 Position;
-    public bool isInbounds;
-    public bool BadNode;
+    public class NodeHelper : MonoBehaviour
+    {
+        public int X;
+        public int Y;
+        public Vector3 Position;
+        public bool isInbounds;
+        public bool BadNode;
 
+    }
 }
