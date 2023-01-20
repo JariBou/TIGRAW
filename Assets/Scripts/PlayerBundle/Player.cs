@@ -58,8 +58,11 @@ namespace PlayerBundle
         public static Player instance;
 
         [Header("Heat Mechanic")]
+        [SaveVariable]
         public float heatRecoveryRate = 2f;
         public float heatAmount;
+        [SaveVariable]
+        public float maxHeat = 100f;        // SAVE
         [SerializeField]
         private bool infiniteHeat;
         private float timer;

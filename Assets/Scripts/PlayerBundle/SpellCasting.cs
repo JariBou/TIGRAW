@@ -35,7 +35,7 @@ namespace PlayerBundle
         
             Debug.Log($"Casting Spell: {spellPrefab.name}");
             Spell spellPrefabScript = spellPrefab.GetComponent<Spell>();
-            if (player.heatAmount + spellPrefabScript.heatProduction <= 100)
+            if (player.heatAmount + spellPrefabScript.heatProduction <= player.maxHeat)
             {
                 Object.Instantiate(spellPrefab);
             }

@@ -38,7 +38,7 @@ namespace PlayerBundle.PlayerUpgrades
             }
         }
 
-        public void Refresh(string text)
+        private void Refresh(string text)
         {
             value.text = text;
             upgradeAmountText.text = $"{(upgradeAmount > 0 ? '+' : '-')} {upgradeAmount}";
