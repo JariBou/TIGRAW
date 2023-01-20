@@ -32,7 +32,6 @@ public class SoundManager : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
     {
         currentScene = scene;
-        
         audioSource.Stop();
         audioSource.loop = false;
         if (scene.name == "TestLobby")
