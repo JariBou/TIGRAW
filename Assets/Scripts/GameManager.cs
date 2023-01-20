@@ -1,3 +1,4 @@
+using System;
 using LoadingScripts;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -37,5 +38,10 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         DontDestroyOnLoad(gameObject);
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 }

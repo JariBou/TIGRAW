@@ -138,7 +138,7 @@ MonoBehaviour:
   projectileSpeed: 10
   damage: 10
   id: 0
-  heatProduction: 0
+  heatProduction: 1
   interactionInterval: 0
   enemyLayer:
     serializedVersion: 2
@@ -155,5 +155,5 @@ MonoBehaviour:
   damageZone: {fileID: 0}
   pierce: 1
   phantom: 0
-  DamageRadius: 0
+  damageRadius: 0
   dashDistance: 0

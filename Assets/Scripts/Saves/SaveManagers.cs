@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace LoadingScripts
@@ -7,25 +10,61 @@ namespace LoadingScripts
     public class SaveManager
     {
         // For more complex saving
-        private static List<Type> supportedTypes;
+        private static List<Type> supportedTypes = new List<Type>()
+        {                             // TODO: check if Dictionary<dynamic, dynamic> == Dictionary<smthElse, smthElse>
+            typeof(Vector2), typeof(Vector3), typeof(int), typeof(string), typeof(Dictionary<dynamic, dynamic>) 
+        };
+
+        private static Dictionary<int, string> test;
 
         public static void SaveData<T>(T data)
         {
             Type dataType = data.GetType();
             if (!supportedTypes.Contains(dataType))
             {
-                throw new NotImplementedException($"Data Type '{dataType}' not supported for saving");
+                if (dataType.Name == typeof(Dictionary<dynamic, dynamic>).Name)
+                {
+                    Debug.Log($"It's ok for {dataType}");
+                }
+                else
+                {
+                    throw new NotImplementedException($"Data Type '{dataType}' not supported for saving");
+                }
             }
-
+            Debug.Log($"It's ok for {dataType}");
             string savePath = Application.persistentDataPath;
 
             //TODO: Implement custom save
         }
-    
-    
+
+        public static void Save(string saveName, object saveData)
+        {
+            BinaryFormatter formatter = GetBinaryFormatter();
+            
+            if (!Directory.Exists(Application.persistentDataPath + "/saves"))
+            {
+                Directory.CreateDirectory(Application.persistentDataPath + "/saves");
+            }
+
+            string path = Application.persistentDataPath + "/saves/" + saveName + ".save";
+
+            FileStream file = File.Create(path);
+
+            formatter.Serialize(file, saveData);
+
+        }
+
+        private static BinaryFormatter GetBinaryFormatter()
+        {
+            BinaryFormatter binaryFormatter = new BinaryFormatter();
+            
+            
+            
+            return binaryFormatter;
+        }
     }
 
-    public class SimpleSaveManager
+    public static class SimpleSaveManager
     {
         public static void SaveInt(string key, int value)
         {

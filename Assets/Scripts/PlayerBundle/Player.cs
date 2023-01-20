@@ -128,28 +128,6 @@ namespace PlayerBundle
             } 
         }
 
-        public void Move(InputAction.CallbackContext context) 
-        {
-            moveVector = context.ReadValue<Vector2>().normalized;
-    
-            if ((int)moveVector.x == 1 && (int)moveVector.y == 0)
-            {
-                animator.SetInteger(Facing, 3);
-            } else if ((int)moveVector.x == -1 && (int)moveVector.y == 0)
-            {
-                animator.SetInteger(Facing, 9);
-            } else if (Mathf.Abs((int)moveVector.y) == 1)
-            {
-                animator.SetInteger(Facing, 9 + 3*(int)moveVector.y);
-            } 
-        
-
-            animator.SetFloat("xMovement", moveVector.x);
-            animator.SetFloat("yMovement", moveVector.y);
-            animator.SetFloat("speed", moveVector.sqrMagnitude);
-
-        }
-
         private bool IsPerformingAction() {
             return isTeleporting || isDashing;
             // return isTeleporting;
@@ -171,45 +149,9 @@ namespace PlayerBundle
 
             body.velocity = new Vector2(moveVector.x, moveVector.y) * ((running ? sprintspeed : movespeed) * Time.fixedDeltaTime);
         }
-    
-        public void Dash(InputAction.CallbackContext context) {
-            if (heatAmount > 100) {return;}
-            if (isTeleporting) {return;}
-            if (isDashing) {return;}
-            if (moveVector.magnitude < 0.01) {return;}
-    
-        
-            SpellCasting.CastSpell(context, 4);
-        }
 
-        public void EndDash() {
-            isDashing = false;
-        }
-    
         public Vector2 GetMoveVector() {
             return moveVector;
-        }
-
-        public void Teleport(InputAction.CallbackContext context) {
-            if (heatAmount > 100) {return;}
-            if (isTeleporting) {return;}
-            if (!context.performed){return;}
-     
-            SpellCasting.CastSpell(context, 3);
-        }
-
-        public void DoBasicAttack(InputAction.CallbackContext context) {
-            if (isTeleporting) {return;}
-            if (!context.performed){return;}
-
-            SpellCasting.CastSpell(context, 2);
-        }
-
-        public void DoThunderStrike(InputAction.CallbackContext context) {
-            if (isTeleporting) {return;}
-            if (!context.performed){return;}
-
-            SpellCasting.CastSpell(context, 1);
         }
 
         public int GetHeat() {
@@ -219,25 +161,7 @@ namespace PlayerBundle
         public void ResetTimer() {
             timer = 0;
         }
-
-        public void PauseGame(InputAction.CallbackContext context)
-        {
-            if (!context.performed) return;
-            if (gamePaused)
-            {
-                Time.timeScale = 1;
-            }
-            else
-            {
-                Time.timeScale = 0;
-            }
-
-            gamePaused = !gamePaused;
-            pauseMenuCanvas.enabled = gamePaused;
-            moveVector = Vector2.zero;
-        }
-
-
+        
         public void SetVelocity(Vector2 vector)
         {
             body.velocity = vector;
@@ -246,34 +170,6 @@ namespace PlayerBundle
         public void ApplyForce(Vector2 testVec)
         {
             body.AddForce(testVec, ForceMode2D.Impulse);
-        }
-
-        public void TryInteracting(InputAction.CallbackContext context)
-        {
-            if (!context.performed) {return;}
-        
-            Collider2D[] results = Physics2D.OverlapCircleAll(GetPosition(), interactionRange, interactableLayers);
-
-            foreach (Collider2D col in results)
-            {
-                Debug.LogWarning(col.name);
-                if (col.CompareTag("Interactable"))
-                {
-                    col.GetComponent<Interactable>().Interact();
-                }
-            }
-        }
-
-        public void ShowStats(InputAction.CallbackContext context)
-        {
-            if(context.performed) // the key has been pressed
-            {
-                playerStatsScript.Enable();
-            }
-            if(context.canceled) //the key has been released
-            {
-                playerStatsScript.Disable();
-            }
         }
 
         private void OnDrawGizmos()
