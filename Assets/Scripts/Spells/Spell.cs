@@ -72,9 +72,13 @@ namespace Spells
 
         internal Vector3 MousePos;
 
+        [HideInInspector] public int Id;
+
         // Start is called before the first frame update
         void Start()
         {
+            Id = gameObject.GetInstanceID();
+            
             GroundTilemap = Player.Instance.groundTilemap;
             damageZone = GetComponent<CircleCollider2D>();
         

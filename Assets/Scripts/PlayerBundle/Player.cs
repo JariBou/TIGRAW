@@ -116,9 +116,7 @@ namespace PlayerBundle
 
         public void Damage(float amount)
         {
-            Debug.Log("REMOVING HEALTH");
             health -= amount;
-            Debug.Log($"HEALTH={health}");
         }
 
         // Start is called before the first frame update

@@ -13,7 +13,6 @@ namespace Spells.SpellBehavior
     {
     
         public Spell spell;
-        public List<int> collidedEnemiesId;
         // ReSharper disable once FieldCanBeMadeReadOnly.Local
         private Collider2D[] _results = new Collider2D[32];
 
@@ -23,11 +22,16 @@ namespace Spells.SpellBehavior
         void Start()
         {
             Player.Instance.heatAmount += spell.heatProduction;
-            collidedEnemiesId = new List<int>();
 
 
             if (spell.zoneSpell)
             {
+
+                CircleCollider2D collider2D = gameObject.AddComponent<CircleCollider2D>();
+                collider2D.radius = spell.damageRadius;
+                collider2D.isTrigger = true;
+                
+                
                 StartCoroutine(DelayedDestroy(spell.spellDuration));
                 InvokeRepeating("DealDamage", 0, spell.interactionInterval); //TODO: doesn't seem right
             }
@@ -71,24 +75,33 @@ namespace Spells.SpellBehavior
         // If has trigger
         private void OnTriggerEnter2D(Collider2D col)
         {
-            if (!col.CompareTag("Enemy")) return;
-            
-            EnemyInterface enemyScript = col.GetComponent<EnemyInterface>();
-            if (collidedEnemiesId.Contains(enemyScript.id))
+            if (!spell.zoneSpell)
             {
                 return;
             }
+            
+            if (!col.CompareTag("Enemy")) return;
+            
+            EnemyInterface enemyScript = col.GetComponent<EnemyInterface>();
+            
+            enemyScript.TryDamage(spell.Damage, spell);
+            
+        }
 
-            collidedEnemiesId.Add(enemyScript.id);
-            StartCoroutine(DelayedRemoval(spell.interactionInterval, enemyScript.id));
-            enemyScript.Damage(spell.Damage);
-        }
-    
-        IEnumerator DelayedRemoval(float delay, int id)
+        private void OnTriggerStay2D(Collider2D col)
         {
-            yield return new WaitForSeconds(delay);
-            collidedEnemiesId.Remove(id);
+            if (!spell.zoneSpell)
+            {
+                return;
+            }
+            
+            if (!col.CompareTag("Enemy")) return;
+            
+            EnemyInterface enemyScript = col.GetComponent<EnemyInterface>();
+            
+            enemyScript.TryDamage(spell.Damage, spell);
         }
+
 
     }
 }

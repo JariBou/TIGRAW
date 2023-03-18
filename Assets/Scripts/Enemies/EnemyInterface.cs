@@ -1,4 +1,7 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using Spells;
 using UnityEngine;
 
 namespace Enemies
@@ -16,6 +19,9 @@ namespace Enemies
         public float DmgInteractionTimer = 0f;
 
         public int id;
+        
+        public List<int> collidedSpellsId;
+
 
         public void Awake()
         {
@@ -40,5 +46,28 @@ namespace Enemies
                 DmgInteractionTimer = 0f;
             }
         }
+
+
+        public void TryDamage(float amount, Spell spell)
+        {
+            if (collidedSpellsId.Contains(spell.Id))
+            {
+                Debug.Log($"CollidedSpellsId already contains {spell.id}");
+            }
+            else
+            {
+                Damage(amount);
+                collidedSpellsId.Add(spell.Id);
+                StartCoroutine(DelayedRemoval(spell.interactionInterval, spell.Id));
+            }
+        }
+        
+        IEnumerator DelayedRemoval(float delay, int id)
+        {
+            yield return new WaitForSeconds(delay);
+            collidedSpellsId.Remove(id);
+        }
+        
+        
     }
 }
