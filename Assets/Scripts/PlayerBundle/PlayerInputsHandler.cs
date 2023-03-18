@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using LoadingScripts;
+using Saves;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -75,9 +77,9 @@ namespace PlayerBundle
 
         private void Start()
         {
-            player = Player.instance;
+            player = Player.Instance;
             Debug.Log("PlayerInputHandler Start method Called");
-            Debug.Log($"Player Animator: {player.animator}");
+            // Debug.Log($"Player Animator: {player.animator}");
         }
 
         private void OnEnable()
@@ -96,11 +98,12 @@ namespace PlayerBundle
         private void Move(InputAction.CallbackContext context) 
         {
             Vector2 moveVector = context.ReadValue<Vector2>().normalized;
+            Debug.Log($"moveVector= {moveVector}");
             player.SetMoveVector(moveVector);
 
             // TODO: Problem, the script is apparently destroyed here??
-            try
-            {
+            // try
+            // {
                 if ((int)moveVector.x == 1 && (int)moveVector.y == 0)
                 {
                     player.animator.SetInteger(player.Facing, 3);
@@ -116,29 +119,30 @@ namespace PlayerBundle
                 player.animator.SetFloat(XMovement, moveVector.x);
                 player.animator.SetFloat(YMovement, moveVector.y);
                 player.animator.SetFloat(Speed, moveVector.sqrMagnitude);
-            }
-            catch (Exception e)
-            {
-                // TODO: We need to remake an animator????
-                player.animator = GetComponent<Animator>();
-                
-                
-                if ((int)moveVector.x == 1 && (int)moveVector.y == 0)
-                {
-                    player.animator.SetInteger(player.Facing, 3);
-                } else if ((int)moveVector.x == -1 && (int)moveVector.y == 0)
-                {
-                    player.animator.SetInteger(player.Facing, 9);
-                } else if (Mathf.Abs((int)moveVector.y) == 1)
-                {
-                    player.animator.SetInteger(player.Facing, 9 + 3*(int)moveVector.y);
-                } 
-        
-
-                player.animator.SetFloat(XMovement, moveVector.x);
-                player.animator.SetFloat(YMovement, moveVector.y);
-                player.animator.SetFloat(Speed, moveVector.sqrMagnitude);
-            }
+            // }
+            // catch (Exception e)
+            // {
+            //     Debug.LogError("ZARBRRETYBRQTTTTTTTTTTTTTTYNSEYER");
+            //     // TODO: We need to remake an animator????
+            //     player.animator = GetComponent<Animator>();
+            //     
+            //     
+            //     if ((int)moveVector.x == 1 && (int)moveVector.y == 0)
+            //     {
+            //         player.animator.SetInteger(player.Facing, 3);
+            //     } else if ((int)moveVector.x == -1 && (int)moveVector.y == 0)
+            //     {
+            //         player.animator.SetInteger(player.Facing, 9);
+            //     } else if (Mathf.Abs((int)moveVector.y) == 1)
+            //     {
+            //         player.animator.SetInteger(player.Facing, 9 + 3*(int)moveVector.y);
+            //     } 
+            //
+            //
+            //     player.animator.SetFloat(XMovement, moveVector.x);
+            //     player.animator.SetFloat(YMovement, moveVector.y);
+            //     player.animator.SetFloat(Speed, moveVector.sqrMagnitude);
+            // }
             
 
         }
@@ -172,7 +176,12 @@ namespace PlayerBundle
         public void PauseGame(InputAction.CallbackContext context)
         {
             if (!context.performed) return;
-        
+            
+            //For Testing only ======================
+            SaveManager.SaveToJson(JsonSaveData.Initialise());
+            SaveManager.LoadFromJson();
+            // ======================================
+            
             Time.timeScale = player.gamePaused ? 1 : 0;
 
             player.gamePaused = !player.gamePaused;

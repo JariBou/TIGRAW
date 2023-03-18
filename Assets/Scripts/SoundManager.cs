@@ -32,8 +32,8 @@ public class SoundManager : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
     {
         currentScene = scene;
-        audioSource.Stop();
         audioSource.loop = false;
+        audioSource.Stop();
         if (scene.name == "TestLobby")
         {
             Debug.Log("Playing Audio");
@@ -41,8 +41,6 @@ public class SoundManager : MonoBehaviour
             audioSource.Play();
             
             StartCoroutine(PlayLobbyMusic());
-            
-            
         }
         // throw new NotImplementedException();
     }
@@ -54,6 +52,16 @@ public class SoundManager : MonoBehaviour
         audioSource.Play();
         audioSource.loop = true;
     }
+
+    IEnumerator PlayLoopingMusic()
+    {
+        throw new NotImplementedException();
+    }
+    
+    IEnumerator PlayMusicOneShot()
+    {
+        throw new NotImplementedException();
+    }
     
 }
 
@@ -64,4 +72,11 @@ public class SceneAudio
 
     public List<AudioClip> audioSourceList;
 
+}
+
+[Serializable]
+public class Music
+{
+    public bool isLoop = false;
+    public AudioClip clip;
 }

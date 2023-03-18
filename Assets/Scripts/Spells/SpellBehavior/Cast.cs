@@ -22,7 +22,7 @@ namespace Spells.SpellBehavior
         // Start is called before the first frame update
         void Start()
         {
-            Player.instance.heatAmount += spell.heatProduction;
+            Player.Instance.heatAmount += spell.heatProduction;
             collidedEnemiesId = new List<int>();
 
 
@@ -34,7 +34,7 @@ namespace Spells.SpellBehavior
             else
             {
                 StartCoroutine(DelayedDestroy(spell.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length));
-                if (spell.damage > 0)
+                if (spell.baseDamage > 0)
                 {
                     DealDamage();
                 }
@@ -50,7 +50,7 @@ namespace Spells.SpellBehavior
             {
                 try
                 {
-                    _results[i].GetComponent<EnemyInterface>().Damage(spell.damage);
+                    _results[i].GetComponent<EnemyInterface>().Damage(spell.Damage);
 
                 }
                 catch (Exception e)
@@ -81,7 +81,7 @@ namespace Spells.SpellBehavior
 
             collidedEnemiesId.Add(enemyScript.id);
             StartCoroutine(DelayedRemoval(spell.interactionInterval, enemyScript.id));
-            enemyScript.Damage(spell.damage);
+            enemyScript.Damage(spell.Damage);
         }
     
         IEnumerator DelayedRemoval(float delay, int id)

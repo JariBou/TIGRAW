@@ -1,6 +1,7 @@
 using System;
 using System.Reflection;
 using LoadingScripts;
+using Saves;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -16,6 +17,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] 
     private PlayerData playerData;
 
+    public JsonSaveData currentSave;
+    public RunData currentRunData;
+
     private void Awake()
     {
         _instance = this;
@@ -25,23 +29,36 @@ public class GameManager : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         //sceneLoader = GameObject.Find("LoadingScreen").GetComponent<SceneLoader>();
-        try
-        {
-            MonoBehaviour[] sceneActive = FindObjectsOfType<MonoBehaviour>();
-            
-            foreach (MonoBehaviour mono in sceneActive) {
-                FieldInfo[] objectFields = mono.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public);
-                for (int i = 0; i < objectFields.Length; i++) {
-                    SaveVariable attribute = Attribute.GetCustomAttribute(objectFields[i], typeof(SaveVariable)) as SaveVariable;
-                    if (attribute != null)
-                        Debug.Log($"{objectFields[i].Name} = {objectFields[i]}"); // The name of the flagged variable.
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-        }
+
+        #region Tests for saving
+        // Tests  for saving with attributes
+        // try
+        // {
+        //     MonoBehaviour[] sceneActive = FindObjectsOfType<MonoBehaviour>();
+        //     
+        //     foreach (MonoBehaviour mono in sceneActive) {
+        //         FieldInfo[] objectFields = mono.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public);
+        //         for (int i = 0; i < objectFields.Length; i++) {
+        //             SaveVariable attribute = Attribute.GetCustomAttribute(objectFields[i], typeof(SaveVariable)) as SaveVariable;
+        //             if (attribute != null)
+        //             {
+        //                 Debug.Log(
+        //                     $"[DEBUG: SaveVariable]{objectFields[i].Name} = {objectFields[i].GetValue(mono)}"); // get value of field for (object)
+        //                 if (objectFields[i].Name == "heatAmount")
+        //                 {
+        //                     objectFields[i].SetValue(mono, 50f);
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
+        // catch (Exception e)
+        // {
+        //     Console.WriteLine(e);
+        // }
+        //SaveManager.SaveTEST();
+        #endregion
+
     }
 
     public static void LoadScene(int sceneId)
@@ -61,4 +78,12 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
+}
+
+public class RunData
+{
+    public int roomNumber;
+    public int goldWon;
+    public int crystalsWon;
+    public int playerHealth;
 }

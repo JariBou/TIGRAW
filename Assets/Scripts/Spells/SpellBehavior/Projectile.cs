@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Enemies;
@@ -20,7 +21,7 @@ namespace Spells.SpellBehavior
             collidedEnnemiesId = new List<int>();
         
         
-            Player.instance.heatAmount += spell.heatProduction;
+            Player.Instance.heatAmount += spell.heatProduction;
 
         
         
@@ -54,7 +55,7 @@ namespace Spells.SpellBehavior
 
                 collidedEnnemiesId.Add(enemyScript.id);
                 StartCoroutine(DelayedRemoval(spell.interactionInterval, enemyScript.id));
-                enemyScript.Damage(spell.damage);
+                enemyScript.Damage(spell.Damage);
                 if (!spell.isInfPierce)
                 {
                     _hasCollided = true;
@@ -74,7 +75,7 @@ namespace Spells.SpellBehavior
         
         
         }
-    
+
         IEnumerator DelayedRemoval(float delay, int id)
         {
             yield return new WaitForSeconds(delay);

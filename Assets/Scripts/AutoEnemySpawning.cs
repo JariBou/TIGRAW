@@ -25,7 +25,7 @@ public class AutoEnemySpawning : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        
+        // TODO: Look for player in the vicinity to avoid spawning on top of player 
         if (!spawn) {return;}
 
         timer += respawnTime * Time.fixedDeltaTime;

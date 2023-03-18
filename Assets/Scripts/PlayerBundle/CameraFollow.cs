@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace PlayerBundle
@@ -28,5 +29,6 @@ namespace PlayerBundle
             Vector3 targetPosition = _player.position + offset;
             transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref _velocity, smoothTime);
         }
+
     }
 }

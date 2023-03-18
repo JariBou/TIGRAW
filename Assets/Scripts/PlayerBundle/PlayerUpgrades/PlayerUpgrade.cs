@@ -1,9 +1,12 @@
+using System;
+using System.Collections;
 using System.Globalization;
 using TMPro;
 using UnityEngine;
 
 namespace PlayerBundle.PlayerUpgrades
 {
+    [Serializable]
     public enum PlayerUpgrades
     {
         AtkMultiplier,
@@ -16,12 +19,20 @@ namespace PlayerBundle.PlayerUpgrades
         public TMP_Text upgradeAmountText;
         public PlayerUpgrades upgrade;
         public float upgradeAmount;
-    
-        //TODO: Refresh on Load bitch
+        
     
         // Start is called before the first frame update
         void Start()
         {
+            if (PlayerUpgradesHandler.upgradeAmount.ContainsKey(upgrade))
+            {
+                PlayerUpgradesHandler.upgradeAmount[upgrade] = upgradeAmount;
+            }
+            else
+            {
+                PlayerUpgradesHandler.upgradeAmount.Add(upgrade, upgradeAmount);
+            }
+
             Refresh();
         }
 
@@ -30,10 +41,10 @@ namespace PlayerBundle.PlayerUpgrades
             switch (upgrade)
             {
                 case PlayerUpgrades.AtkMultiplier:
-                    Refresh(Player.instance.atkMultiplier.ToString(CultureInfo.InvariantCulture));
+                    Refresh(Math.Round(Player.Instance.baseAtkMultiplier, 3).ToString(CultureInfo.InvariantCulture));
                     break;
                 case PlayerUpgrades.Health:
-                    Refresh(Player.instance.health.ToString(CultureInfo.InvariantCulture));
+                    Refresh(Player.Instance.baseMaxHealth.ToString(CultureInfo.InvariantCulture));
                     break;
             }
         }
@@ -46,17 +57,8 @@ namespace PlayerBundle.PlayerUpgrades
     
         public void Upgrade()
         {
-            switch (upgrade)
-            {
-                case PlayerUpgrades.AtkMultiplier:
-                    Player.instance.atkMultiplier += upgradeAmount;
-                    Refresh(Player.instance.atkMultiplier.ToString(CultureInfo.InvariantCulture));
-                    break;
-                case PlayerUpgrades.Health:
-                    Player.instance.health += upgradeAmount;
-                    Refresh(Player.instance.health.ToString(CultureInfo.InvariantCulture));
-                    break;
-            }
+            PlayerUpgradesHandler.Upgrade(upgrade);
+            Refresh();
         }
     }
 }

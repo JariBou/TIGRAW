@@ -1,3 +1,4 @@
+using PlayerBundle;
 using UnityEngine;
 
 namespace Enemies.EnemyScript
@@ -20,6 +21,12 @@ namespace Enemies.EnemyScript
         {
             if (col.CompareTag("Player"))
             {
+                // if (DmgInteractionTimer == 0)
+                // {
+                //     Debug.Log("ZAFUCK");
+                //     col.GetComponent<Player>().health -= attack;
+                //     DmgInteractionTimer = DmgInteractionDelay;
+                // }
                 isInRange = true;
             } 
         }

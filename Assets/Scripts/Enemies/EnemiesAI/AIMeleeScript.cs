@@ -1,4 +1,5 @@
 using PathFinding;
+using PlayerBundle;
 using UnityEngine;
 using Grid = PathFinding.Grid;
 
@@ -32,6 +33,8 @@ namespace Enemies.EnemiesAI
         // Start is called before the first frame update
         void Start()
         {
+            targetEntity = Player.Instance.gameObject;
+
             var position = transform.position;
             _targetPos = position;
             _previousPos = position;
@@ -41,6 +44,10 @@ namespace Enemies.EnemiesAI
         {
             if (_enemyInstance.isInRange) {            
                 _previousPos = transform.position;
+
+                Debug.Log("ATTACKING FUCKER");
+                Player.Instance.Damage(_enemyInstance.attack);
+                
                 return;
             }
             updateFrameCount += 1;

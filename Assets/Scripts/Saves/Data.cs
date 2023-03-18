@@ -11,11 +11,6 @@ namespace Saves
 
         public int roomNumber;
 
-        void test()
-        {
-            
-        }
-
         public int playerHealth;
         public int playerGold; // Might replace with souls to make more sense
         public int playerCrystals; 

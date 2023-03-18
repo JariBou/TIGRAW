@@ -42,7 +42,7 @@ public class SpellEditor : Editor
             spell.spellDuration = EditorGUILayout.Slider("Spell Duration", spell.spellDuration, 0, 16);
         }
         
-        if (spell.damage > 0)
+        if (spell.baseDamage > 0)
         {
             spell.damageRadius = EditorGUILayout.Slider("Damage Radius", spell.damageRadius, 0, 8);
         }
@@ -57,7 +57,7 @@ public class SpellEditor : Editor
 
         spell.dashDistance = EditorGUILayout.IntField("Dash Distance", spell.dashDistance);
         
-        if (spell.damage > 0)
+        if (spell.baseDamage > 0)
         {
             spell.damageRadius = EditorGUILayout.Slider("Damage Radius", spell.damageRadius, 0, 8);
         }
@@ -75,19 +75,19 @@ public class SpellEditor : Editor
         {
         } else if (spell.spellType == SpellsType.Teleport)
         {
-            if (spell.damage > 0)
+            if (spell.baseDamage > 0)
             {
                 Handles.DrawWireDisc(spell.transform.position, Vector3.back, spell.damageRadius);
             }
         } else if (spell.spellType == SpellsType.Dash)
         {
-            if (spell.damage > 0)
+            if (spell.baseDamage > 0)
             {
                 Handles.DrawWireDisc(spell.transform.position, Vector3.back, spell.damageRadius);
             }
         } else if (spell.spellType == SpellsType.AoeCast)
         {
-            if (spell.damage > 0)
+            if (spell.baseDamage > 0)
             {
                 Handles.DrawWireDisc(spell.transform.position, Vector3.back, spell.damageRadius);
             }
@@ -103,7 +103,7 @@ public class SpellEditor : Editor
         spell.startParticles = EditorGUILayout.ObjectField("Start Particles" ,spell.startParticles, typeof(GameObject), true) as GameObject;
         spell.endParticles = EditorGUILayout.ObjectField("End Particles" ,spell.endParticles, typeof(GameObject), true) as GameObject;
         
-        if (spell.damage > 0)
+        if (spell.baseDamage > 0)
         {
             spell.damageRadius = EditorGUILayout.Slider("Damage Radius", spell.damageRadius, 0, 8);
         }

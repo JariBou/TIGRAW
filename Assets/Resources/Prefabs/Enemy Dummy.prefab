@@ -156,10 +156,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c57457832f7c3c42990d7db4255102c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attack: 0
+  attack: 10
   health: 20
-  _self: {fileID: 0}
+  self: {fileID: 0}
   isInRange: 0
+  DmgInteractionDelay: 2
+  DmgInteractionTimer: 0
   id: 0
   playerDetection: {fileID: 902154081949910570}
 --- !u!58 &902154081949910570

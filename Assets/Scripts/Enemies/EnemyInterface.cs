@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Enemies
@@ -10,6 +11,9 @@ namespace Enemies
         public GameObject self;
         public bool isInRange;
         public static EnemyInterface Instance;
+
+        public float DmgInteractionDelay = 2f;
+        public float DmgInteractionTimer = 0f;
 
         public int id;
 
@@ -24,6 +28,17 @@ namespace Enemies
             health -= amount;
         }
 
-    
+        private void FixedUpdate()
+        {
+            if (DmgInteractionTimer > 0)
+            {
+                DmgInteractionTimer -= Time.fixedDeltaTime;
+            }
+
+            if (DmgInteractionTimer < 0)
+            {
+                DmgInteractionTimer = 0f;
+            }
+        }
     }
 }

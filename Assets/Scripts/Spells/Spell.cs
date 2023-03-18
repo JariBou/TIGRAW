@@ -1,7 +1,9 @@
 using System;
 using PlayerBundle;
 using Spells.SpellBehavior;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.Tilemaps;
 
 namespace Spells
@@ -20,7 +22,8 @@ namespace Spells
     public class Spell : MonoBehaviour
     {
         public float projectileSpeed = 2f;
-        public float damage = 10;
+        [FormerlySerializedAs("damage")] public float baseDamage = 10;
+        [Serialize] public float Damage => baseDamage + Player.Instance.AtkMultiplier;
         public int id;
         public float heatProduction = 2f;
 
@@ -72,19 +75,19 @@ namespace Spells
         // Start is called before the first frame update
         void Start()
         {
-            GroundTilemap = Player.instance.groundTilemap;
+            GroundTilemap = Player.Instance.groundTilemap;
             damageZone = GetComponent<CircleCollider2D>();
         
             MousePos = Camera.main!.ScreenToWorldPoint(Input.mousePosition);
             MousePos += new Vector3(0, 0, 10); // z camera offset
-            transform.position = Player.instance.GetPosition();
-            Direction = (MousePos - Player.instance.GetPosition());
+            transform.position = Player.Instance.GetPosition();
+            Direction = (MousePos - Player.Instance.GetPosition());
             Direction /= Direction.magnitude;
 
             switch (spellType)
             {
                 case SpellsType.Dash :
-                    Player.instance.isDashing = true;
+                    Player.Instance.isDashing = true;
                     gameObject.AddComponent<Dash>().spell = this;
                     break;
             
@@ -95,10 +98,10 @@ namespace Spells
             
                 case SpellsType.Projectile :
 
-                    RaycastHit2D hit = Physics2D.Raycast(Player.instance.GetPosition(), Direction,
+                    RaycastHit2D hit = Physics2D.Raycast(Player.Instance.GetPosition(), Direction,
                         new Vector2(Direction.x, Direction.y).sqrMagnitude, wallLayer);
         
-                    Debug.DrawRay(new Vector3(Player.instance.GetPosition().x, Player.instance.GetPosition().y, 0), new Vector3(Direction.x, Direction.y, 0), Color.red, 1f);
+                    Debug.DrawRay(new Vector3(Player.Instance.GetPosition().x, Player.Instance.GetPosition().y, 0), new Vector3(Direction.x, Direction.y, 0), Color.red, 1f);
                     if (hit)
                     {
                         Debug.LogError("Hit");

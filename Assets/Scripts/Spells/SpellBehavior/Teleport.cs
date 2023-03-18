@@ -19,13 +19,13 @@ namespace Spells.SpellBehavior
                 return;
             }
         
-            Player.instance.isTeleporting = true;
-            Player.instance.sprite.enabled = false;
-            Player.instance.SetVelocity(Vector2.zero);
+            Player.Instance.isTeleporting = true;
+            Player.Instance.sprite.enabled = false;
+            Player.Instance.SetVelocity(Vector2.zero);
 
-            Player.instance.heatAmount += spell.heatProduction;
+            Player.Instance.heatAmount += spell.heatProduction;
             
-            GameObject thingy = Instantiate(spell.startParticles, Player.instance.transform.position, Quaternion.identity);
+            GameObject thingy = Instantiate(spell.startParticles, Player.Instance.transform.position, Quaternion.identity);
             Destroy(thingy.gameObject, 0.5f);
 
             Invoke("DoTeleport", spell.projectileSpeed);
@@ -36,17 +36,17 @@ namespace Spells.SpellBehavior
         void DoTeleport()
         {
             Debug.Log("TELEPORTING");
-            Debug.Log(Player.instance.transform.position);
+            Debug.Log(Player.Instance.transform.position);
             
             var position = transform.position;
             Debug.Log(position);
-            Player.instance.transform.position = position;
+            Player.Instance.transform.position = position;
             
             GameObject thingy = Instantiate(spell.endParticles, position, Quaternion.identity);
             Destroy(thingy.gameObject, 0.5f);
 
-            Player.instance.isTeleporting = false;
-            Player.instance.sprite.enabled = true;
+            Player.Instance.isTeleporting = false;
+            Player.Instance.sprite.enabled = true;
 
             Destroy(this);
         }
