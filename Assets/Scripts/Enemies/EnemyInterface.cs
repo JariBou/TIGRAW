@@ -43,8 +43,18 @@ namespace Enemies
 
             if (DmgInteractionTimer < 0)
             {
-                DmgInteractionTimer = 0f;
+                ResetInteractionTimer();
             }
+        }
+
+        public void InitInteractionTimer()
+        {
+            DmgInteractionTimer = DmgInteractionDelay;
+        }
+        
+        public void ResetInteractionTimer()
+        {
+            DmgInteractionTimer = 0f;
         }
 
 

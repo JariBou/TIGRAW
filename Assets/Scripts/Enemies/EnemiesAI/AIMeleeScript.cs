@@ -42,11 +42,11 @@ namespace Enemies.EnemiesAI
     
         void Update()
         {
-            if (_enemyInstance.isInRange) {            
+            if (_enemyInstance.isInRange) {     // Leave it here because ranged and melee will not behave the same       
                 _previousPos = transform.position;
-
-                Debug.Log("ATTACKING FUCKER");
-                Player.Instance.Damage(_enemyInstance.attack);
+                
+                
+                AttackPlayer();
                 
                 return;
             }
@@ -56,6 +56,22 @@ namespace Enemies.EnemiesAI
                 UpdatePath();
                 updateFrameCount = 0;
             }
+        }
+
+        private void AttackPlayer()
+        {
+            if (_enemyInstance.DmgInteractionTimer > 0)
+            {
+                return;
+            }
+            else
+            {
+                Debug.Log("ATTACKING FUCKER");
+
+                Player.Instance.Damage(_enemyInstance.attack);
+                _enemyInstance.InitInteractionTimer();
+            }
+
         }
 
         void FixedUpdate()
