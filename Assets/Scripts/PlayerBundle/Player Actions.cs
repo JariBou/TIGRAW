@@ -37,42 +37,6 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Teleport"",
-                    ""type"": ""Button"",
-                    ""id"": ""8549b579-0c2e-40b3-a304-16077530dcff"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Dash"",
-                    ""type"": ""Button"",
-                    ""id"": ""330a8cbf-d462-43f6-a254-15022c70daa1"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""BasicAttack"",
-                    ""type"": ""Button"",
-                    ""id"": ""451a998e-5756-4e2f-9a5a-053a822b5b27"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""ThunderStrike"",
-                    ""type"": ""Button"",
-                    ""id"": ""4225d3a2-fd9b-4b7f-b488-1967ce310cac"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Escape"",
                     ""type"": ""Button"",
                     ""id"": ""25f4f4a1-4bba-484e-8197-eff558953bdd"",
@@ -134,6 +98,60 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Spell 4"",
+                    ""type"": ""Button"",
+                    ""id"": ""ad450f0a-1e8a-4b31-a8cd-9ac5918a8757"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Spell 5"",
+                    ""type"": ""Button"",
+                    ""id"": ""ca0a0bec-671f-487b-b37f-13134b2b68b8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Spell 6"",
+                    ""type"": ""Button"",
+                    ""id"": ""a91a217c-4959-4503-9627-736fda251982"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Spell 7"",
+                    ""type"": ""Button"",
+                    ""id"": ""971d90c1-cf37-4568-801a-431a7ecd3241"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Spell 8"",
+                    ""type"": ""Button"",
+                    ""id"": ""94db5e6f-bf3f-413c-9fe6-429c0221bbb2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Run"",
+                    ""type"": ""Button"",
+                    ""id"": ""a62b2195-0fee-42c3-96d5-840ac477078f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -191,50 +209,6 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""4aa676f2-6010-4cb6-b82a-5824e737df85"",
-                    ""path"": ""<Keyboard>/c"",
-                    ""interactions"": ""Press"",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Teleport"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""db834bd9-d617-4ad0-99b6-b15cc1e6a277"",
-                    ""path"": ""<Keyboard>/space"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Dash"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""4f1b22dc-b726-4b6d-ac70-7bdfb02f1231"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": ""Press"",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""BasicAttack"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""ba44486d-c588-471d-899c-2322ab387062"",
-                    ""path"": ""<Mouse>/rightButton"",
-                    ""interactions"": ""Press"",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ThunderStrike"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
@@ -312,6 +286,72 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
                     ""action"": ""Spell 3"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""aa389889-7f2e-4b4a-972a-c0caa602203e"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Run"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""73a96d04-16af-4778-bbd5-28a3c0b3690e"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Spell 4"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4a23fe30-bae8-4575-8c5c-a48d16d4506e"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Spell 5"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e0d6e082-2e5d-4f30-a3e2-b930da520025"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Spell 6"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e8a098c6-f450-42e5-89b1-a736d52213bd"",
+                    ""path"": ""<Keyboard>/z"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Spell 7"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8bab69c2-afd7-4a50-9f0c-a5b42226304b"",
+                    ""path"": ""<Keyboard>/x"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Spell 8"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -349,10 +389,6 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
         // Player maps
         m_Playermaps = asset.FindActionMap("Player maps", throwIfNotFound: true);
         m_Playermaps_Movement = m_Playermaps.FindAction("Movement", throwIfNotFound: true);
-        m_Playermaps_Teleport = m_Playermaps.FindAction("Teleport", throwIfNotFound: true);
-        m_Playermaps_Dash = m_Playermaps.FindAction("Dash", throwIfNotFound: true);
-        m_Playermaps_BasicAttack = m_Playermaps.FindAction("BasicAttack", throwIfNotFound: true);
-        m_Playermaps_ThunderStrike = m_Playermaps.FindAction("ThunderStrike", throwIfNotFound: true);
         m_Playermaps_Escape = m_Playermaps.FindAction("Escape", throwIfNotFound: true);
         m_Playermaps_Interact = m_Playermaps.FindAction("Interact", throwIfNotFound: true);
         m_Playermaps_OpenStats = m_Playermaps.FindAction("OpenStats", throwIfNotFound: true);
@@ -360,6 +396,12 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
         m_Playermaps_Spell1 = m_Playermaps.FindAction("Spell 1", throwIfNotFound: true);
         m_Playermaps_Spell2 = m_Playermaps.FindAction("Spell 2", throwIfNotFound: true);
         m_Playermaps_Spell3 = m_Playermaps.FindAction("Spell 3", throwIfNotFound: true);
+        m_Playermaps_Spell4 = m_Playermaps.FindAction("Spell 4", throwIfNotFound: true);
+        m_Playermaps_Spell5 = m_Playermaps.FindAction("Spell 5", throwIfNotFound: true);
+        m_Playermaps_Spell6 = m_Playermaps.FindAction("Spell 6", throwIfNotFound: true);
+        m_Playermaps_Spell7 = m_Playermaps.FindAction("Spell 7", throwIfNotFound: true);
+        m_Playermaps_Spell8 = m_Playermaps.FindAction("Spell 8", throwIfNotFound: true);
+        m_Playermaps_Run = m_Playermaps.FindAction("Run", throwIfNotFound: true);
         // SpellCastingMap
         m_SpellCastingMap = asset.FindActionMap("SpellCastingMap", throwIfNotFound: true);
         m_SpellCastingMap_SpellCastingMap = m_SpellCastingMap.FindAction("SpellCastingMap", throwIfNotFound: true);
@@ -423,10 +465,6 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Playermaps;
     private IPlayermapsActions m_PlayermapsActionsCallbackInterface;
     private readonly InputAction m_Playermaps_Movement;
-    private readonly InputAction m_Playermaps_Teleport;
-    private readonly InputAction m_Playermaps_Dash;
-    private readonly InputAction m_Playermaps_BasicAttack;
-    private readonly InputAction m_Playermaps_ThunderStrike;
     private readonly InputAction m_Playermaps_Escape;
     private readonly InputAction m_Playermaps_Interact;
     private readonly InputAction m_Playermaps_OpenStats;
@@ -434,15 +472,17 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Playermaps_Spell1;
     private readonly InputAction m_Playermaps_Spell2;
     private readonly InputAction m_Playermaps_Spell3;
+    private readonly InputAction m_Playermaps_Spell4;
+    private readonly InputAction m_Playermaps_Spell5;
+    private readonly InputAction m_Playermaps_Spell6;
+    private readonly InputAction m_Playermaps_Spell7;
+    private readonly InputAction m_Playermaps_Spell8;
+    private readonly InputAction m_Playermaps_Run;
     public struct PlayermapsActions
     {
         private @PlayerActions m_Wrapper;
         public PlayermapsActions(@PlayerActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_Playermaps_Movement;
-        public InputAction @Teleport => m_Wrapper.m_Playermaps_Teleport;
-        public InputAction @Dash => m_Wrapper.m_Playermaps_Dash;
-        public InputAction @BasicAttack => m_Wrapper.m_Playermaps_BasicAttack;
-        public InputAction @ThunderStrike => m_Wrapper.m_Playermaps_ThunderStrike;
         public InputAction @Escape => m_Wrapper.m_Playermaps_Escape;
         public InputAction @Interact => m_Wrapper.m_Playermaps_Interact;
         public InputAction @OpenStats => m_Wrapper.m_Playermaps_OpenStats;
@@ -450,6 +490,12 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
         public InputAction @Spell1 => m_Wrapper.m_Playermaps_Spell1;
         public InputAction @Spell2 => m_Wrapper.m_Playermaps_Spell2;
         public InputAction @Spell3 => m_Wrapper.m_Playermaps_Spell3;
+        public InputAction @Spell4 => m_Wrapper.m_Playermaps_Spell4;
+        public InputAction @Spell5 => m_Wrapper.m_Playermaps_Spell5;
+        public InputAction @Spell6 => m_Wrapper.m_Playermaps_Spell6;
+        public InputAction @Spell7 => m_Wrapper.m_Playermaps_Spell7;
+        public InputAction @Spell8 => m_Wrapper.m_Playermaps_Spell8;
+        public InputAction @Run => m_Wrapper.m_Playermaps_Run;
         public InputActionMap Get() { return m_Wrapper.m_Playermaps; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -462,18 +508,6 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
                 @Movement.started -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnMovement;
                 @Movement.performed -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnMovement;
                 @Movement.canceled -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnMovement;
-                @Teleport.started -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnTeleport;
-                @Teleport.performed -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnTeleport;
-                @Teleport.canceled -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnTeleport;
-                @Dash.started -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnDash;
-                @Dash.performed -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnDash;
-                @Dash.canceled -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnDash;
-                @BasicAttack.started -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnBasicAttack;
-                @BasicAttack.performed -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnBasicAttack;
-                @BasicAttack.canceled -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnBasicAttack;
-                @ThunderStrike.started -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnThunderStrike;
-                @ThunderStrike.performed -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnThunderStrike;
-                @ThunderStrike.canceled -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnThunderStrike;
                 @Escape.started -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnEscape;
                 @Escape.performed -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnEscape;
                 @Escape.canceled -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnEscape;
@@ -495,6 +529,24 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
                 @Spell3.started -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnSpell3;
                 @Spell3.performed -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnSpell3;
                 @Spell3.canceled -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnSpell3;
+                @Spell4.started -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnSpell4;
+                @Spell4.performed -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnSpell4;
+                @Spell4.canceled -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnSpell4;
+                @Spell5.started -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnSpell5;
+                @Spell5.performed -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnSpell5;
+                @Spell5.canceled -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnSpell5;
+                @Spell6.started -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnSpell6;
+                @Spell6.performed -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnSpell6;
+                @Spell6.canceled -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnSpell6;
+                @Spell7.started -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnSpell7;
+                @Spell7.performed -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnSpell7;
+                @Spell7.canceled -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnSpell7;
+                @Spell8.started -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnSpell8;
+                @Spell8.performed -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnSpell8;
+                @Spell8.canceled -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnSpell8;
+                @Run.started -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnRun;
+                @Run.performed -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnRun;
+                @Run.canceled -= m_Wrapper.m_PlayermapsActionsCallbackInterface.OnRun;
             }
             m_Wrapper.m_PlayermapsActionsCallbackInterface = instance;
             if (instance != null)
@@ -502,18 +554,6 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
                 @Movement.started += instance.OnMovement;
                 @Movement.performed += instance.OnMovement;
                 @Movement.canceled += instance.OnMovement;
-                @Teleport.started += instance.OnTeleport;
-                @Teleport.performed += instance.OnTeleport;
-                @Teleport.canceled += instance.OnTeleport;
-                @Dash.started += instance.OnDash;
-                @Dash.performed += instance.OnDash;
-                @Dash.canceled += instance.OnDash;
-                @BasicAttack.started += instance.OnBasicAttack;
-                @BasicAttack.performed += instance.OnBasicAttack;
-                @BasicAttack.canceled += instance.OnBasicAttack;
-                @ThunderStrike.started += instance.OnThunderStrike;
-                @ThunderStrike.performed += instance.OnThunderStrike;
-                @ThunderStrike.canceled += instance.OnThunderStrike;
                 @Escape.started += instance.OnEscape;
                 @Escape.performed += instance.OnEscape;
                 @Escape.canceled += instance.OnEscape;
@@ -535,6 +575,24 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
                 @Spell3.started += instance.OnSpell3;
                 @Spell3.performed += instance.OnSpell3;
                 @Spell3.canceled += instance.OnSpell3;
+                @Spell4.started += instance.OnSpell4;
+                @Spell4.performed += instance.OnSpell4;
+                @Spell4.canceled += instance.OnSpell4;
+                @Spell5.started += instance.OnSpell5;
+                @Spell5.performed += instance.OnSpell5;
+                @Spell5.canceled += instance.OnSpell5;
+                @Spell6.started += instance.OnSpell6;
+                @Spell6.performed += instance.OnSpell6;
+                @Spell6.canceled += instance.OnSpell6;
+                @Spell7.started += instance.OnSpell7;
+                @Spell7.performed += instance.OnSpell7;
+                @Spell7.canceled += instance.OnSpell7;
+                @Spell8.started += instance.OnSpell8;
+                @Spell8.performed += instance.OnSpell8;
+                @Spell8.canceled += instance.OnSpell8;
+                @Run.started += instance.OnRun;
+                @Run.performed += instance.OnRun;
+                @Run.canceled += instance.OnRun;
             }
         }
     }
@@ -575,10 +633,6 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
     public interface IPlayermapsActions
     {
         void OnMovement(InputAction.CallbackContext context);
-        void OnTeleport(InputAction.CallbackContext context);
-        void OnDash(InputAction.CallbackContext context);
-        void OnBasicAttack(InputAction.CallbackContext context);
-        void OnThunderStrike(InputAction.CallbackContext context);
         void OnEscape(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
         void OnOpenStats(InputAction.CallbackContext context);
@@ -586,6 +640,12 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
         void OnSpell1(InputAction.CallbackContext context);
         void OnSpell2(InputAction.CallbackContext context);
         void OnSpell3(InputAction.CallbackContext context);
+        void OnSpell4(InputAction.CallbackContext context);
+        void OnSpell5(InputAction.CallbackContext context);
+        void OnSpell6(InputAction.CallbackContext context);
+        void OnSpell7(InputAction.CallbackContext context);
+        void OnSpell8(InputAction.CallbackContext context);
+        void OnRun(InputAction.CallbackContext context);
     }
     public interface ISpellCastingMapActions
     {

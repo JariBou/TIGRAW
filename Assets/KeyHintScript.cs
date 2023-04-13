@@ -1,3 +1,4 @@
+using LobbyScripts;
 using UnityEngine;
 
 public class KeyHintScript : MonoBehaviour
@@ -27,21 +28,20 @@ public class KeyHintScript : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
-        {
-            playerInRange = true;
-            floatingText.SetActive(true);
+        if (!other.CompareTag("Player")) return;
+        if (!TeleporterScript.Instance.IsUsable) {return;}
             
-        }
+        playerInRange = true;
+        floatingText.SetActive(true);
     }
 
     void OnTriggerExit2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
-        {
-            playerInRange = false;
-            floatingText.SetActive(false);
-        }
+        if (!other.CompareTag("Player")) return;
+        if (!TeleporterScript.Instance.IsUsable) {return;}
+
+        playerInRange = false;
+        floatingText.SetActive(false);
     }
     
 }

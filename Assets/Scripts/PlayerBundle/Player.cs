@@ -21,7 +21,8 @@ namespace PlayerBundle
         [FormerlySerializedAs("sprintspeed")] [SaveVariable] public int baseSprintspeed; // Modified by bracelet potentially
         [SaveVariable] public bool canSprint; // Modified by bracelet potentially
         private Vector2 moveVector;
-        bool running;
+        [HideInInspector]
+        public bool running;
         [HideInInspector] public bool isDashing;
         
 
@@ -34,6 +35,10 @@ namespace PlayerBundle
         public float AtkMultiplier =>
             baseAtkMultiplier +
             PlayerUpgradesHandler.GetUpgradedAmount(PlayerUpgrades.PlayerUpgrades.AtkMultiplier);
+
+        public float MaxHealth =>
+            baseMaxHealth +
+            PlayerUpgradesHandler.GetUpgradedAmount(PlayerUpgrades.PlayerUpgrades.Health);
 
 
         [Header("Teleportation Variables")]
@@ -89,8 +94,8 @@ namespace PlayerBundle
             circleCollider = GetComponent<CircleCollider2D>();
             circleColliderOffset = new Vector3(circleCollider.offset.x, circleCollider.offset.y, 0);
             
-            _playerUpgradesHandler = new PlayerUpgradesHandler();
-            _braceletUpgrades = new BraceletUpgrades();
+            // _playerUpgradesHandler = new PlayerUpgradesHandler();
+            // _braceletUpgrades = new BraceletUpgrades();
 
         }
 
@@ -139,7 +144,7 @@ namespace PlayerBundle
                 heatAmount = 0;
             }
         
-            running = Input.GetKey(KeyCode.LeftShift);
+            // running = Input.GetKey(KeyCode.LeftShift);
         }
 
         private bool IsPerformingAction() {
@@ -149,7 +154,6 @@ namespace PlayerBundle
 
         private void FixedUpdate()
         {
-            Debug.Log("Fixed Update");
             if (heatAmount > 0) heatAmount -= baseHeatRecoveryRate * Time.fixedDeltaTime;
             else if (heatAmount < 0) heatAmount = 0;
 

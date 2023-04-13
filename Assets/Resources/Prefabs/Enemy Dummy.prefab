@@ -157,12 +157,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attack: 10
+  deathObj: {fileID: 942481806563087437, guid: d2508fa4a01db974bb06a4e18dd43399, type: 3}
+  MaxHealth: 20
   health: 20
   self: {fileID: 0}
   isInRange: 0
   DmgInteractionDelay: 2
   DmgInteractionTimer: 0
   id: 0
+  collidedSpellsId: 
   playerDetection: {fileID: 902154081949910570}
 --- !u!58 &902154081949910570
 CircleCollider2D:

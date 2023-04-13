@@ -76,10 +76,7 @@ namespace Enemies.EnemiesAI
 
         void FixedUpdate()
         {
-            if (_enemyInstance.health <= 0)
-            {
-                Destroy(gameObject);
-            }
+            
         
 
         

@@ -1,13 +1,15 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using PlayerBundle.PlayerUpgrades;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.TextCore.Text;
 
 public class SoundManager : MonoBehaviour
 {
-
+    public bool playMusic = true;
+    
     public List<SceneAudio> audios;
 
     private Dictionary<string, List<AudioClip>> audioDict = new();
@@ -32,15 +34,12 @@ public class SoundManager : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
     {
         currentScene = scene;
+        if (!playMusic) return;
         audioSource.loop = false;
         audioSource.Stop();
-        if (scene.name == "TestLobby")
+        if (scene.name == "Lobby")
         {
-            Debug.Log("Playing Audio");
-            audioSource.clip = audioDict["TestLobby"][0];
-            audioSource.Play();
-            
-            StartCoroutine(PlayLobbyMusic());
+            PlayLoopingMusic(audioDict["Lobby"][0]);
         }
         // throw new NotImplementedException();
     }
@@ -48,14 +47,16 @@ public class SoundManager : MonoBehaviour
     IEnumerator PlayLobbyMusic()
     {
         yield return new WaitForSeconds(audioSource.clip.length);
-        audioSource.clip = audioDict["TestLobby"][1];
+        audioSource.clip = audioDict["TestLobby"][0];
         audioSource.Play();
         audioSource.loop = true;
     }
 
-    IEnumerator PlayLoopingMusic()
+    private void PlayLoopingMusic(AudioClip clip)
     {
-        throw new NotImplementedException();
+        audioSource.clip = clip;
+        audioSource.Play();
+        audioSource.loop = true;
     }
     
     IEnumerator PlayMusicOneShot()

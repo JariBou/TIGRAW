@@ -32,6 +32,8 @@ namespace LoadingScripts
 
                 yield return null;
             }
+
+            loadingScreen.enabled = false;
         }
     }
 }

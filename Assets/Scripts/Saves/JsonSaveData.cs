@@ -20,6 +20,7 @@ namespace Saves
         public int playerGold; // Might replace with souls to make more sense
         public int playerCrystals; 
         
+        // relic from when I worked on this while filming an AD for MEUPORG
 
         public static JsonSaveData Initialise()
         {

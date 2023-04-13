@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using Spells;
@@ -10,6 +9,9 @@ namespace Enemies
     {
         public float attack;
 
+        public GameObject deathObj;
+
+        public float MaxHealth;
         public float health;
         public GameObject self;
         public bool isInRange;
@@ -21,11 +23,13 @@ namespace Enemies
         public int id;
         
         public List<int> collidedSpellsId;
+        private static readonly int IsDead = Animator.StringToHash("isDead");
 
 
         public void Awake()
         {
             id = gameObject.GetInstanceID();
+            health = MaxHealth;
         }
 
 
@@ -34,8 +38,15 @@ namespace Enemies
             health -= amount;
         }
 
-        private void FixedUpdate()
+        protected void FixedUpdate()
         {
+            if (health <= 0)
+            {
+                Instantiate(deathObj, transform.position, Quaternion.identity);
+                Destroy(gameObject);
+                return;
+            }
+            
             if (DmgInteractionTimer > 0)
             {
                 DmgInteractionTimer -= Time.fixedDeltaTime;
@@ -62,7 +73,7 @@ namespace Enemies
         {
             if (collidedSpellsId.Contains(spell.Id))
             {
-                Debug.Log($"CollidedSpellsId already contains {spell.id}");
+                //Debug.Log($"CollidedSpellsId already contains {spell.id}");
             }
             else
             {

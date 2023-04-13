@@ -23,7 +23,7 @@ namespace Spells
     {
         public float projectileSpeed = 2f;
         [FormerlySerializedAs("damage")] public float baseDamage = 10;
-        [Serialize] public float Damage => baseDamage + Player.Instance.AtkMultiplier;
+        [Serialize] public float Damage => baseDamage * Player.Instance.AtkMultiplier;
         public int id;
         public float heatProduction = 2f;
 
@@ -37,20 +37,23 @@ namespace Spells
     
         [HideInInspector]
         public GameObject startParticles, endParticles;
-
         public SpellsType spellType;
-
+        [HideInInspector]
+        public bool destroyOnAnimEnd;
         [HideInInspector]
         public bool isInfPierce;
-
         [HideInInspector]
         public bool zoneSpell;
-    
         [HideInInspector]
         public float spellDuration;
-    
+        [HideInInspector]
+        public Vector3 centerOffset;
         [HideInInspector]
         public CircleCollider2D damageZone;
+        [HideInInspector]
+        public bool hasOnHitEffect;
+        [HideInInspector]
+        public GameObject onHitEffect;
 
         // Interesting... ty Vampire Survivors lmao
         [HideInInspector]
@@ -87,6 +90,8 @@ namespace Spells
             transform.position = Player.Instance.GetPosition();
             Direction = (MousePos - Player.Instance.GetPosition());
             Direction /= Direction.magnitude;
+            
+            
 
             switch (spellType)
             {
@@ -96,7 +101,6 @@ namespace Spells
                     break;
             
                 case SpellsType.Teleport :
-                    transform.position = MousePos;
                     gameObject.AddComponent<Teleport>().spell = this;
                     break;
             
@@ -119,12 +123,15 @@ namespace Spells
                             }
                         }
                     }
+                    
+                    float angle = Mathf.Atan2(Direction.y, Direction.x) * Mathf.Rad2Deg;
+                    transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
                 
                     gameObject.AddComponent<Projectile>().spell = this;
                     break;
 
                 case SpellsType.AoeCast :
-                    transform.position = MousePos;
+                    transform.position = MousePos - centerOffset;
                     gameObject.AddComponent<Cast>().spell = this;
                     break;
             

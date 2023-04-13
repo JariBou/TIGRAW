@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace LobbyScripts
@@ -5,14 +6,16 @@ namespace LobbyScripts
     public class TeleporterScript : Interactable
     {
         private bool _playerInRange;
+
+        public int SceneToLoadId;
+
+        public bool IsUsable;
         
-        // Update is called once per frame
-        void Update()
+        public static TeleporterScript Instance;
+
+        private void Awake()
         {
-            if (_playerInRange)
-            {
-                // Show Tooltip of key to press
-            }
+            Instance = this;
         }
 
         private void OnTriggerEnter(Collider other)
@@ -33,11 +36,11 @@ namespace LobbyScripts
 
         public override void Interact()
         {
+            if (!IsUsable) {return;}
             Debug.Log($"Interacting with {name}");
-
             //SceneManager.LoadScene(4);
             //SceneLoader.instance.LoadScene(4);
-            GameManager.LoadScene(4);
+            GameManager.LoadScene(SceneToLoadId);
         }
     }
 }

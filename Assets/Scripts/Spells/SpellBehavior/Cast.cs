@@ -11,7 +11,6 @@ namespace Spells.SpellBehavior
 {
     public class Cast : MonoBehaviour
     {
-    
         public Spell spell;
         // ReSharper disable once FieldCanBeMadeReadOnly.Local
         private Collider2D[] _results = new Collider2D[32];
@@ -26,14 +25,8 @@ namespace Spells.SpellBehavior
 
             if (spell.zoneSpell)
             {
-
-                CircleCollider2D collider2D = gameObject.AddComponent<CircleCollider2D>();
-                collider2D.radius = spell.damageRadius;
-                collider2D.isTrigger = true;
-                
-                
-                StartCoroutine(DelayedDestroy(spell.spellDuration));
-                InvokeRepeating("DealDamage", 0, spell.interactionInterval); //TODO: doesn't seem right
+                StartCoroutine(DelayedDestroy(spell.spellDuration != 0 ? spell.spellDuration : spell.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length));
+                //InvokeRepeating("DealDamage", 0, spell.interactionInterval); //TODO: doesn't seem right
             }
             else
             {
@@ -48,14 +41,14 @@ namespace Spells.SpellBehavior
 
         private void DealDamage()
         {
-            var size = Physics2D.OverlapCircleNonAlloc(transform.position, spell.damageRadius, _results, spell.enemyLayer);
+            var size = Physics2D.OverlapCircleNonAlloc(transform.position + spell.centerOffset, spell.damageRadius, _results, spell.enemyLayer);
 
             for (int i = 0; i < size; i++)
             {
                 try
                 {
+                    if (_results[i].isTrigger) {continue;}
                     _results[i].GetComponent<EnemyInterface>().Damage(spell.Damage);
-
                 }
                 catch (Exception e)
                 {
@@ -81,6 +74,7 @@ namespace Spells.SpellBehavior
             }
             
             if (!col.CompareTag("Enemy")) return;
+            if(col.isTrigger) {return;}
             
             EnemyInterface enemyScript = col.GetComponent<EnemyInterface>();
             
@@ -94,6 +88,7 @@ namespace Spells.SpellBehavior
             {
                 return;
             }
+            if(col.isTrigger) {return;}
             
             if (!col.CompareTag("Enemy")) return;
             
