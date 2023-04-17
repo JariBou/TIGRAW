@@ -78,14 +78,12 @@ namespace PlayerBundle
                         bindingLinks[action.name] = new Action<InputAction.CallbackContext>(ResolveSpellCasted);
                         break;
                 }
-            
-            
             }
+            player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         }
 
         private void Start()
         {
-            player = Player.Instance;
             Debug.Log("PlayerInputHandler Start method Called");
             player.animator.SetFloat(Speed, 0);
             player.animator.SetInteger(player.Facing, 6); // facing downwards

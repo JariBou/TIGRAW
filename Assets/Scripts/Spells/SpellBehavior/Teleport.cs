@@ -11,8 +11,8 @@ namespace Spells.SpellBehavior
         public Spell spell;
         
         private Collider2D[] _results = new Collider2D[32];
-    
-    
+
+
         // Start is called before the first frame update
         void Start()
         {
@@ -23,13 +23,13 @@ namespace Spells.SpellBehavior
                 return;
             }
         
-            Player.Instance.isTeleporting = true;
-            Player.Instance.sprite.enabled = false;
-            Player.Instance.SetVelocity(Vector2.zero);
+            spell.player.isTeleporting = true;
+            spell.player.sprite.enabled = false;
+            spell.player.SetVelocity(Vector2.zero);
 
-            Player.Instance.heatAmount += spell.heatProduction;
+            spell.player.heatAmount += spell.heatProduction;
             
-            GameObject thingy = Instantiate(spell.startParticles, Player.Instance.transform.position, Quaternion.identity);
+            GameObject thingy = Instantiate(spell.startParticles, spell.player.transform.position, Quaternion.identity);
             //Destroy(thingy.gameObject, 0.5f);
             if (spell.Damage > 0)
             {
@@ -66,13 +66,13 @@ namespace Spells.SpellBehavior
             transform.position = spell.MousePos;
             
             var position = transform.position;
-            Player.Instance.transform.position = position;
+            spell.player.transform.position = position;
             
             GameObject thingy = Instantiate(spell.endParticles, position, Quaternion.identity);
             //Destroy(thingy.gameObject, 0.5f);
 
-            Player.Instance.isTeleporting = false;
-            Player.Instance.sprite.enabled = true;
+            spell.player.isTeleporting = false;
+            spell.player.sprite.enabled = true;
             if (spell.Damage > 0)
             {
                 DealDamage();

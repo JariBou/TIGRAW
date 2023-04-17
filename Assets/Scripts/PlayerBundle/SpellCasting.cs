@@ -12,7 +12,7 @@ namespace PlayerBundle
         // Work on Casting spells by type:
         public static void CastSpell(InputAction.CallbackContext context, int spellId)
         {
-            Player player = Player.Instance;
+            Player player = GameObject.FindWithTag("Player").GetComponent<Player>();
             if (player.isTeleporting) return;
             if (!context.performed) return;
             if (player.gamePaused) return;

@@ -33,7 +33,7 @@ namespace Enemies.EnemiesAI
         // Start is called before the first frame update
         void Start()
         {
-            targetEntity = Player.Instance.gameObject;
+            targetEntity = GameObject.FindGameObjectWithTag("Player");
 
             var position = transform.position;
             _targetPos = position;
@@ -68,7 +68,7 @@ namespace Enemies.EnemiesAI
             {
                 Debug.Log("ATTACKING FUCKER");
 
-                Player.Instance.Damage(_enemyInstance.attack);
+                targetEntity.GetComponent<Player>().Damage(_enemyInstance.attack);
                 _enemyInstance.InitInteractionTimer();
             }
 

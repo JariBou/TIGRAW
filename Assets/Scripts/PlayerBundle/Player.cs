@@ -64,8 +64,10 @@ namespace PlayerBundle
         [HideInInspector] public SpriteRenderer sprite;
         public Animator animator { get; set; }
         public readonly int Facing = Animator.StringToHash("facing");
+        
+        // ============================
         public static Player Instance;
-
+        // ============================
 
         [FormerlySerializedAs("heatRecoveryRate")]
         [Header("Heat Mechanic")]
@@ -75,6 +77,8 @@ namespace PlayerBundle
         [SerializeField] private bool infiniteHeat;
         private float _heatTimer;
         private bool _isCasting = false;
+
+        private GameManager _gm;
         
         [SaveVariable]
         private BraceletUpgrades _braceletUpgrades;
@@ -86,7 +90,8 @@ namespace PlayerBundle
             Debug.Log("AWAKENING PLAYER");
             Instance = this;
             enabled = true;
-        
+
+            _gm = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
             playerActions = new PlayerActions();
             body = GetComponent<Rigidbody2D>();
             sprite = GetComponent<SpriteRenderer>();

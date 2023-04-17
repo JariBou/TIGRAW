@@ -33,7 +33,7 @@ public class AutoEnemySpawning : MonoBehaviour
     void Start()
     {
         timer = 0f;
-        player = Player.Instance.gameObject;
+        player =  GameObject.FindGameObjectWithTag("Player");
         enemyPrefabs.Sort((a, b) => a.Weight.CompareTo(b.Weight));
         float maxValue = enemyPrefabs.Sum(e => e.Weight);
         foreach (var enemySpawn in enemyPrefabs)

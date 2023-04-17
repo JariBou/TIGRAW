@@ -320,7 +320,7 @@ namespace PathFinding
         {
             timer = 0;
             //Convert player point to grid coordinates
-            Vector2 playerPos = WorldToGrid(Player.Instance.GetPosition());
+            Vector2 playerPos = WorldToGrid(GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().GetPosition());
 
             //Find path from player to clicked position
             //BreadCrumb bc = PathFinder.FindPath(this,new Point(WorldToGrid(ennemy.transform.position)), new Point(playerPos));

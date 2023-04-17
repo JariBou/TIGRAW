@@ -21,7 +21,7 @@ namespace Spells.SpellBehavior
             collidedEnnemiesId = new List<int>();
         
         
-            Player.Instance.heatAmount += spell.heatProduction;
+            spell.player.heatAmount += spell.heatProduction;
 
             if (spell.destroyOnAnimEnd)
             {
