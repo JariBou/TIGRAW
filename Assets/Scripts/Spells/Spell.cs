@@ -23,7 +23,7 @@ namespace Spells
     {
         public float projectileSpeed = 2f;
         [FormerlySerializedAs("damage")] public float baseDamage = 10;
-        [Serialize] public float Damage => baseDamage * Player.Instance.AtkMultiplier;
+        [Serialize] public float Damage => baseDamage * player.AtkMultiplier;
         public int id;
         public float heatProduction = 2f;
 
@@ -75,20 +75,23 @@ namespace Spells
 
         internal Vector3 MousePos;
 
+        public Player player;
+
         [HideInInspector] public int Id;
 
         // Start is called before the first frame update
         void Start()
         {
             Id = gameObject.GetInstanceID();
+            player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>(); // What's the difference with FindWithTag
             
-            GroundTilemap = Player.Instance.groundTilemap;
+            GroundTilemap = player.groundTilemap;
             damageZone = GetComponent<CircleCollider2D>();
         
             MousePos = Camera.main!.ScreenToWorldPoint(Input.mousePosition);
             MousePos += new Vector3(0, 0, 10); // z camera offset
-            transform.position = Player.Instance.GetPosition();
-            Direction = (MousePos - Player.Instance.GetPosition());
+            transform.position = player.GetPosition();
+            Direction = (MousePos - player.GetPosition());
             Direction /= Direction.magnitude;
             
             
@@ -96,7 +99,7 @@ namespace Spells
             switch (spellType)
             {
                 case SpellsType.Dash :
-                    Player.Instance.isDashing = true;
+                    player.isDashing = true;
                     gameObject.AddComponent<Dash>().spell = this;
                     break;
             
@@ -106,19 +109,16 @@ namespace Spells
             
                 case SpellsType.Projectile :
 
-                    RaycastHit2D hit = Physics2D.Raycast(Player.Instance.GetPosition(), Direction,
+                    RaycastHit2D hit = Physics2D.Raycast(player.GetPosition(), Direction,
                         new Vector2(Direction.x, Direction.y).sqrMagnitude, wallLayer);
         
-                    Debug.DrawRay(new Vector3(Player.Instance.GetPosition().x, Player.Instance.GetPosition().y, 0), new Vector3(Direction.x, Direction.y, 0), Color.red, 1f);
+                    Debug.DrawRay(new Vector3(player.GetPosition().x, player.GetPosition().y, 0), new Vector3(Direction.x, Direction.y, 0), Color.red, 1f);
                     if (hit)
                     {
-                        Debug.LogError("Hit");
                         if (hit.transform.gameObject != null)
                         {
-                            Debug.LogError("Has GameObject");
                             if (hit.transform.gameObject.CompareTag("Wall"))
                             {
-                                Debug.LogError("Destroying");
                                 Destroy(gameObject);
                             }
                         }

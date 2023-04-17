@@ -20,7 +20,7 @@ namespace Spells.SpellBehavior
         // Start is called before the first frame update
         void Start()
         {
-            Player.Instance.heatAmount += spell.heatProduction;
+            spell.player.heatAmount += spell.heatProduction;
 
 
             if (spell.zoneSpell)

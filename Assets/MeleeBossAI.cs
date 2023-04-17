@@ -29,7 +29,8 @@ public class MeleeBossAI : EnemyInterface
     // Start is called before the first frame update
     void Start()
     {
-        targetEntity = Player.Instance.gameObject;
+        targetEntity = GameObject.FindGameObjectWithTag("Player");
+        ;
         self = gameObject;
         _animator = GetComponent<Animator>();
         _renderer = GetComponent<SpriteRenderer>();
@@ -112,7 +113,7 @@ public class MeleeBossAI : EnemyInterface
             
             _animator.SetTrigger(Attack);
 
-            Player.Instance.Damage(_enemyInstance.attack);
+            targetEntity.GetComponent<Player>().Damage(_enemyInstance.attack);
             _enemyInstance.InitInteractionTimer();
         }
 

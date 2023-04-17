@@ -19,11 +19,15 @@ namespace PlayerBundle.PlayerUpgrades
         public TMP_Text upgradeAmountText;
         public PlayerUpgrades upgrade;
         public float upgradeAmount;
+
+        private Player player;
         
     
         // Start is called before the first frame update
         void Start()
         {
+            player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+
             if (PlayerUpgradesHandler.upgradeAmount.ContainsKey(upgrade))
             {
                 PlayerUpgradesHandler.upgradeAmount[upgrade] = upgradeAmount;
@@ -41,10 +45,10 @@ namespace PlayerBundle.PlayerUpgrades
             switch (upgrade)
             {
                 case PlayerUpgrades.AtkMultiplier:
-                    Refresh(Math.Round(Player.Instance.baseAtkMultiplier, 3).ToString(CultureInfo.InvariantCulture));
+                    Refresh(Math.Round(player.baseAtkMultiplier, 3).ToString(CultureInfo.InvariantCulture));
                     break;
                 case PlayerUpgrades.Health:
-                    Refresh(Player.Instance.baseMaxHealth.ToString(CultureInfo.InvariantCulture));
+                    Refresh(player.baseMaxHealth.ToString(CultureInfo.InvariantCulture));
                     break;
             }
         }

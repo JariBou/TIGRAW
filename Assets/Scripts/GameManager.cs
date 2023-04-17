@@ -37,12 +37,14 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         currentRunData = new RunData();
         PlayerUpgradesHandler = new PlayerUpgradesHandler();
+        //player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         
-        Player player = Player.Instance;
+        Player player = GameObject.FindWithTag("Player").GetComponent<Player>();
         if (!player)
         {
             
@@ -105,7 +107,7 @@ public class GameManager : MonoBehaviour
     {
         // GameObject gameObject = Instantiate(_instance.loadingScreen);
         // _instance.sceneLoader = gameObject.GetComponent<SceneLoader>();
-        _instance.sceneLoader.LoadScene(sceneId);
+        GameObject.FindGameObjectWithTag("Player").GetComponent<GameManager>().sceneLoader.LoadScene(sceneId);
     }
 
     // Start is called before the first frame update
