@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class TimerRoomLogic : MonoBehaviour
@@ -13,6 +14,11 @@ public class TimerRoomLogic : MonoBehaviour
     {
         timer = time;
         EventManager.FlagEvent += OnFlagEvent;
+    }
+
+    private void OnDestroy()
+    {
+        EventManager.FlagEvent -= OnFlagEvent;
     }
 
     private void OnFlagEvent(Flag obj)

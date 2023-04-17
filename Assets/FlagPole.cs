@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,7 +11,7 @@ public class FlagPole : Interactable
     public Flag calledFlag;
     public bool isReusable;
     
-    public static FlagPole Instance;
+    public static FlagPole Instance; // Useless?
 
     private void Awake()
     {
@@ -41,8 +42,9 @@ public class FlagPole : Interactable
         EventManager.InvokeFlagEvent(calledFlag);
     }
 
-    public override void OnFlagEvent(Flag flag)
+    protected override void OnFlagEvent(Flag flag)
     {
-        IsUsable = false;
+        if (isReusable) {return;}
+        Destroy(gameObject);
     }
 }

@@ -13,6 +13,11 @@ public class KeyHintScript : MonoBehaviour
     {
         floatingText.SetActive(false);
         floatingText.GetComponent<Renderer>().sortingOrder = 9;
+
+        if (!linkedObject)
+        {
+            linkedObject = GetComponentInParent<Interactable>();
+        }
     }
 
     // Update is called once per frame
@@ -39,7 +44,6 @@ public class KeyHintScript : MonoBehaviour
     void OnTriggerExit2D(Collider2D other)
     {
         if (!other.CompareTag("Player")) return;
-        if (!linkedObject.IsUsable) {return;}
 
         playerInRange = false;
         floatingText.SetActive(false);

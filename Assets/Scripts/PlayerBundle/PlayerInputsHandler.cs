@@ -30,6 +30,7 @@ namespace PlayerBundle
             spellLinks = new Dictionary<string, int>();
             playerActions = new PlayerActions();
             bindingLinks.Add("A", new Action<InputAction.CallbackContext>(Move));
+            
             // bindingLinks.Add("RightClick", new Action<InputAction.CallbackContext, int>(SpellCasting.CastSpell));
             // bindingLinks["A"].DynamicInvoke(new InputAction.CallbackContext());
             // Debug.Log(bindingLinks["A"].Method.Name); // Returns 'Move'
@@ -86,6 +87,8 @@ namespace PlayerBundle
         {
             player = Player.Instance;
             Debug.Log("PlayerInputHandler Start method Called");
+            player.animator.SetFloat(Speed, 0);
+            player.animator.SetInteger(player.Facing, 6); // facing downwards
             // Debug.Log($"Player Animator: {player.animator}");
         }
 
@@ -123,9 +126,9 @@ namespace PlayerBundle
             if (Mathf.Abs((int)moveVector.y) == 1)
             {
                 player.animator.SetInteger(player.Facing, 9 + 3*(int)moveVector.y);
-            } else if (Mathf.Abs((int)moveVector.y) == 1)
+            } else if (Mathf.Abs((int)moveVector.x) == 1)
             {
-                player.animator.SetInteger(player.Facing, 6 + 3*(int)moveVector.x);
+                player.animator.SetInteger(player.Facing, 6 - 3*(int)moveVector.x);
             } 
     
 

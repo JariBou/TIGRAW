@@ -12,5 +12,10 @@ public abstract class Interactable : MonoBehaviour
 
     public abstract void Interact();
 
-    public abstract void OnFlagEvent(Flag flag);
+    protected abstract void OnFlagEvent(Flag flag);
+
+    private void OnDestroy()
+    {
+        EventManager.FlagEvent -= OnFlagEvent;
+    }
 }

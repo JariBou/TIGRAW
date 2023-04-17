@@ -27,7 +27,7 @@ namespace LobbyScripts
             }
         }
 
-        public override void OnFlagEvent(Flag flag)
+        protected override void OnFlagEvent(Flag flag)
         {
             
         }

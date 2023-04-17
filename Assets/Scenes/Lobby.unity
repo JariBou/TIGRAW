@@ -77019,6 +77019,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81d05441dcf591c458e900e8e765a70f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  linkedObject: {fileID: 1727817419}
   floatingText: {fileID: 1861853060}
 --- !u!224 &1651464591 stripped
 RectTransform:
@@ -77089,6 +77090,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0abb3c3479f3b3b45965a4063334fff6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsUsable: 1
   canvas: {fileID: 288242827}
 --- !u!1 &1861853060 stripped
 GameObject:

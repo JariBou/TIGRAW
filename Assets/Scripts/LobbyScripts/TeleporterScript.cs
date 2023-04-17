@@ -42,7 +42,7 @@ namespace LobbyScripts
             GameManager.LoadScene(SceneToLoadId);
         }
 
-        public override void OnFlagEvent(Flag flag)
+        protected override void OnFlagEvent(Flag flag)
         {
             if (flag == Flag.UnlockTeleporter)
             {
