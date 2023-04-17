@@ -287,6 +287,18 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7267870839923698731, guid: f4d25aca64c9ac545a9fd437005855fa, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7267870839923698731, guid: f4d25aca64c9ac545a9fd437005855fa, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7267870839923698731, guid: f4d25aca64c9ac545a9fd437005855fa, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -10
+      objectReference: {fileID: 0}
     - target: {fileID: 7267870839986428710, guid: f4d25aca64c9ac545a9fd437005855fa, type: 3}
       propertyPath: loadSpells
       value: 0
@@ -325,6 +337,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7267870841138018750, guid: f4d25aca64c9ac545a9fd437005855fa, type: 3}
       propertyPath: m_ActionEvents.Array.data[12].m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7267870841138018907, guid: f4d25aca64c9ac545a9fd437005855fa, type: 3}
+      propertyPath: canCastSpells
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

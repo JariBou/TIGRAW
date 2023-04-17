@@ -1,3 +1,4 @@
+using PlayerBundle;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -18,6 +19,7 @@ namespace PathFinding
     public class Grid : MonoBehaviour
     {
         public const float NodeDistance = 1f;
+        public LayerMask wallLayer;
 
         [HideInInspector]
         public int width;
@@ -35,6 +37,7 @@ namespace PathFinding
         public int top => height;
 
         public static Grid Instance;
+        public bool DRAW_CONNECTIONS;
 
 
         // Start is called before the first frame update
@@ -112,15 +115,18 @@ namespace PathFinding
             }	
         
             // Then draw connections between nodes
-            /*for (int x = 0; x < width; x++)
-        {
-            for (int y = 0; y < height; y++)
+            if (DRAW_CONNECTIONS)
             {
-                if (NodesGrid[x,y] == null) continue;				
-                NodesGrid[x, y].DrawConnections();
+                for (int x = 0; x < width; x++)
+                {
+                    for (int y = 0; y < height; y++)
+                    {
+                        if (NodesGrid[x, y] == null) continue;
+                        NodesGrid[x, y].DrawConnections();
+                    }
+                }
             }
-        }*/
-        
+
             //Debug.Log($"{WorldToGrid(GridToWorld(NodesGrid[10, 5].GridPos))}");
             //TestWorldToGrid(100);
 
@@ -296,23 +302,25 @@ namespace PathFinding
             };
         }
     
-        /*
+        
     // DEBUG
-    public Transform player;
     public LineRenderer lr;
     public Transform ennemy;
 
     [SerializeField]
     private float timer;
 
+    public bool DRAW_PATHS;
+
     void FixedUpdate()
     {
+        if (!DRAW_PATHS) {return;}
         timer += Time.fixedDeltaTime;
         if (timer >= 1)
         {
             timer = 0;
             //Convert player point to grid coordinates
-            Vector2 playerPos = WorldToGrid(Player.instance.GetPosition());
+            Vector2 playerPos = WorldToGrid(Player.Instance.GetPosition());
 
             //Find path from player to clicked position
             //BreadCrumb bc = PathFinder.FindPath(this,new Point(WorldToGrid(ennemy.transform.position)), new Point(playerPos));
@@ -337,7 +345,7 @@ namespace PathFinding
             lr.SetVertexCount(count);
         }
         
-    } */
+    } 
 
     }
 }

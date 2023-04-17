@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using LobbyScripts;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class TimerRoomLogic : MonoBehaviour
@@ -9,31 +5,49 @@ public class TimerRoomLogic : MonoBehaviour
     public bool doCountdown;
     public float time;
     public float startDelay;
+    private bool started = false;
     
     private float timer;
     // Start is called before the first frame update
     void Start()
     {
         timer = time;
-        StartCoroutine(DelayedStart());
+        EventManager.FlagEvent += OnFlagEvent;
     }
+
+    private void OnFlagEvent(Flag obj)
+    {
+        if (obj == Flag.StartLevel)
+        {
+            started = true;
+            doCountdown = true;
+            AutoEnemySpawning.Instance.spawn = true;
+        }
+        else if (obj == Flag.UnlockTeleporter)
+        {
+            Destroy(this);
+        }
+    }
+
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (!doCountdown) {return;}
+        if (!started) {return;}
+        if (!doCountdown)
+        {
+            if (AutoEnemySpawning.Instance.GetCurrentMobCap() == 0)
+            {
+                EventManager.InvokeFlagEvent(Flag.UnlockTeleporter);
+            }
+            return;
+        }
         timer -= Time.fixedDeltaTime;
         if (timer <= 0)
         {
-            TeleporterScript.Instance.IsUsable = true;
+            AutoEnemySpawning.Instance.spawn = false;
             doCountdown = false;
         }
     }
-
-    IEnumerator DelayedStart()
-    {
-        yield return new WaitForSeconds(startDelay);
-        doCountdown = true;
-        AutoEnemySpawning.Instance.spawn = true;
-    }
+    
 }

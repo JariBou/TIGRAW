@@ -5,6 +5,7 @@ public class KeyHintScript : MonoBehaviour
 {
     private bool playerInRange;
 
+    public Interactable linkedObject;
     public GameObject floatingText;
 
     // Start is called before the first frame update
@@ -29,7 +30,7 @@ public class KeyHintScript : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         if (!other.CompareTag("Player")) return;
-        if (!TeleporterScript.Instance.IsUsable) {return;}
+        if (!linkedObject.IsUsable) {return;}
             
         playerInRange = true;
         floatingText.SetActive(true);
@@ -38,7 +39,7 @@ public class KeyHintScript : MonoBehaviour
     void OnTriggerExit2D(Collider2D other)
     {
         if (!other.CompareTag("Player")) return;
-        if (!TeleporterScript.Instance.IsUsable) {return;}
+        if (!linkedObject.IsUsable) {return;}
 
         playerInRange = false;
         floatingText.SetActive(false);

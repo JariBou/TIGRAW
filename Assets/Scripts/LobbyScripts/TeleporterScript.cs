@@ -8,8 +8,6 @@ namespace LobbyScripts
         private bool _playerInRange;
 
         public int SceneToLoadId;
-
-        public bool IsUsable;
         
         public static TeleporterScript Instance;
 
@@ -17,6 +15,7 @@ namespace LobbyScripts
         {
             Instance = this;
         }
+        
 
         private void OnTriggerEnter(Collider other)
         {
@@ -41,6 +40,14 @@ namespace LobbyScripts
             //SceneManager.LoadScene(4);
             //SceneLoader.instance.LoadScene(4);
             GameManager.LoadScene(SceneToLoadId);
+        }
+
+        public override void OnFlagEvent(Flag flag)
+        {
+            if (flag == Flag.UnlockTeleporter)
+            {
+                IsUsable = true;
+            }
         }
     }
 }

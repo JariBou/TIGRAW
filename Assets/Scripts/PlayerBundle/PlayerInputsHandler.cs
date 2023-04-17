@@ -20,7 +20,9 @@ namespace PlayerBundle
         private static readonly int YMovement = Animator.StringToHash("yMovement");
         private static readonly int Speed = Animator.StringToHash("speed");
 
-        public static event Action<InputAction.CallbackContext> KeyPressedEvent; 
+        public static event Action<InputAction.CallbackContext> KeyPressedEvent;
+
+        public bool canCastSpells = true;
     
         private void Awake()
         {
@@ -165,7 +167,6 @@ namespace PlayerBundle
 
             foreach (Collider2D col in results)
             {
-                Debug.LogWarning(col.name);
                 if (col.CompareTag("Interactable"))
                 {
                     col.GetComponent<Interactable>().Interact();
@@ -187,7 +188,7 @@ namespace PlayerBundle
 
         private void ResolveSpellCasted(InputAction.CallbackContext context)
         {
-            if (context.canceled) {return;}
+            if (context.canceled || !canCastSpells) {return;}
             int spellId = spellLinks[context.action.name];
             SpellCasting.CastSpell(context, spellId);
         }

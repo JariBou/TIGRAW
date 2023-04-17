@@ -9,8 +9,6 @@ namespace PlayerBundle
     public abstract class SpellCasting
     {
 
-        //TODO: Add checkers for if spells can be casted on spell scripts to make a simpler player movement script
-    
         // Work on Casting spells by type:
         public static void CastSpell(InputAction.CallbackContext context, int spellId)
         {

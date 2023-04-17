@@ -50,8 +50,8 @@ public class AutoEnemySpawning : MonoBehaviour
 
         timer += respawnTime * Time.fixedDeltaTime;
         if (!(timer > respawnTime)) return;
-        
-        int count = spawningPoints.Sum(point => point.childCount) + packSize; // CurrentMobCount
+
+        int count = GetCurrentMobCap() + packSize;
         
         if (count >= mobCap) {return;}
         timer = 0f;
@@ -62,6 +62,11 @@ public class AutoEnemySpawning : MonoBehaviour
                 Quaternion.identity, spawningPoint);
             enemy.GetComponent<AIMeleeScript>().targetEntity = player;
         }
+    }
+
+    public int GetCurrentMobCap()
+    {
+        return spawningPoints.Sum(point => point.childCount); // CurrentMobCount
     }
 
     public GameObject DetermineSpawningEnemy()
