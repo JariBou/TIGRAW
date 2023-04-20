@@ -1,7 +1,9 @@
 using System;
 using PlayerBundle;
 using Spells.SpellBehavior;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.Tilemaps;
 
 namespace Spells
@@ -20,7 +22,8 @@ namespace Spells
     public class Spell : MonoBehaviour
     {
         public float projectileSpeed = 2f;
-        public float damage = 10;
+        [FormerlySerializedAs("damage")] public float baseDamage = 10;
+        [Serialize] public float Damage => baseDamage * player.AtkMultiplier;
         public int id;
         public float heatProduction = 2f;
 
@@ -34,20 +37,23 @@ namespace Spells
     
         [HideInInspector]
         public GameObject startParticles, endParticles;
-
         public SpellsType spellType;
-
+        [HideInInspector]
+        public bool destroyOnAnimEnd;
         [HideInInspector]
         public bool isInfPierce;
-
         [HideInInspector]
         public bool zoneSpell;
-    
         [HideInInspector]
         public float spellDuration;
-    
+        [HideInInspector]
+        public Vector3 centerOffset;
         [HideInInspector]
         public CircleCollider2D damageZone;
+        [HideInInspector]
+        public bool hasOnHitEffect;
+        [HideInInspector]
+        public GameObject onHitEffect;
 
         // Interesting... ty Vampire Survivors lmao
         [HideInInspector]
@@ -69,55 +75,63 @@ namespace Spells
 
         internal Vector3 MousePos;
 
+        public Player player;
+
+        [HideInInspector] public int Id;
+
         // Start is called before the first frame update
         void Start()
         {
-            GroundTilemap = Player.instance.groundTilemap;
+            Id = gameObject.GetInstanceID();
+            player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>(); // What's the difference with FindWithTag
+            
+            GroundTilemap = player.groundTilemap;
             damageZone = GetComponent<CircleCollider2D>();
         
             MousePos = Camera.main!.ScreenToWorldPoint(Input.mousePosition);
             MousePos += new Vector3(0, 0, 10); // z camera offset
-            transform.position = Player.instance.GetPosition();
-            Direction = (MousePos - Player.instance.GetPosition());
+            transform.position = player.GetPosition();
+            Direction = (MousePos - player.GetPosition());
             Direction /= Direction.magnitude;
+            
+            
 
             switch (spellType)
             {
                 case SpellsType.Dash :
-                    Player.instance.isDashing = true;
+                    player.isDashing = true;
                     gameObject.AddComponent<Dash>().spell = this;
                     break;
             
                 case SpellsType.Teleport :
-                    transform.position = MousePos;
                     gameObject.AddComponent<Teleport>().spell = this;
                     break;
             
                 case SpellsType.Projectile :
 
-                    RaycastHit2D hit = Physics2D.Raycast(Player.instance.GetPosition(), Direction,
+                    RaycastHit2D hit = Physics2D.Raycast(player.GetPosition(), Direction,
                         new Vector2(Direction.x, Direction.y).sqrMagnitude, wallLayer);
         
-                    Debug.DrawRay(new Vector3(Player.instance.GetPosition().x, Player.instance.GetPosition().y, 0), new Vector3(Direction.x, Direction.y, 0), Color.red, 1f);
+                    Debug.DrawRay(new Vector3(player.GetPosition().x, player.GetPosition().y, 0), new Vector3(Direction.x, Direction.y, 0), Color.red, 1f);
                     if (hit)
                     {
-                        Debug.LogError("Hit");
                         if (hit.transform.gameObject != null)
                         {
-                            Debug.LogError("Has GameObject");
                             if (hit.transform.gameObject.CompareTag("Wall"))
                             {
-                                Debug.LogError("Destroying");
                                 Destroy(gameObject);
                             }
                         }
                     }
+                    
+                    float angle = Mathf.Atan2(Direction.y, Direction.x) * Mathf.Rad2Deg;
+                    transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
                 
                     gameObject.AddComponent<Projectile>().spell = this;
                     break;
 
                 case SpellsType.AoeCast :
-                    transform.position = MousePos;
+                    transform.position = MousePos - centerOffset;
                     gameObject.AddComponent<Cast>().spell = this;
                     break;
             

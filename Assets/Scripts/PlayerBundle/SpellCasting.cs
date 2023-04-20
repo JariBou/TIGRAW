@@ -9,17 +9,14 @@ namespace PlayerBundle
     public abstract class SpellCasting
     {
 
-        //TODO: Add checkers for if spells can be casted on spell scripts to make a simpler player movement script
-    
         // Work on Casting spells by type:
         public static void CastSpell(InputAction.CallbackContext context, int spellId)
         {
-            Player player = Player.instance;
+            Player player = GameObject.FindWithTag("Player").GetComponent<Player>();
             if (player.isTeleporting) return;
             if (!context.performed) return;
             if (player.gamePaused) return;
         
-            player.ResetTimer();
             GameObject spellPrefab;
 
             try
@@ -31,12 +28,12 @@ namespace PlayerBundle
                 Console.WriteLine(e);
                 return;
             }
-        
-        
+
             Debug.Log($"Casting Spell: {spellPrefab.name}");
             Spell spellPrefabScript = spellPrefab.GetComponent<Spell>();
-            if (player.heatAmount + spellPrefabScript.heatProduction <= 100)
+            if (player.heatAmount + spellPrefabScript.heatProduction <= player.baseMaxHeat)
             {
+                player.ResetTimer();
                 Object.Instantiate(spellPrefab);
             }
         }

@@ -1,11 +1,14 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
+using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
-using Unity.VisualScripting;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
-namespace LoadingScripts
+namespace Saves
 {
     public class SaveManager
     {
@@ -17,6 +20,7 @@ namespace LoadingScripts
 
         private static Dictionary<int, string> test;
 
+        // ================= SOB THIS WILL NEVER BE USED PROB ========================
         public static void SaveData<T>(T data)
         {
             Type dataType = data.GetType();
@@ -36,7 +40,46 @@ namespace LoadingScripts
 
             //TODO: Implement custom save
         }
+        
+        public static void SaveToJson(JsonSaveData data)
+        {
+            string jsonData = JsonUtility.ToJson(data);
+            string filepath = Application.persistentDataPath + "/PlayerUpgrades.json";
+            Debug.LogWarning(jsonData);
+            File.WriteAllText(filepath, jsonData);
+        }
+        
+        public static void SaveToJson(JsonSaveData data, string filename)
+        {
+            string jsonData = JsonUtility.ToJson(data);
+            string filepath = Application.persistentDataPath + "/" + filename + (filename.EndsWith(".json") ? ""
+                : ".json");
+            Debug.LogWarning(jsonData);
+            File.WriteAllText(filepath, jsonData);
+        }
 
+        public static JsonSaveData LoadFromJson()
+        {
+            string filepath = Application.persistentDataPath + "/PlayerUpgrades.json";
+            string jsonData = File.ReadAllText(filepath);
+            Debug.LogWarning(jsonData);
+
+            JsonSaveData data = JsonUtility.FromJson<JsonSaveData>(jsonData);
+            return data;
+        }
+        
+        public static JsonSaveData LoadFromJson(string filename)
+        {
+            string filepath = Application.persistentDataPath + "/" + filename + (filename.EndsWith(".json") ? ""
+                : ".json");
+            string jsonData = File.ReadAllText(filepath);
+            Debug.LogWarning(jsonData);
+
+            JsonSaveData data = JsonUtility.FromJson<JsonSaveData>(jsonData);
+            return data;
+        }
+
+        // ========== USELESS IMO =======================================
         public static void Save(string saveName, object saveData)
         {
             BinaryFormatter formatter = GetBinaryFormatter();
@@ -54,14 +97,57 @@ namespace LoadingScripts
 
         }
 
+        public static void SaveTEST()
+        {
+            /*
+             * Save only upgrades and don't modify base values of Player class
+             * Make methods to get the player stats with upgrades
+             * Affected by arrays of enum of upgrades to know which upgrades to look for
+             */
+            Hashtable saveData = new Hashtable(); // HAsh tables are serializable ("yay")
+            try
+            {
+                MonoBehaviour[] sceneActive = Object.FindObjectsOfType<MonoBehaviour>();
+            
+                foreach (MonoBehaviour mono in sceneActive) {
+                    FieldInfo[] objectFields = mono.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public);
+                    for (int i = 0; i < objectFields.Length; i++) {
+                        SaveVariable attribute = Attribute.GetCustomAttribute(objectFields[i], typeof(SaveVariable)) as SaveVariable;
+                        if (attribute != null)
+                        {
+                            saveData.Add(objectFields[i].Name, objectFields[i].GetValue(mono));
+                            Debug.Log(
+                                $"[DEBUG: SaveVariable]{objectFields[i].Name} = {objectFields[i].GetValue(mono)}"); // get value of field for (object)
+                            if (objectFields[i].Name == "heatAmount")
+                            {
+                                objectFields[i].SetValue(mono, 50f);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+        }
+
         private static BinaryFormatter GetBinaryFormatter()
         {
             BinaryFormatter binaryFormatter = new BinaryFormatter();
+
+            SurrogateSelector selector = new SurrogateSelector();
+
+            Vector3SerializationSurrogate vector3Surrogate = new Vector3SerializationSurrogate();
             
-            
+            selector.AddSurrogate(typeof(Vector3), new StreamingContext(StreamingContextStates.All), vector3Surrogate);
+
+            binaryFormatter.SurrogateSelector = selector;
             
             return binaryFormatter;
         }
+        
+        // ===============================================================
     }
 
     public static class SimpleSaveManager

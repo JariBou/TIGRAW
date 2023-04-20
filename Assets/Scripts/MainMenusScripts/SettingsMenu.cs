@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using LoadingScripts;
+using Saves;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-
+// TODO: Fix fact that to apply settings you need to open settings menu
 namespace MainMenusScripts
 {
     public class SettingsMenu : MonoBehaviour
@@ -28,7 +29,7 @@ namespace MainMenusScripts
             Resolution savedRes = GetSavedResolution();
             fullscreenToggle.isOn = SimpleSaveManager.GetBool("Fullscreen");
             audioMixer.SetFloat("MasterVolume", SimpleSaveManager.GetFloat("Volume", 0f));
-            volumeSlider.value = GetVolumeSliderValue();
+            volumeSlider.value = SettingsGetter.GetVolumeSliderValue();
             print(GetVolumeSliderValue());
 
 
@@ -54,8 +55,8 @@ namespace MainMenusScripts
 
         public void SetVolume(float volume)
         {
-            float value = Mathf.Log10(volume+80) * 20; // -80 offset on slider
-            audioMixer.SetFloat("MasterVolume", value); // Volume mixer is not linear
+            float value = Mathf.Log10(volume) * 20; // Volume mixer is not linear
+            audioMixer.SetFloat("MasterVolume", value); 
             SimpleSaveManager.SaveFloat("Volume", value);
         }
 
@@ -63,7 +64,7 @@ namespace MainMenusScripts
         {
             float audioValue = SimpleSaveManager.GetFloat("Volume", 0f);
             Debug.LogWarning($"audioValue: {audioValue}");
-            return Mathf.Pow(10, audioValue / 20) - 80;
+            return Mathf.Pow(10, audioValue / 20);
         }
 
         public void SetFullscreen(bool isFullscreen)

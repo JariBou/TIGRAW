@@ -1,4 +1,5 @@
 using PathFinding;
+using PlayerBundle;
 using UnityEngine;
 using Grid = PathFinding.Grid;
 
@@ -32,6 +33,8 @@ namespace Enemies.EnemiesAI
         // Start is called before the first frame update
         void Start()
         {
+            targetEntity = GameObject.FindGameObjectWithTag("Player");
+
             var position = transform.position;
             _targetPos = position;
             _previousPos = position;
@@ -39,8 +42,12 @@ namespace Enemies.EnemiesAI
     
         void Update()
         {
-            if (_enemyInstance.isInRange) {            
+            if (_enemyInstance.isInRange) {     // Leave it here because ranged and melee will not behave the same       
                 _previousPos = transform.position;
+                
+                
+                AttackPlayer();
+                
                 return;
             }
             updateFrameCount += 1;
@@ -51,12 +58,25 @@ namespace Enemies.EnemiesAI
             }
         }
 
+        private void AttackPlayer()
+        {
+            if (_enemyInstance.DmgInteractionTimer > 0)
+            {
+                return;
+            }
+            else
+            {
+                Debug.Log("ATTACKING FUCKER");
+
+                targetEntity.GetComponent<Player>().Damage(_enemyInstance.attack);
+                _enemyInstance.InitInteractionTimer();
+            }
+
+        }
+
         void FixedUpdate()
         {
-            if (_enemyInstance.health <= 0)
-            {
-                Destroy(gameObject);
-            }
+            
         
 
         

@@ -1,3 +1,4 @@
+using System;
 using System.Globalization;
 using TMPro;
 using UnityEngine;
@@ -24,12 +25,12 @@ namespace PlayerBundle.StatsWindow
 
         public void Enable()
         {
-            _player = Player.instance;
+            _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();;
             _canvas.enabled = true;
 
-            healthText.text = _player.health.ToString(CultureInfo.InvariantCulture);
-            atkMultiplierText.text = _player.atkMultiplier.ToString(CultureInfo.InvariantCulture);
-            armorText.text = _player.armor.ToString();
+            healthText.text =$"{_player.health.ToString(CultureInfo.InvariantCulture)}/{_player.MaxHealth.ToString(CultureInfo.InvariantCulture)}";
+            atkMultiplierText.text = Math.Round(_player.AtkMultiplier, 3).ToString(CultureInfo.InvariantCulture);
+            armorText.text = _player.baseArmor.ToString();
         }
     
         public void Disable()

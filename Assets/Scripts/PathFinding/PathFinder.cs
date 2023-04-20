@@ -49,9 +49,11 @@ namespace PathFinding
 			int cost;
 			int diff;
 	
-			BreadCrumb current = new BreadCrumb(start);
-			current.Cost = 0;
-	
+			BreadCrumb current = new BreadCrumb(start)
+			{
+				Cost = 0
+			};
+
 			BreadCrumb finish = new BreadCrumb(end);
 			brWorld[current.Position.X, current.Position.Y] = current;
 			openList.Add(current);

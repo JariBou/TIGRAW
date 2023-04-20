@@ -26,5 +26,10 @@ namespace LobbyScripts
                 script.Refresh();
             }
         }
+
+        protected override void OnFlagEvent(Flag flag)
+        {
+            
+        }
     }
 }

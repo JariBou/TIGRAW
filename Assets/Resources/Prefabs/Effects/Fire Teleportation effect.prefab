@@ -119,4 +119,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   duration: 0.25
+  animMode: 2
+  repeatTimes: 0
   id: 0

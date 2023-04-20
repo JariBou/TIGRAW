@@ -1,3 +1,5 @@
+using System;
+using Enemies;
 using PlayerBundle;
 using UnityEngine;
 
@@ -7,8 +9,10 @@ namespace Spells.SpellBehavior
     {
     
         public Spell spell;
-    
-    
+        
+        private Collider2D[] _results = new Collider2D[32];
+
+
         // Start is called before the first frame update
         void Start()
         {
@@ -19,36 +23,61 @@ namespace Spells.SpellBehavior
                 return;
             }
         
-            Player.instance.isTeleporting = true;
-            Player.instance.sprite.enabled = false;
-            Player.instance.SetVelocity(Vector2.zero);
+            spell.player.isTeleporting = true;
+            spell.player.sprite.enabled = false;
+            spell.player.SetVelocity(Vector2.zero);
 
-            Player.instance.heatAmount += spell.heatProduction;
+            spell.player.heatAmount += spell.heatProduction;
             
-            GameObject thingy = Instantiate(spell.startParticles, Player.instance.transform.position, Quaternion.identity);
-            Destroy(thingy.gameObject, 0.5f);
+            GameObject thingy = Instantiate(spell.startParticles, spell.player.transform.position, Quaternion.identity);
+            //Destroy(thingy.gameObject, 0.5f);
+            if (spell.Damage > 0)
+            {
+                DealDamage();
+            }
 
             Invoke("DoTeleport", spell.projectileSpeed);
 
+        }
+        
+        private void DealDamage()
+        {
+            Debug.Log("============== DEALING DAMAGE ==============");
+            var size = Physics2D.OverlapCircleNonAlloc(transform.position + spell.centerOffset, spell.damageRadius, _results, spell.enemyLayer);
+            Debug.Log($"Size={size}");
+            
+            for (int i = 0; i < size; i++)
+            {
+                try
+                {
+                    _results[i].GetComponent<EnemyInterface>().Damage(spell.Damage);
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError($"PROBLEM WITH {_results[i]} Stacktrace: {e}");
+                }
+            }
         }
 
 
         void DoTeleport()
         {
             Debug.Log("TELEPORTING");
-            Debug.Log(Player.instance.transform.position);
+            transform.position = spell.MousePos;
             
             var position = transform.position;
-            Debug.Log(position);
-            Player.instance.transform.position = position;
+            spell.player.transform.position = position;
             
             GameObject thingy = Instantiate(spell.endParticles, position, Quaternion.identity);
-            Destroy(thingy.gameObject, 0.5f);
+            //Destroy(thingy.gameObject, 0.5f);
 
-            Player.instance.isTeleporting = false;
-            Player.instance.sprite.enabled = true;
-
-            Destroy(this);
+            spell.player.isTeleporting = false;
+            spell.player.sprite.enabled = true;
+            if (spell.Damage > 0)
+            {
+                DealDamage();
+            }
+            Destroy(gameObject);
         }
     }
 }

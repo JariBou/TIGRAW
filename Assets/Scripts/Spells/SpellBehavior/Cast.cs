@@ -11,9 +11,7 @@ namespace Spells.SpellBehavior
 {
     public class Cast : MonoBehaviour
     {
-    
         public Spell spell;
-        public List<int> collidedEnemiesId;
         // ReSharper disable once FieldCanBeMadeReadOnly.Local
         private Collider2D[] _results = new Collider2D[32];
 
@@ -22,19 +20,18 @@ namespace Spells.SpellBehavior
         // Start is called before the first frame update
         void Start()
         {
-            Player.instance.heatAmount += spell.heatProduction;
-            collidedEnemiesId = new List<int>();
+            spell.player.heatAmount += spell.heatProduction;
 
 
             if (spell.zoneSpell)
             {
-                StartCoroutine(DelayedDestroy(spell.spellDuration));
-                InvokeRepeating("DealDamage", 0, spell.interactionInterval); //TODO: doesn't seem right
+                StartCoroutine(DelayedDestroy(spell.spellDuration != 0 ? spell.spellDuration : spell.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length));
+                //InvokeRepeating("DealDamage", 0, spell.interactionInterval); //TODO: doesn't seem right
             }
             else
             {
                 StartCoroutine(DelayedDestroy(spell.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length));
-                if (spell.damage > 0)
+                if (spell.baseDamage > 0)
                 {
                     DealDamage();
                 }
@@ -44,14 +41,14 @@ namespace Spells.SpellBehavior
 
         private void DealDamage()
         {
-            var size = Physics2D.OverlapCircleNonAlloc(transform.position, spell.damageRadius, _results, spell.enemyLayer);
+            var size = Physics2D.OverlapCircleNonAlloc(transform.position + spell.centerOffset, spell.damageRadius, _results, spell.enemyLayer);
 
             for (int i = 0; i < size; i++)
             {
                 try
                 {
-                    _results[i].GetComponent<EnemyInterface>().Damage(spell.damage);
-
+                    if (_results[i].isTrigger) {continue;}
+                    _results[i].GetComponent<EnemyInterface>().Damage(spell.Damage);
                 }
                 catch (Exception e)
                 {
@@ -71,24 +68,35 @@ namespace Spells.SpellBehavior
         // If has trigger
         private void OnTriggerEnter2D(Collider2D col)
         {
-            if (!col.CompareTag("Enemy")) return;
-            
-            EnemyInterface enemyScript = col.GetComponent<EnemyInterface>();
-            if (collidedEnemiesId.Contains(enemyScript.id))
+            if (!spell.zoneSpell)
             {
                 return;
             }
+            
+            if (!col.CompareTag("Enemy")) return;
+            if(col.isTrigger) {return;}
+            
+            EnemyInterface enemyScript = col.GetComponent<EnemyInterface>();
+            
+            enemyScript.TryDamage(spell.Damage, spell);
+            
+        }
 
-            collidedEnemiesId.Add(enemyScript.id);
-            StartCoroutine(DelayedRemoval(spell.interactionInterval, enemyScript.id));
-            enemyScript.Damage(spell.damage);
-        }
-    
-        IEnumerator DelayedRemoval(float delay, int id)
+        private void OnTriggerStay2D(Collider2D col)
         {
-            yield return new WaitForSeconds(delay);
-            collidedEnemiesId.Remove(id);
+            if (!spell.zoneSpell)
+            {
+                return;
+            }
+            if(col.isTrigger) {return;}
+            
+            if (!col.CompareTag("Enemy")) return;
+            
+            EnemyInterface enemyScript = col.GetComponent<EnemyInterface>();
+            
+            enemyScript.TryDamage(spell.Damage, spell);
         }
+
 
     }
 }

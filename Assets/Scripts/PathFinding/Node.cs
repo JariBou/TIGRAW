@@ -6,7 +6,7 @@ namespace PathFinding
 {
 	public class Node
 	{
-		private GameObject _self;
+		public GameObject Self;
 		private readonly int _x;
 		private readonly int _y;
 
@@ -43,18 +43,18 @@ namespace PathFinding
 
 		public void SetColor(Color color)
 		{
-			_self.GetComponent<SpriteRenderer>().color = color;
+			Self.GetComponent<SpriteRenderer>().color = color;
 		}
 
 		private void Create(Vector3 pos, GameObject parent)
 		{
-			_self = Object.Instantiate(Resources.Load ("Prefabs/Node"), parent.transform, instantiateInWorldSpace:true) as GameObject;
+			Self = Object.Instantiate(Resources.Load ("Prefabs/Node"), parent.transform, instantiateInWorldSpace:true) as GameObject;
 
-			_self!.GetComponent<SpriteRenderer>().enabled = Grid.Instance.debugMode;
+			Self!.GetComponent<SpriteRenderer>().enabled = Grid.Instance.debugMode;
 	    
 			// _self = Object.Instantiate(Resources.Load ("Prefabs/Node")) as GameObject;
-			if (_self != null) _self.transform.position = pos;
-			Helper = _self.GetComponent<NodeHelper>();
+			if (Self != null) Self.transform.position = pos;
+			Helper = Self.GetComponent<NodeHelper>();
 			Helper.Position = pos;
 			Helper.X = _x;
 			Helper.Y = _y;
@@ -73,7 +73,7 @@ namespace PathFinding
 			if (_x > 1)
 			{	
 				// Left
-				hit = Physics2D.Raycast(Position, new Vector2(-1, 0), Grid.NodeDistance);
+				hit = Physics2D.Raycast(Position, new Vector2(-1, 0), Grid.NodeDistance, Grid.Instance.wallLayer);
 				if (hit.collider != null && hit.collider.CompareTag("Wall"))
 				{
 					valid = false;
@@ -85,7 +85,7 @@ namespace PathFinding
 				if (_y > 0)
 				{
 					valid = true;
-					hit = Physics2D.Raycast(Position, new Vector2(-1, 1), diagonalDistance);
+					hit = Physics2D.Raycast(Position, new Vector2(-1, 1), diagonalDistance, Grid.Instance.wallLayer);
 					if (hit.collider != null && hit.collider.CompareTag("Wall"))
 					{
 						valid = false;
@@ -97,7 +97,7 @@ namespace PathFinding
 				if (_y < grid.height - 1)
 				{
 					valid = true;
-					hit = Physics2D.Raycast(Position, new Vector2(-1, -1), diagonalDistance);
+					hit = Physics2D.Raycast(Position, new Vector2(-1, -1), diagonalDistance, Grid.Instance.wallLayer);
 					if (hit.collider != null && hit.collider.CompareTag("Wall"))
 					{
 						valid = false;
@@ -112,7 +112,7 @@ namespace PathFinding
 			{
 				// Right
 				valid = true;
-				hit = Physics2D.Raycast(Position, new Vector2(1, 0), Grid.NodeDistance);
+				hit = Physics2D.Raycast(Position, new Vector2(1, 0), Grid.NodeDistance, Grid.Instance.wallLayer);
 				if (hit.collider != null && hit.collider.CompareTag("Wall"))
 				{
 					valid = false;
@@ -123,7 +123,7 @@ namespace PathFinding
 				if (_y > 0)
 				{
 					valid = true;
-					hit = Physics2D.Raycast(Position, new Vector2(1, 1), diagonalDistance);
+					hit = Physics2D.Raycast(Position, new Vector2(1, 1), diagonalDistance, Grid.Instance.wallLayer);
 					if (hit.collider != null && hit.collider.CompareTag("Wall"))
 					{
 						valid = false;
@@ -135,7 +135,7 @@ namespace PathFinding
 				if (_y < grid.height - 1)
 				{
 					valid = true;
-					hit = Physics2D.Raycast(Position, new Vector2(1, -1), diagonalDistance);
+					hit = Physics2D.Raycast(Position, new Vector2(1, -1), diagonalDistance, Grid.Instance.wallLayer);
 					if (hit.collider != null && hit.collider.CompareTag("Wall"))
 					{
 						valid = false;
@@ -150,7 +150,7 @@ namespace PathFinding
 			{
 				// Top
 				valid = true;
-				hit = Physics2D.Raycast(Position, new Vector2(0, 1), Grid.NodeDistance);
+				hit = Physics2D.Raycast(Position, new Vector2(0, 1), Grid.NodeDistance, Grid.Instance.wallLayer);
 				if (hit.collider != null && hit.collider.CompareTag("Wall"))
 				{
 					valid = false;
@@ -165,7 +165,7 @@ namespace PathFinding
 			{
 				// Bottom
 				valid = true;
-				hit = Physics2D.Raycast(Position, new Vector2(0, -1), Grid.NodeDistance);
+				hit = Physics2D.Raycast(Position, new Vector2(0, -1), Grid.NodeDistance, Grid.Instance.wallLayer );
 				if (hit.collider != null && hit.collider.CompareTag("Wall"))
 				{
 					valid = false;
@@ -180,11 +180,10 @@ namespace PathFinding
 
 		public void CheckIfBadNode()
 		{
-			Helper.isInbounds = false;
+			Helper.isInbounds = true;
 			if (!_floor.bounds.Contains(Position)) 
 			{
-				// Debug.Log("IS INBOUNDS");
-				Helper.isInbounds = true;
+				Helper.isInbounds = false;
 				BadNode = true;
 			}
 	    
@@ -214,7 +213,7 @@ namespace PathFinding
 			}
 
 			Helper.BadNode = BadNode;
-			_self.GetComponent<SpriteRenderer>().color = BadNode ? Color.red : Color.green;
+			Self.GetComponent<SpriteRenderer>().color = BadNode ? Color.red : Color.green;
 		}
 
 		public void DrawConnections()

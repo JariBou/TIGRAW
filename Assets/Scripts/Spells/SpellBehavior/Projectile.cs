@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Enemies;
@@ -20,7 +21,12 @@ namespace Spells.SpellBehavior
             collidedEnnemiesId = new List<int>();
         
         
-            Player.instance.heatAmount += spell.heatProduction;
+            spell.player.heatAmount += spell.heatProduction;
+
+            if (spell.destroyOnAnimEnd)
+            {
+                StartCoroutine(DelayedDestroy(spell.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length));
+            }
 
         
         
@@ -37,16 +43,18 @@ namespace Spells.SpellBehavior
             transform1.position = new Vector2(transformVector.x, transformVector.y) + spell.Direction * (spell.projectileSpeed * Time.fixedDeltaTime);
         }
     
-        private void OnTriggerEnter2D(Collider2D collider)
+        private void OnTriggerEnter2D(Collider2D col)
         {
         
             if(_hasCollided) {return;}
+            
+            if(col.isTrigger) {return;}
         
         
-            if (collider.CompareTag("Enemy") )
+            if (col.CompareTag("Enemy") )
             {
                 // Debug.Log("HIT ENNEMY!");
-                EnemyInterface enemyScript = collider.GetComponent<EnemyInterface>();
+                EnemyInterface enemyScript = col.GetComponent<EnemyInterface>();
                 if (collidedEnnemiesId.Contains(enemyScript.id))
                 {
                     return;
@@ -54,31 +62,47 @@ namespace Spells.SpellBehavior
 
                 collidedEnnemiesId.Add(enemyScript.id);
                 StartCoroutine(DelayedRemoval(spell.interactionInterval, enemyScript.id));
-                enemyScript.Damage(spell.damage);
+                enemyScript.Damage(spell.Damage);
+                if (spell.hasOnHitEffect)
+                {
+                    Instantiate(spell.onHitEffect, transform.position, transform.rotation);
+                }
                 if (!spell.isInfPierce)
                 {
                     _hasCollided = true;
+                    
                     Destroy(gameObject, 0.1f); // Actually only destroy if hasCollided
 
                 }
-            } else if (collider.CompareTag("Wall") )
+            } else if (col.CompareTag("Wall") )
             {
                 // Debug.Log("Hits wall!!!");
                 if (!spell.phantom)
                 {
+                    if (spell.hasOnHitEffect)
+                    {
+                        Instantiate(spell.onHitEffect, transform.position, transform.rotation);
+                    }
                     // Debug.Log("No phantom fucker");
                     _hasCollided = true;
-                    Destroy(gameObject, 0.1f); // Actually only destroy if hasCollided
+                    Destroy(gameObject, 0.01f); // Actually only destroy if hasCollided
                 }
             }
         
         
         }
-    
+
+        // TODO: maybe don't use a coroutine for that, and do a timer in an Update function
         IEnumerator DelayedRemoval(float delay, int id)
         {
             yield return new WaitForSeconds(delay);
             collidedEnnemiesId.Remove(id);
+        }
+        
+        IEnumerator DelayedDestroy(float delay = 0)
+        {
+            yield return new WaitForSeconds(delay);
+            Destroy(gameObject);
         }
     
     }

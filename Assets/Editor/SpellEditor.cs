@@ -42,9 +42,10 @@ public class SpellEditor : Editor
             spell.spellDuration = EditorGUILayout.Slider("Spell Duration", spell.spellDuration, 0, 16);
         }
         
-        if (spell.damage > 0)
+        if (spell.baseDamage > 0)
         {
             spell.damageRadius = EditorGUILayout.Slider("Damage Radius", spell.damageRadius, 0, 8);
+            spell.centerOffset = EditorGUILayout.Vector3Field("Center Offset", spell.centerOffset);
         }
 
         SceneView.RepaintAll();
@@ -57,7 +58,7 @@ public class SpellEditor : Editor
 
         spell.dashDistance = EditorGUILayout.IntField("Dash Distance", spell.dashDistance);
         
-        if (spell.damage > 0)
+        if (spell.baseDamage > 0)
         {
             spell.damageRadius = EditorGUILayout.Slider("Damage Radius", spell.damageRadius, 0, 8);
         }
@@ -75,21 +76,21 @@ public class SpellEditor : Editor
         {
         } else if (spell.spellType == SpellsType.Teleport)
         {
-            if (spell.damage > 0)
+            if (spell.baseDamage > 0)
             {
                 Handles.DrawWireDisc(spell.transform.position, Vector3.back, spell.damageRadius);
             }
         } else if (spell.spellType == SpellsType.Dash)
         {
-            if (spell.damage > 0)
+            if (spell.baseDamage > 0)
             {
                 Handles.DrawWireDisc(spell.transform.position, Vector3.back, spell.damageRadius);
             }
         } else if (spell.spellType == SpellsType.AoeCast)
         {
-            if (spell.damage > 0)
+            if (spell.baseDamage > 0)
             {
-                Handles.DrawWireDisc(spell.transform.position, Vector3.back, spell.damageRadius);
+                Handles.DrawWireDisc(spell.transform.position + spell.centerOffset, Vector3.back, spell.damageRadius);
             }
         }
 
@@ -103,7 +104,7 @@ public class SpellEditor : Editor
         spell.startParticles = EditorGUILayout.ObjectField("Start Particles" ,spell.startParticles, typeof(GameObject), true) as GameObject;
         spell.endParticles = EditorGUILayout.ObjectField("End Particles" ,spell.endParticles, typeof(GameObject), true) as GameObject;
         
-        if (spell.damage > 0)
+        if (spell.baseDamage > 0)
         {
             spell.damageRadius = EditorGUILayout.Slider("Damage Radius", spell.damageRadius, 0, 8);
         }
@@ -122,12 +123,21 @@ public class SpellEditor : Editor
         EditorGUILayout.EndToggleGroup(); */
         
         
+        spell.destroyOnAnimEnd = EditorGUILayout.Toggle("Destroy on Animation End", spell.destroyOnAnimEnd);
         spell.isInfPierce = EditorGUILayout.Toggle("Has Inf Piercing", spell.isInfPierce);
         
         if (!spell.isInfPierce)
         {
             EditorGUI.indentLevel++;
             spell.pierce = EditorGUILayout.IntSlider("Pierce Amount", spell.pierce, 1, 256);
+            EditorGUI.indentLevel--;
+        }
+        
+        spell.hasOnHitEffect = EditorGUILayout.Toggle("Has On Hit Effect", spell.hasOnHitEffect);
+        if (spell.hasOnHitEffect)
+        {
+            EditorGUI.indentLevel++;
+            spell.onHitEffect = EditorGUILayout.ObjectField("On Hit Effect", spell.onHitEffect, typeof(GameObject)) as GameObject;
             EditorGUI.indentLevel--;
         }
         spell.phantom = EditorGUILayout.Toggle("Passes through Walls", spell.phantom);

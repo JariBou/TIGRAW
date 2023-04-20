@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using LoadingScripts;
+using Saves;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -18,7 +20,9 @@ namespace PlayerBundle
         private static readonly int YMovement = Animator.StringToHash("yMovement");
         private static readonly int Speed = Animator.StringToHash("speed");
 
-        public static event Action<InputAction.CallbackContext> KeyPressedEvent; 
+        public static event Action<InputAction.CallbackContext> KeyPressedEvent;
+
+        public bool canCastSpells = true;
     
         private void Awake()
         {
@@ -26,6 +30,7 @@ namespace PlayerBundle
             spellLinks = new Dictionary<string, int>();
             playerActions = new PlayerActions();
             bindingLinks.Add("A", new Action<InputAction.CallbackContext>(Move));
+            
             // bindingLinks.Add("RightClick", new Action<InputAction.CallbackContext, int>(SpellCasting.CastSpell));
             // bindingLinks["A"].DynamicInvoke(new InputAction.CallbackContext());
             // Debug.Log(bindingLinks["A"].Method.Name); // Returns 'Move'
@@ -44,7 +49,9 @@ namespace PlayerBundle
                     spellsInputActions.Add(action);
                 }
 
-            
+                action.performed += OnKeyPressedTriggerEvent;
+                action.canceled += OnKeyPressedTriggerEvent;
+                
                 // Could have those in static functions, yeah whatever we'll see
                 switch (action.name)
                 {
@@ -63,21 +70,24 @@ namespace PlayerBundle
                     case "OpenStats":
                         bindingLinks[action.name] = new Action<InputAction.CallbackContext>(ShowStats);
                         break;
+                    case "Run":
+                        bindingLinks[action.name] = new Action<InputAction.CallbackContext>(Run);
+                        break;
                     case not null when action.name.StartsWith("Spell"):
                         spellLinks[action.name] = int.Parse(action.name.Substring(action.name.Length-1, 1)); // Get the number of the spell, won't work with 2 digits tho so need to change
                         bindingLinks[action.name] = new Action<InputAction.CallbackContext>(ResolveSpellCasted);
                         break;
                 }
-            
-            
             }
+            player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         }
 
         private void Start()
         {
-            player = Player.instance;
             Debug.Log("PlayerInputHandler Start method Called");
-            Debug.Log($"Player Animator: {player.animator}");
+            player.animator.SetFloat(Speed, 0);
+            player.animator.SetInteger(player.Facing, 6); // facing downwards
+            // Debug.Log($"Player Animator: {player.animator}");
         }
 
         private void OnEnable()
@@ -92,87 +102,57 @@ namespace PlayerBundle
             KeyPressedEvent -= ResolveKeyPressed;
         }
 
-
+        private void Run(InputAction.CallbackContext context)
+        {
+            player.running = context.performed;
+        }
+        
         private void Move(InputAction.CallbackContext context) 
         {
             Vector2 moveVector = context.ReadValue<Vector2>().normalized;
+            //Debug.Log($"moveVector= {moveVector}");
             player.SetMoveVector(moveVector);
-
-            // TODO: Problem, the script is apparently destroyed here??
-            try
-            {
-                if ((int)moveVector.x == 1 && (int)moveVector.y == 0)
-                {
-                    player.animator.SetInteger(player.Facing, 3);
-                } else if ((int)moveVector.x == -1 && (int)moveVector.y == 0)
-                {
-                    player.animator.SetInteger(player.Facing, 9);
-                } else if (Mathf.Abs((int)moveVector.y) == 1)
-                {
-                    player.animator.SetInteger(player.Facing, 9 + 3*(int)moveVector.y);
-                } 
-        
-
-                player.animator.SetFloat(XMovement, moveVector.x);
-                player.animator.SetFloat(YMovement, moveVector.y);
-                player.animator.SetFloat(Speed, moveVector.sqrMagnitude);
-            }
-            catch (Exception e)
-            {
-                // TODO: We need to remake an animator????
-                player.animator = GetComponent<Animator>();
-                
-                
-                if ((int)moveVector.x == 1 && (int)moveVector.y == 0)
-                {
-                    player.animator.SetInteger(player.Facing, 3);
-                } else if ((int)moveVector.x == -1 && (int)moveVector.y == 0)
-                {
-                    player.animator.SetInteger(player.Facing, 9);
-                } else if (Mathf.Abs((int)moveVector.y) == 1)
-                {
-                    player.animator.SetInteger(player.Facing, 9 + 3*(int)moveVector.y);
-                } 
-        
-
-                player.animator.SetFloat(XMovement, moveVector.x);
-                player.animator.SetFloat(YMovement, moveVector.y);
-                player.animator.SetFloat(Speed, moveVector.sqrMagnitude);
-            }
             
+            // if ((int)moveVector.x == 1 && (int)moveVector.y == 0)
+            // {
+            //     player.animator.SetInteger(player.Facing, 3);
+            // } else if ((int)moveVector.x == -1 && (int)moveVector.y == 0)
+            // {
+            //     player.animator.SetInteger(player.Facing, 9);
+            // } else 
 
+            if (Mathf.Abs((int)moveVector.y) == 1)
+            {
+                player.animator.SetInteger(player.Facing, 9 + 3*(int)moveVector.y);
+            } else if (Mathf.Abs((int)moveVector.x) == 1)
+            {
+                player.animator.SetInteger(player.Facing, 6 - 3*(int)moveVector.x);
+            } 
+    
+
+            player.animator.SetFloat(XMovement, moveVector.x);
+            player.animator.SetFloat(YMovement, moveVector.y);
+            player.animator.SetFloat(Speed, moveVector.sqrMagnitude);
         }
     
         private void Dash(InputAction.CallbackContext context) {
-            if (!context.performed){return;}
+            if (context.canceled){return;}
         
-            SpellCasting.CastSpell(context, 4);
-        }
-    
-        public void Teleport(InputAction.CallbackContext context) {
-            if (!context.performed){return;}
-     
             SpellCasting.CastSpell(context, 3);
         }
-    
-        public void DoBasicAttack(InputAction.CallbackContext context) {
-            if (!context.performed){return;}
 
-            SpellCasting.CastSpell(context, 2);
-        }
-    
-        public void DoThunderStrike(InputAction.CallbackContext context) {
-            if (!context.performed){return;}
-        
-            SpellCasting.CastSpell(context, 1);
-        }
-
-    
-        //TODO: Game PAusing should be handled by a script 
+        //TODO: Game Pausing should be handled by a script 
         public void PauseGame(InputAction.CallbackContext context)
         {
-            if (!context.performed) return;
-        
+            if (context.canceled) return;
+            
+            Debug.Log("its here");
+            
+            //For Testing only ======================
+            // SaveManager.SaveToJson(JsonSaveData.Initialise());
+            // SaveManager.LoadFromJson();
+            // ======================================
+            
             Time.timeScale = player.gamePaused ? 1 : 0;
 
             player.gamePaused = !player.gamePaused;
@@ -182,16 +162,22 @@ namespace PlayerBundle
     
         public void TryInteracting(InputAction.CallbackContext context)
         {
-            if (!context.performed) {return;}
+            if (context.canceled) {return;}
         
             Collider2D[] results = Physics2D.OverlapCircleAll(player.GetPosition(), player.interactionRange, player.interactableLayers);
 
             foreach (Collider2D col in results)
             {
-                Debug.LogWarning(col.name);
-                if (col.CompareTag("Interactable"))
+                if (col.CompareTag("Interactable") || col.isTrigger)
                 {
-                    col.GetComponent<Interactable>().Interact();
+                    try
+                    {
+                        col.GetComponent<Interactable>().Interact();
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e); 
+                    }
                 }
             }
         }
@@ -210,6 +196,7 @@ namespace PlayerBundle
 
         private void ResolveSpellCasted(InputAction.CallbackContext context)
         {
+            if (context.canceled || !canCastSpells) {return;}
             int spellId = spellLinks[context.action.name];
             SpellCasting.CastSpell(context, spellId);
         }
@@ -225,23 +212,6 @@ namespace PlayerBundle
             // This works biatch
 
             bindingLinks[context.action.name].DynamicInvoke(context);
-        
-            // switch (actionName)
-            // {
-            //     case "Move":
-            //         // Theoretically:
-            //         // bindingLinks[functionName].DynamicInvoke(context);
-            //         Move(context);
-            //         break;
-            //     case "CastSpell":
-            //         // Theoretically also:
-            //         // bindingLinks[functionName].DynamicInvoke(context);
-            //         // With function being ResolveSpellCasted
-            //         int spellId = spellLinks[context.action.name];
-            //         SpellCasting.CastSpell(context, spellId);
-            //         break;
-            // }
-        
         }
     
         public void OnKeyPressedTriggerEvent(InputAction.CallbackContext context)
