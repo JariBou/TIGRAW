@@ -34,11 +34,11 @@ namespace PlayerBundle
 
         public float AtkMultiplier =>
             baseAtkMultiplier +
-            PlayerUpgradesHandler.GetUpgradedAmount(PlayerUpgrades.PlayerUpgrades.AtkMultiplier);
+            _gm.PlayerUpgradesHandler.GetUpgradedAmount(PlayerUpgrades.PlayerUpgrades.AtkMultiplier);
 
         public float MaxHealth =>
             baseMaxHealth +
-            PlayerUpgradesHandler.GetUpgradedAmount(PlayerUpgrades.PlayerUpgrades.Health);
+            _gm.PlayerUpgradesHandler.GetUpgradedAmount(PlayerUpgrades.PlayerUpgrades.Health);
 
 
         [Header("Teleportation Variables")]

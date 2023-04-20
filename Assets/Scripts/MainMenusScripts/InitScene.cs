@@ -1,22 +1,27 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using MainMenusScripts;
+using Saves;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace LoadingScripts
 {
     public class InitScene : MonoBehaviour
     {
         public AudioMixer audioMixer;
+        public Slider slider;
+
+        private const int MAIN_MENU = 1;
 
         private void Start()
         {
-            
-            print(typeof(Dictionary<dynamic, dynamic>).Name );
-            print(typeof(Dictionary<int, string>).Name);
-            print(typeof(Dictionary<int, string>).Name == typeof(Dictionary<dynamic, dynamic>).Name);
+            // print(typeof(Dictionary<dynamic, dynamic>).Name );
+            // print(typeof(Dictionary<int, string>).Name);
+            // print(typeof(Dictionary<int, string>).Name == typeof(Dictionary<dynamic, dynamic>).Name);
             
             
             // SaveManager.SaveData(new Vector2());
@@ -42,13 +47,21 @@ namespace LoadingScripts
             InitAudioVolume(audioMixer);
 
 
-            StartGame();
+            StartCoroutine(LoadSceneAsync(MAIN_MENU));
         }
-
-
-        void StartGame()
+        
+        IEnumerator LoadSceneAsync(int sceneId)
         {
-            SceneManager.LoadScene(1);
+            AsyncOperation operation = SceneManager.LoadSceneAsync(sceneId);
+
+            while (!operation.isDone)
+            {
+                float progressValue = Mathf.Clamp01(operation.progress / 0.9f);
+
+                slider.value = progressValue;
+
+                yield return null;
+            }
         }
 
         private float GetVolumeSliderValue()

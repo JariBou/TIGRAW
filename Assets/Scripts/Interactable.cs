@@ -1,9 +1,10 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public abstract class Interactable : MonoBehaviour
 {
-    public bool IsUsable;
+    public bool isUsable;
 
     private void Start()
     {

@@ -11,11 +11,9 @@ public class FlagPole : Interactable
     public Flag calledFlag;
     public bool isReusable;
     
-    public static FlagPole Instance; // Useless?
 
     private void Awake()
     {
-        Instance = this;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -36,7 +34,7 @@ public class FlagPole : Interactable
 
     public override void Interact()
     {
-        if (!IsUsable) {return;}
+        if (!isUsable) {return;}
         Debug.Log($"Interacting with {name}");
 
         EventManager.InvokeFlagEvent(calledFlag);

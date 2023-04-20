@@ -7,6 +7,11 @@ namespace MainMenusScripts
 {
     public class MainMenu : MonoBehaviour
     {
+        private GameManager _gm;
+        private void Awake()
+        {
+            _gm = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
+        }
 
 
         public void Exit()
@@ -16,7 +21,7 @@ namespace MainMenusScripts
 
         public void Play()
         {
-            GameManager.LoadScene(3);
+            _gm.LoadScene(4);
         }
 
         public void Options()

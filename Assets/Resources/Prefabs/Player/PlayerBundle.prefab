@@ -772,7 +772,7 @@ Transform:
   - {fileID: 7267870840072405224}
   - {fileID: 8229534389512622627}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7267870839923698903
 GameObject:
@@ -873,7 +873,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerObj: {fileID: 7267870841138018725}
   offset: {x: 0, y: 0, z: -10}
-  smoothTime: 0.1
+  smoothTime: 0.001
   playerIsTeleporting: 0
 --- !u!1 &7267870839986428705
 GameObject:
@@ -920,7 +920,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdcd1302d4ca9af4cb8afe5981ea9f23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LoadSpells: 1
+  loadSpells: 1
   path: Prefabs/Spells
 --- !u!114 &7267870839986428709
 MonoBehaviour:
@@ -1151,26 +1151,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50b5960f13b69794b89d50c840986fc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movespeed: 400
-  sprintspeed: 800
-  health: 50
-  atkMultiplier: 0.9
-  armor: 0
+  baseMovespeed: 400
+  baseSprintspeed: 800
+  canSprint: 0
+  running: 0
   isDashing: 0
+  health: 50
+  baseMaxHealth: 50
+  baseAtkMultiplier: 0.9
+  baseArmor: 0
   isTeleporting: 0
-  cameraObj: {fileID: 7267870839923698903}
-  gamePaused: 0
+  groundTilemap: {fileID: 0}
   interactableLayers:
     serializedVersion: 2
     m_Bits: 512
   pauseMenuCanvas: {fileID: 0}
-  interactionRange: 1.4
-  groundTilemap: {fileID: 0}
-  circleColliderOffset: {x: 0, y: 0, z: 0}
+  gamePaused: 0
   playerStatsScript: {fileID: 5395115190937182697}
+  cameraObj: {fileID: 7267870839923698903}
+  interactionRange: 1.4
+  circleColliderOffset: {x: 0, y: 0, z: 0}
   sprite: {fileID: 0}
-  heatRecoveryRate: 2
+  baseHeatRecoveryRate: 2
   heatAmount: 0
+  baseMaxHeat: 100
   infiniteHeat: 0
 --- !u!114 &7267870841138018907
 MonoBehaviour:
@@ -1184,6 +1188,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 949fec8116f809545b368745a9697e59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canCastSpells: 1
 --- !u!114 &7267870841138018750
 MonoBehaviour:
   m_ObjectHideFlags: 0

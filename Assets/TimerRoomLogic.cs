@@ -9,6 +9,13 @@ public class TimerRoomLogic : MonoBehaviour
     private bool started = false;
     
     private float timer;
+    private AutoEnemySpawning _autoEnemySpawning;
+    
+    private void Awake()
+    {
+        _autoEnemySpawning = GameObject.FindWithTag("SpawnHandler").GetComponent<AutoEnemySpawning>();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -27,7 +34,7 @@ public class TimerRoomLogic : MonoBehaviour
         {
             started = true;
             doCountdown = true;
-            AutoEnemySpawning.Instance.spawn = true;
+            _autoEnemySpawning.spawn = true;
         }
         else if (obj == Flag.UnlockTeleporter)
         {
@@ -42,7 +49,7 @@ public class TimerRoomLogic : MonoBehaviour
         if (!started) {return;}
         if (!doCountdown)
         {
-            if (AutoEnemySpawning.Instance.GetCurrentMobCap() == 0)
+            if (_autoEnemySpawning.GetCurrentMobCap() == 0)
             {
                 EventManager.InvokeFlagEvent(Flag.UnlockTeleporter);
             }
@@ -51,7 +58,7 @@ public class TimerRoomLogic : MonoBehaviour
         timer -= Time.fixedDeltaTime;
         if (timer <= 0)
         {
-            AutoEnemySpawning.Instance.spawn = false;
+            _autoEnemySpawning.spawn = false;
             doCountdown = false;
         }
     }

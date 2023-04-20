@@ -18,34 +18,35 @@ namespace Saves
         public List<int> unlockedSpellsId;
 
         public int playerGold; // Might replace with souls to make more sense
-        public int playerCrystals; 
-        
+        public int playerCrystals;
+
         // relic from when I worked on this while filming an AD for MEUPORG
 
         public static JsonSaveData Initialise()
         {
+            GameManager gm = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
             JsonSaveData data = new JsonSaveData
             {
                 playerUpgradesLvl =
                 {
-                    items = new EnumIntItem[PlayerUpgradesHandler.playerUpgradesLvl.Count]
+                    items = new EnumIntItem[gm.PlayerUpgradesHandler.UpgradesLvl.Count]
                 },
                 upgradeAmount =
                 {
-                    items = new EnumFloatItem[PlayerUpgradesHandler.upgradeAmount.Count]
+                    items = new EnumFloatItem[gm.PlayerUpgradesHandler.UpgradesAmount.Count]
                 },
                 unlockedSpellsId = SpellsList.unlockedSpellsId
             };
 
             int i = 0;
-            foreach (var keyValuePair in PlayerUpgradesHandler.playerUpgradesLvl)
+            foreach (var keyValuePair in gm.PlayerUpgradesHandler.UpgradesLvl)
             {
                 data.playerUpgradesLvl.items[i] = new EnumIntItem { key = Enum.GetName(typeof(PlayerUpgrades), keyValuePair.Key), value = keyValuePair.Value };
                 i++;
             }
             
             i = 0;
-            foreach (var keyValuePair in PlayerUpgradesHandler.upgradeAmount)
+            foreach (var keyValuePair in gm.PlayerUpgradesHandler.UpgradesAmount)
             {
                 data.upgradeAmount.items[i] = new EnumFloatItem { key = Enum.GetName(typeof(PlayerUpgrades), keyValuePair.Key), value = keyValuePair.Value};
                 i++;

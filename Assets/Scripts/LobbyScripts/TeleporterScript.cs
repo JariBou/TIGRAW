@@ -10,10 +10,13 @@ namespace LobbyScripts
         public int SceneToLoadId;
         
         public static TeleporterScript Instance;
+        private GameManager _gm;
 
         private void Awake()
         {
             Instance = this;
+            _gm = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+
         }
         
 
@@ -35,18 +38,19 @@ namespace LobbyScripts
 
         public override void Interact()
         {
-            if (!IsUsable) {return;}
+            if (!isUsable) {return;}
             Debug.Log($"Interacting with {name}");
             //SceneManager.LoadScene(4);
             //SceneLoader.instance.LoadScene(4);
-            GameManager.LoadScene(SceneToLoadId);
+            _gm.LoadScene(SceneToLoadId);
+            isUsable = false;
         }
 
         protected override void OnFlagEvent(Flag flag)
         {
             if (flag == Flag.UnlockTeleporter)
             {
-                IsUsable = true;
+                isUsable = true;
             }
         }
     }
