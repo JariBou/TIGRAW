@@ -1,5 +1,6 @@
-
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 using LoadingScripts;
 using PlayerBundle;
@@ -8,15 +9,18 @@ using Saves;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
 
     private static GameManager _instance;
-    public SceneLoader sceneLoader;
+
+    [Range(1, 512)]
+    public int UpdateRate = 30; // Frame update rate of enemy pathfinding set in settings according to performance
 
     [SerializeField]
-    private GameObject loadingScreen;
+    private GameObject _sceneLoaderObj;
 
     [SerializeField] 
     private PlayerData playerData;
@@ -26,6 +30,10 @@ public class GameManager : MonoBehaviour
     public RunData currentRunData; // I don't think I'll use this , nvm still need to diferenciate both
     // Put all in current save imo
 
+    [SerializeField]
+    private int LOADING_SCENE = 3;
+
+    
     private void Awake()
     {
         _instance = this;
@@ -43,15 +51,19 @@ public class GameManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        Player player;
         
-        Player player = GameObject.FindWithTag("Player").GetComponent<Player>();
-        if (!player)
+        try
         {
-            
-            
-            Debug.LogWarning("FUUUUUUUUUUUUUUUUUUUCK");
+            player = GameObject.FindWithTag("Player").GetComponent<Player>();
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning("No Player Found");
             return;
         }
+        
+        if(!player) {return;}
 
         if (scene.name == "Lobby")
         {
@@ -103,11 +115,14 @@ public class GameManager : MonoBehaviour
 
     }
 
-    public static void LoadScene(int sceneId)
+    public void LoadScene(int sceneId)
     {
         // GameObject gameObject = Instantiate(_instance.loadingScreen);
         // _instance.sceneLoader = gameObject.GetComponent<SceneLoader>();
-        GameObject.FindGameObjectWithTag("Player").GetComponent<GameManager>().sceneLoader.LoadScene(sceneId);
+        SceneManager.LoadScene(LOADING_SCENE, LoadSceneMode.Single);
+        SceneLoader sceneLoader = Instantiate(_sceneLoaderObj).GetComponent<SceneLoader>();
+
+        sceneLoader.LoadScene(sceneId);
     }
 
     // Start is called before the first frame update
@@ -118,6 +133,7 @@ public class GameManager : MonoBehaviour
     }
 }
 
+[Serializable]
 public class RunData
 {
     public int roomNumber;

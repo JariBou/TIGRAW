@@ -3,35 +3,33 @@ using System.Collections.Generic;
 
 namespace PlayerBundle.PlayerUpgrades
 {
-    [Serializable]
     public class PlayerUpgradesHandler
     {
-        public static Dictionary<PlayerUpgrades, int> playerUpgradesLvl; // Hashtable to be able to serialize, might do a dictionary with a custom serialisation tho
-        public static Dictionary<PlayerUpgrades, float> upgradeAmount;
+        public Dictionary<PlayerUpgrades, int> UpgradesLvl; // Hashtable to be able to serialize, might do a dictionary with a custom serialisation tho, nvm
+        public Dictionary<PlayerUpgrades, float> UpgradesAmount;
         
-        
-
 
         public PlayerUpgradesHandler()
         {
-            playerUpgradesLvl = new Dictionary<PlayerUpgrades, int>();
-            upgradeAmount = new Dictionary<PlayerUpgrades, float>();
+            UpgradesLvl = new Dictionary<PlayerUpgrades, int>();
+            UpgradesAmount = new Dictionary<PlayerUpgrades, float>();
             
             
             PlayerUpgrades[] playerUpgradesArray = (PlayerUpgrades[])Enum.GetValues(typeof(PlayerUpgrades));
             foreach (var upgrade in playerUpgradesArray)
             {
-                playerUpgradesLvl.Add(upgrade, 0); // Defaults to lvl 0
-                upgradeAmount.Add(upgrade, 0.1f); // Defaults to 0.1 upgrading
+                UpgradesLvl.Add(upgrade, 0); // Defaults to lvl 0
+                UpgradesAmount.Add(upgrade, 0.1f); // Defaults to 0.1 upgrading
             }
         }
 
-        public static float GetUpgradedAmount(PlayerUpgrades upgrade)
+
+        public float GetUpgradedAmount(PlayerUpgrades upgrade)
         {
-            return (float)Math.Round(playerUpgradesLvl[upgrade] * upgradeAmount[upgrade], 3);
+            return (float)Math.Round(UpgradesLvl[upgrade] * UpgradesAmount[upgrade], 3);
         }
 
-        public static ref float GetPlayerRef(PlayerUpgrades upgrade)
+        public static ref float GetPlayerRef(PlayerUpgrades upgrade) // This is useless for now and probably forever
         {
             switch (upgrade)
             {
@@ -45,22 +43,26 @@ namespace PlayerBundle.PlayerUpgrades
         }
 
 
-        public static void Upgrade(PlayerUpgrades upgrade)
+        public void Upgrade(PlayerUpgrades upgrade)
         {
-            switch (upgrade)
-            {
-                case PlayerUpgrades.AtkMultiplier:
-                    Player.Instance.baseAtkMultiplier += upgradeAmount[upgrade];
-                    break;
-                case PlayerUpgrades.Health:
-                    Player.Instance.health += upgradeAmount[upgrade];
-                    Player.Instance.baseMaxHealth += upgradeAmount[upgrade];
-                    break;
-                default:
-                    return;
-            }
+            // Switch useless now because we calculate bonuses based on multiplication between upgradeAmount and UpgradeLvl
+            // switch (upgrade)
+            // {
+            //     case PlayerUpgrades.AtkMultiplier:
+            //         _player.baseAtkMultiplier += upgradeAmount[upgrade];
+            //         break;
+            //     case PlayerUpgrades.Health:
+            //         _player.health += upgradeAmount[upgrade];
+            //         _player.baseMaxHealth += upgradeAmount[upgrade];
+            //         break;
+            //     default:
+            //         return;
+            // }
             
-            playerUpgradesLvl[upgrade] = (int)playerUpgradesLvl[upgrade] + 1;
+            // TODO: Heal player when upgrading health OR do smth where teleporters have an option to apply an effect such as heal player
+            // TODO: 2nd One works best imo
+            
+            UpgradesLvl[upgrade] = (int)UpgradesLvl[upgrade] + 1;
 
         }
         
@@ -68,11 +70,11 @@ namespace PlayerBundle.PlayerUpgrades
         // multiple stats, maybe return an array of refs and iterate
         // through them since we can get the upgrade amounts for
         // each.... seems hard tho
-        public static void Upgrade2(PlayerUpgrades upgrade) 
+        public void Upgrade2(PlayerUpgrades upgrade) 
         {
-            GetPlayerRef(upgrade) += upgradeAmount[upgrade];
+            GetPlayerRef(upgrade) += UpgradesAmount[upgrade];
             
-            playerUpgradesLvl[upgrade] = (int)playerUpgradesLvl[upgrade] + 1;
+            UpgradesLvl[upgrade] = (int)UpgradesLvl[upgrade] + 1;
         }
     }
 }

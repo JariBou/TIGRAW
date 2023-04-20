@@ -21,12 +21,12 @@ public class AutoEnemySpawning : MonoBehaviour
     [FormerlySerializedAs("Timer")] [SerializeField] private float timer;
     public int respawnTime;
     public int packSize;
-
-    public static AutoEnemySpawning Instance;
+    
+    private GameManager _gm;
 
     private void Awake()
     {
-        Instance = this;
+        _gm = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
     }
 
     // Start is called before the first frame update
@@ -60,7 +60,9 @@ public class AutoEnemySpawning : MonoBehaviour
             Transform spawningPoint = spawningPoints[Random.Range(0, spawningPoints.Count)];
             GameObject enemy = Instantiate(DetermineSpawningEnemy(), spawningPoint.position,
                 Quaternion.identity, spawningPoint);
-            enemy.GetComponent<AIMeleeScript>().targetEntity = player;
+            AIMeleeScript script = enemy.GetComponent<AIMeleeScript>();
+            script.targetEntity = player;
+            script.updateRate = _gm.UpdateRate;
         }
     }
 

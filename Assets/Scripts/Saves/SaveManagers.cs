@@ -5,12 +5,10 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
-using Saves;
-using Unity.VisualScripting;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace LoadingScripts
+namespace Saves
 {
     public class SaveManager
     {
@@ -22,6 +20,7 @@ namespace LoadingScripts
 
         private static Dictionary<int, string> test;
 
+        // ================= SOB THIS WILL NEVER BE USED PROB ========================
         public static void SaveData<T>(T data)
         {
             Type dataType = data.GetType();
@@ -41,7 +40,7 @@ namespace LoadingScripts
 
             //TODO: Implement custom save
         }
-
+        
         public static void SaveToJson(JsonSaveData data)
         {
             string jsonData = JsonUtility.ToJson(data);
@@ -68,7 +67,19 @@ namespace LoadingScripts
             JsonSaveData data = JsonUtility.FromJson<JsonSaveData>(jsonData);
             return data;
         }
+        
+        public static JsonSaveData LoadFromJson(string filename)
+        {
+            string filepath = Application.persistentDataPath + "/" + filename + (filename.EndsWith(".json") ? ""
+                : ".json");
+            string jsonData = File.ReadAllText(filepath);
+            Debug.LogWarning(jsonData);
 
+            JsonSaveData data = JsonUtility.FromJson<JsonSaveData>(jsonData);
+            return data;
+        }
+
+        // ========== USELESS IMO =======================================
         public static void Save(string saveName, object saveData)
         {
             BinaryFormatter formatter = GetBinaryFormatter();
@@ -135,6 +146,8 @@ namespace LoadingScripts
             
             return binaryFormatter;
         }
+        
+        // ===============================================================
     }
 
     public static class SimpleSaveManager

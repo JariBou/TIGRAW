@@ -168,9 +168,16 @@ namespace PlayerBundle
 
             foreach (Collider2D col in results)
             {
-                if (col.CompareTag("Interactable"))
+                if (col.CompareTag("Interactable") || col.isTrigger)
                 {
-                    col.GetComponent<Interactable>().Interact();
+                    try
+                    {
+                        col.GetComponent<Interactable>().Interact();
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e); 
+                    }
                 }
             }
         }

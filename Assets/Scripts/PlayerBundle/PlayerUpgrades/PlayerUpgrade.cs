@@ -21,20 +21,26 @@ namespace PlayerBundle.PlayerUpgrades
         public float upgradeAmount;
 
         private Player player;
-        
-    
+        private GameManager _gm;
+
+        private void Awake()
+        {
+            player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+            _gm = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+        }
+
+
         // Start is called before the first frame update
         void Start()
         {
-            player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
-
-            if (PlayerUpgradesHandler.upgradeAmount.ContainsKey(upgrade))
+            
+            if (_gm.PlayerUpgradesHandler.UpgradesAmount.ContainsKey(upgrade))
             {
-                PlayerUpgradesHandler.upgradeAmount[upgrade] = upgradeAmount;
+                upgradeAmount = _gm.PlayerUpgradesHandler.UpgradesAmount[upgrade];
             }
             else
             {
-                PlayerUpgradesHandler.upgradeAmount.Add(upgrade, upgradeAmount);
+                _gm.PlayerUpgradesHandler.UpgradesAmount.Add(upgrade, upgradeAmount);
             }
 
             Refresh();
@@ -45,10 +51,10 @@ namespace PlayerBundle.PlayerUpgrades
             switch (upgrade)
             {
                 case PlayerUpgrades.AtkMultiplier:
-                    Refresh(Math.Round(player.baseAtkMultiplier, 3).ToString(CultureInfo.InvariantCulture));
+                    Refresh(Math.Round(player.AtkMultiplier, 3).ToString(CultureInfo.InvariantCulture));
                     break;
                 case PlayerUpgrades.Health:
-                    Refresh(player.baseMaxHealth.ToString(CultureInfo.InvariantCulture));
+                    Refresh(player.MaxHealth.ToString(CultureInfo.InvariantCulture));
                     break;
             }
         }
@@ -61,7 +67,7 @@ namespace PlayerBundle.PlayerUpgrades
     
         public void Upgrade()
         {
-            PlayerUpgradesHandler.Upgrade(upgrade);
+            _gm.PlayerUpgradesHandler.Upgrade(upgrade);
             Refresh();
         }
     }

@@ -35,7 +35,7 @@ public class KeyHintScript : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         if (!other.CompareTag("Player")) return;
-        if (!linkedObject.IsUsable) {return;}
+        if (!linkedObject.isUsable) {return;}
             
         playerInRange = true;
         floatingText.SetActive(true);

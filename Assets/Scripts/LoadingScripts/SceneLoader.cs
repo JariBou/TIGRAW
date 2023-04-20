@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -7,12 +8,11 @@ namespace LoadingScripts
 {
     public class SceneLoader : MonoBehaviour
     {
-        public Canvas loadingScreen;
-        public Image loadingBarFill;
-        public static SceneLoader Instance;
-
-    
-
+        public Slider slider;
+        
+        
+        // TODO: Ask maybe going to a lightweight loading screen not asycly scene that loads asyncly the scene we want to load?
+        
         public void LoadScene(int sceneId)
         {
             StartCoroutine(LoadSceneAsync(sceneId));
@@ -21,19 +21,16 @@ namespace LoadingScripts
         IEnumerator LoadSceneAsync(int sceneId)
         {
             AsyncOperation operation = SceneManager.LoadSceneAsync(sceneId);
-
-            loadingScreen.enabled = true;
-
+            
             while (!operation.isDone)
             {
                 float progressValue = Mathf.Clamp01(operation.progress / 0.9f);
 
-                loadingBarFill.fillAmount = progressValue;
+                slider.value = progressValue;
 
                 yield return null;
             }
 
-            loadingScreen.enabled = false;
         }
     }
 }

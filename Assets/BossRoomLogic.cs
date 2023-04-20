@@ -14,7 +14,7 @@ public class BossRoomLogic : MonoBehaviour
     {
         if (boss.health <= 0)
         {
-            TeleporterScript.Instance.IsUsable = true;
+            TeleporterScript.Instance.isUsable = true;
         }
     }
 }
