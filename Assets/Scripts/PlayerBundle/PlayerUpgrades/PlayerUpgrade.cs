@@ -6,13 +6,6 @@ using UnityEngine;
 
 namespace PlayerBundle.PlayerUpgrades
 {
-    [Serializable]
-    public enum PlayerUpgrades
-    {
-        AtkMultiplier,
-        Health,
-    }
-
     public class PlayerUpgrade : MonoBehaviour
     {
         public TMP_Text value;

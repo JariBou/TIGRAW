@@ -1,14 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using PlayerBundle.BraceletUpgrade;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public enum BraceletUpgrades
-{
-    
-}
 
 public class BraceletUpgradeManager : MonoBehaviour
 {
@@ -22,15 +19,25 @@ public class BraceletUpgradeManager : MonoBehaviour
     public Sprite upgradeLocked;
     public Sprite upgradeUnlocked;
     
+    [Header("Badges")]
+    public Sprite badgeForbidden;
+    public Sprite badgeMaxedOut;
+    
     [Header("Utils")]
     public GameObject connectionsParent;
     public GameObject connectionPrefab;
 
     public BraceletUpgradeButton firstUpgrade;
 
+    public Tooltip Tooltip;
+
+    public GameManager gameManager;
 
     private void Start()
     {
+        gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
         StartCoroutine(firstUpgrade.InitConnections());
     }
+
+  
 }

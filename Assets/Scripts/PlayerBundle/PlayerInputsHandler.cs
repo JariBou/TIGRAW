@@ -138,7 +138,7 @@ namespace PlayerBundle
         private void Dash(InputAction.CallbackContext context) {
             if (context.canceled){return;}
         
-            SpellCasting.CastSpell(context, 3);
+            player.heatManager.CastSpell(context, 3);
         }
 
         //TODO: Game Pausing should be handled by a script 
@@ -198,7 +198,7 @@ namespace PlayerBundle
         {
             if (context.canceled || !canCastSpells) {return;}
             int spellId = spellLinks[context.action.name];
-            SpellCasting.CastSpell(context, spellId);
+            player.heatManager.CastSpell(context, spellId);
         }
 
 

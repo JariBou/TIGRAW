@@ -27,8 +27,8 @@ namespace Spells.SpellBehavior
             spell.player.sprite.enabled = false;
             spell.player.SetVelocity(Vector2.zero);
 
-            spell.player.heatAmount += spell.heatProduction;
-            
+            spell.player.heatManager.AddHeat(spell.heatProduction);
+
             GameObject thingy = Instantiate(spell.startParticles, spell.player.transform.position, Quaternion.identity);
             //Destroy(thingy.gameObject, 0.5f);
             if (spell.Damage > 0)

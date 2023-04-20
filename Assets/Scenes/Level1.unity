@@ -111114,6 +111114,22 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7267870841138018725, guid: f4d25aca64c9ac545a9fd437005855fa, type: 3}
   m_PrefabInstance: {fileID: 5600770614948203512}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2982866429975229022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2982866429975229021}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: debb37eb1dfdd124aaa8d53456ffa188, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseHeatRecoveryRate: 2
+  baseBonusHeatRecoveryRate: 2
+  heatAmount: 0
+  baseMaxHeat: 100
 --- !u!1001 &5600770614948203512
 PrefabInstance:
   m_ObjectHideFlags: 0

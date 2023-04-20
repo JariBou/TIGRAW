@@ -772,7 +772,7 @@ Transform:
   - {fileID: 7267870840072405224}
   - {fileID: 8229534389512622627}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7267870839923698903
 GameObject:
@@ -1015,6 +1015,7 @@ GameObject:
   - component: {fileID: 7267870841138018745}
   - component: {fileID: 7267870841138018746}
   - component: {fileID: 7267870841138018747}
+  - component: {fileID: 2788340538875148990}
   - component: {fileID: 7267870841138018724}
   - component: {fileID: 7267870841138018907}
   - component: {fileID: 7267870841138018750}
@@ -1139,6 +1140,18 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
+--- !u!114 &2788340538875148990
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7267870841138018725}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: debb37eb1dfdd124aaa8d53456ffa188, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &7267870841138018724
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1230,22 +1243,6 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 3b9e562d-d13f-44ba-8f96-f3aaadb82948
     m_ActionName: Player maps/Movement[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 8549b579-0c2e-40b3-a304-16077530dcff
-    m_ActionName: Player maps/Teleport[/Keyboard/c]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 330a8cbf-d462-43f6-a254-15022c70daa1
-    m_ActionName: Player maps/Dash[/Keyboard/space]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 451a998e-5756-4e2f-9a5a-053a822b5b27
-    m_ActionName: Player maps/BasicAttack[/Mouse/leftButton]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 4225d3a2-fd9b-4b7f-b488-1967ce310cac
-    m_ActionName: Player maps/ThunderStrike[/Mouse/rightButton]
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 7267870841138018907}
@@ -1362,6 +1359,30 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: a53756c2-1e7e-4df4-ba5e-8c982a2bb1c0
     m_ActionName: Player maps/Spell 3[/Keyboard/space]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: ad450f0a-1e8a-4b31-a8cd-9ac5918a8757
+    m_ActionName: Player maps/Spell 4[/Keyboard/r]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: ca0a0bec-671f-487b-b37f-13134b2b68b8
+    m_ActionName: Player maps/Spell 5[/Keyboard/f]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: a91a217c-4959-4503-9627-736fda251982
+    m_ActionName: Player maps/Spell 6[/Keyboard/q]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 971d90c1-cf37-4568-801a-431a7ecd3241
+    m_ActionName: Player maps/Spell 7[/Keyboard/z]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 94db5e6f-bf3f-413c-9fe6-429c0221bbb2
+    m_ActionName: Player maps/Spell 8[/Keyboard/x]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: a62b2195-0fee-42c3-96d5-840ac477078f
+    m_ActionName: Player maps/Run[/Keyboard/leftShift]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player maps

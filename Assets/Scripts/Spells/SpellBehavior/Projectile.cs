@@ -20,8 +20,7 @@ namespace Spells.SpellBehavior
         {
             collidedEnnemiesId = new List<int>();
         
-        
-            spell.player.heatAmount += spell.heatProduction;
+            spell.player.heatManager.AddHeat(spell.heatProduction);
 
             if (spell.destroyOnAnimEnd)
             {

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using PlayerBundle.BraceletUpgrade;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -13,25 +14,41 @@ public enum BraceletUpgradeState
     Unlocked
 }
 
+public enum BadgeState
+{
+    Neutral,
+    Forbidden,
+    MaxedOut
+}
+
 public class BraceletUpgradeButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    public Tooltip Tooltip;
+    public BraceletUpgrades upgrade;
     public string UpgradeName;
     public string description;
     public int cost;
 
     public int currentLevel;
     public int maxLevel;
+    public float upgradeAmount;
 
     private Image _buttonImage;
     private RectTransform _rectTransform;
+    public Image badgeImage;
 
     public BraceletUpgradeState state = BraceletUpgradeState.Hidden;
+    public BadgeState badgeState = BadgeState.Neutral;
 
     public BraceletUpgradeManager manager;
 
     public BraceletUpgradeButton[] nextUpgrades;
     public List<BraceletUpgradeConnection> connections = new(8);
+    
+    public List<BraceletUpgrades> IncompatibleUpgrades;
+    
+    public static event Action<BraceletUpgrades> OnBraceletUpgrade;
+
+
 
     private void Awake()
     {
@@ -41,7 +58,31 @@ public class BraceletUpgradeButton : MonoBehaviour, IPointerEnterHandler, IPoint
 
     private void Start()
     {
+        OnBraceletUpgrade += OnOtherBraceletUpgrade;
         
+        if (manager.gameManager.BraceletUpgradesHandler.UpgradesAmount.ContainsKey(upgrade))
+        {
+            manager.gameManager.BraceletUpgradesHandler.UpgradesAmount[upgrade] = upgradeAmount;
+        }
+        else
+        {
+            manager.gameManager.BraceletUpgradesHandler.UpgradesAmount.Add(upgrade, upgradeAmount);
+        }
+
+    }
+
+    private void OnDestroy()
+    {
+        OnBraceletUpgrade -= OnOtherBraceletUpgrade;
+    }
+
+    private void OnOtherBraceletUpgrade(BraceletUpgrades upgrade)
+    {
+        if (IncompatibleUpgrades.Contains(upgrade))
+        {
+            badgeState = BadgeState.Forbidden;
+            UpdateBadge();
+        }
     }
 
     public RectTransform GetRectTransform()
@@ -66,6 +107,23 @@ public class BraceletUpgradeButton : MonoBehaviour, IPointerEnterHandler, IPoint
                 break;
             case BraceletUpgradeState.Unlocked:
                 SetSprite(manager.upgradeUnlocked);
+                break;
+        }
+    }
+    
+    private void UpdateBadge()
+    {
+        badgeImage.enabled = true;
+        switch (badgeState)
+        {
+            case BadgeState.Neutral:
+                badgeImage.enabled = false;
+                break;
+            case BadgeState.Forbidden:
+                badgeImage.sprite = manager.badgeForbidden;
+                break;
+            case BadgeState.MaxedOut:
+                badgeImage.sprite = manager.badgeMaxedOut;
                 break;
         }
     }
@@ -125,15 +183,43 @@ public class BraceletUpgradeButton : MonoBehaviour, IPointerEnterHandler, IPoint
         }
     }
 
+    public void Upgrade()
+    {
+        if (!(currentLevel < maxLevel) || badgeState == BadgeState.Forbidden)
+        {
+            Debug.Log($"Cannot upgrade! state={state} || level={currentLevel}/{maxLevel}");
+            return;
+        }
+        
+        manager.gameManager.BraceletUpgradesHandler.Upgrade(upgrade);
+
+        InvokeBraceletUpgrade(upgrade);
+        
+        currentLevel++;
+        if (currentLevel == maxLevel)
+        {
+            badgeState = BadgeState.MaxedOut;
+            UpdateBadge();
+        }
+        if (state == BraceletUpgradeState.Unlocked) return;
+        state = BraceletUpgradeState.Unlocked;
+        UpdateSprite();
+    }
+
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Tooltip.PassData(UpgradeName, description, cost);
-        Tooltip.SetActive(true);
+        manager.Tooltip.PassData(UpgradeName, description, cost);
+        manager.Tooltip.SetActive(true);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        Tooltip.SetActive(false);
+        manager.Tooltip.SetActive(false);
 
+    }
+    
+    public static void InvokeBraceletUpgrade(BraceletUpgrades obj)
+    {
+        OnBraceletUpgrade?.Invoke(obj);
     }
 }

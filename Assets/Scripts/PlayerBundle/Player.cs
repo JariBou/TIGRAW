@@ -70,12 +70,9 @@ namespace PlayerBundle
         // ============================
 
         [FormerlySerializedAs("heatRecoveryRate")]
-        [Header("Heat Mechanic")]
-        [SaveVariable] public float baseHeatRecoveryRate = 2f; // Modified by BraceletUpgrades
-        public float heatAmount;
-        [FormerlySerializedAs("maxHeat")] [SaveVariable] public float baseMaxHeat = 100f; // Modified by BraceletUpgrades
-        [SerializeField] private bool infiniteHeat;
-        private float _heatTimer;
+        // [Header("Heat Mechanic")]
+        public HeatManager heatManager;
+        
         private bool _isCasting = false;
 
         private GameManager _gm;
@@ -97,6 +94,7 @@ namespace PlayerBundle
             sprite = GetComponent<SpriteRenderer>();
             animator = GetComponent<Animator>();
             circleCollider = GetComponent<CircleCollider2D>();
+            heatManager = GetComponent<HeatManager>();
             circleColliderOffset = new Vector3(circleCollider.offset.x, circleCollider.offset.y, 0);
             
             // _playerUpgradesHandler = new PlayerUpgradesHandler();
@@ -140,36 +138,15 @@ namespace PlayerBundle
         {
             moveVector = vector;
         }
-    
-        // Update is called once per frame
-        void Update()
-        {
-            if (infiniteHeat)
-            {
-                heatAmount = 0;
-            }
-        
-            // running = Input.GetKey(KeyCode.LeftShift);
-        }
 
-        private bool IsPerformingAction() {
+        public bool IsPerformingAction() {
             return isTeleporting || isDashing;
             // return isTeleporting;
         }
 
         private void FixedUpdate()
         {
-            if (heatAmount > 0) heatAmount -= baseHeatRecoveryRate * Time.fixedDeltaTime;
-            else if (heatAmount < 0) heatAmount = 0;
-
-            if (IsPerformingAction()) {ResetTimer(); return;}
-        
-            _heatTimer += 1f * Time.fixedDeltaTime;
-
-            if (_heatTimer >= 3) {
-                if (heatAmount > 0) heatAmount -= baseHeatRecoveryRate * Time.fixedDeltaTime * 2;
-            }
-
+            
             body.velocity = new Vector2(moveVector.x, moveVector.y) * ((running ? baseSprintspeed : baseMovespeed) * Time.fixedDeltaTime);
         }
 
@@ -177,14 +154,6 @@ namespace PlayerBundle
             return moveVector;
         }
 
-        public int GetHeat() {
-            return (int) heatAmount;
-        }
-
-        public void ResetTimer() {
-            _heatTimer = 0;
-        }
-        
         public void SetVelocity(Vector2 vector)
         {
             body.velocity = vector;

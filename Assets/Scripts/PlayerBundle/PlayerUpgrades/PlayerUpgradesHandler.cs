@@ -3,6 +3,12 @@ using System.Collections.Generic;
 
 namespace PlayerBundle.PlayerUpgrades
 {
+    
+    public enum PlayerUpgrades
+    {
+        AtkMultiplier,
+        Health,
+    }
     public class PlayerUpgradesHandler
     {
         public Dictionary<PlayerUpgrades, int> UpgradesLvl; // Hashtable to be able to serialize, might do a dictionary with a custom serialisation tho, nvm

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using LoadingScripts;
 using PlayerBundle;
+using PlayerBundle.BraceletUpgrade;
 using PlayerBundle.PlayerUpgrades;
 using Saves;
 using Unity.VisualScripting;
@@ -27,6 +28,7 @@ public class GameManager : MonoBehaviour
 
     public JsonSaveData currentSave;
     public PlayerUpgradesHandler PlayerUpgradesHandler;
+    public BraceletUpgradesHandler BraceletUpgradesHandler;
     public RunData currentRunData; // I don't think I'll use this , nvm still need to diferenciate both
     // Put all in current save imo
 
@@ -45,6 +47,7 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         currentRunData = new RunData();
         PlayerUpgradesHandler = new PlayerUpgradesHandler();
+        BraceletUpgradesHandler = new BraceletUpgradesHandler();
         //player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
 
     }

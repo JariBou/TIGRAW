@@ -180,9 +180,13 @@ MonoBehaviour:
   upgradeHidden: {fileID: 21300000, guid: 893dd6ebc5de5984ea229f087d6c7dd4, type: 3}
   upgradeLocked: {fileID: 21300000, guid: adc9a2436f0905a46bdf4b326fb36bf4, type: 3}
   upgradeUnlocked: {fileID: 21300000, guid: 175ed80e3d0f3e64488198dc25418f0d, type: 3}
+  badgeForbidden: {fileID: -132319502, guid: ba9905d728b80a94e9c4a7387b42811d, type: 3}
+  badgeMaxedOut: {fileID: 2073123614, guid: ba9905d728b80a94e9c4a7387b42811d, type: 3}
   connectionsParent: {fileID: 1124371592}
   connectionPrefab: {fileID: 6097222950573603523, guid: 9bb7039148f512c4eb6a47c1ffc5bcf3, type: 3}
   firstUpgrade: {fileID: 61376725}
+  Tooltip: {fileID: 1820517429}
+  gameManager: {fileID: 0}
 --- !u!1 &61376720
 GameObject:
   m_ObjectHideFlags: 0
@@ -216,6 +220,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 181476706}
+  - {fileID: 506939961}
   m_Father: {fileID: 1708171330}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -267,7 +272,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 61376723}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 61376725}
+        m_TargetAssemblyTypeName: BraceletUpgradeButton, Assembly-CSharp
+        m_MethodName: Upgrade
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &61376723
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -318,18 +335,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c73a604a4c38e649b6bcbe604934df3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Tooltip: {fileID: 1820517429}
+  upgrade: 0
   UpgradeName: Upgrade 1
   description: description
   cost: 56
   currentLevel: 0
-  maxLevel: 0
+  maxLevel: 10
+  upgradeAmount: 10
+  badgeImage: {fileID: 506939962}
   state: 2
+  badgeState: 0
   manager: {fileID: 51977056}
   nextUpgrades:
   - {fileID: 893916227}
   - {fileID: 643274983}
   connections: []
+  IncompatibleUpgrades: 
 --- !u!1 &72542116
 GameObject:
   m_ObjectHideFlags: 0
@@ -1107,6 +1128,122 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1268201927}
     - target: {fileID: 7267870841138018750, guid: f4d25aca64c9ac545a9fd437005855fa, type: 3}
+      propertyPath: m_ActionEvents.Array.size
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 7267870841138018750, guid: f4d25aca64c9ac545a9fd437005855fa, type: 3}
+      propertyPath: m_ActionEvents.Array.data[1].m_ActionId
+      value: 25f4f4a1-4bba-484e-8197-eff558953bdd
+      objectReference: {fileID: 0}
+    - target: {fileID: 7267870841138018750, guid: f4d25aca64c9ac545a9fd437005855fa, type: 3}
+      propertyPath: m_ActionEvents.Array.data[2].m_ActionId
+      value: bbd279a1-415c-4e77-8b78-90168c7c1e59
+      objectReference: {fileID: 0}
+    - target: {fileID: 7267870841138018750, guid: f4d25aca64c9ac545a9fd437005855fa, type: 3}
+      propertyPath: m_ActionEvents.Array.data[3].m_ActionId
+      value: e882aab9-8bc8-45d1-a03c-e3078b7319e9
+      objectReference: {fileID: 0}
+    - target: {fileID: 7267870841138018750, guid: f4d25aca64c9ac545a9fd437005855fa, type: 3}
+      propertyPath: m_ActionEvents.Array.data[4].m_ActionId
+      value: aa4dd6c0-7a28-48f3-9e26-b77220a7a3be
+      objectReference: {fileID: 0}
+    - target: {fileID: 7267870841138018750, guid: f4d25aca64c9ac545a9fd437005855fa, type: 3}
+      propertyPath: m_ActionEvents.Array.data[5].m_ActionId
+      value: 4f54ab65-63a9-4864-8f86-d8b806ce69d2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7267870841138018750, guid: f4d25aca64c9ac545a9fd437005855fa, type: 3}
+      propertyPath: m_ActionEvents.Array.data[6].m_ActionId
+      value: 7fdc5a16-6659-4735-920d-94e69adf04e9
+      objectReference: {fileID: 0}
+    - target: {fileID: 7267870841138018750, guid: f4d25aca64c9ac545a9fd437005855fa, type: 3}
+      propertyPath: m_ActionEvents.Array.data[7].m_ActionId
+      value: 7be2b693-35f2-4b5c-8cb4-d7ed8f09beff
+      objectReference: {fileID: 0}
+    - target: {fileID: 7267870841138018750, guid: f4d25aca64c9ac545a9fd437005855fa, type: 3}
+      propertyPath: m_ActionEvents.Array.data[8].m_ActionId
+      value: a53756c2-1e7e-4df4-ba5e-8c982a2bb1c0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7267870841138018750, guid: f4d25aca64c9ac545a9fd437005855fa, type: 3}
+      propertyPath: m_ActionEvents.Array.data[9].m_ActionId
+      value: ad450f0a-1e8a-4b31-a8cd-9ac5918a8757
+      objectReference: {fileID: 0}
+    - target: {fileID: 7267870841138018750, guid: f4d25aca64c9ac545a9fd437005855fa, type: 3}
+      propertyPath: m_ActionEvents.Array.data[10].m_ActionId
+      value: ca0a0bec-671f-487b-b37f-13134b2b68b8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7267870841138018750, guid: f4d25aca64c9ac545a9fd437005855fa, type: 3}
+      propertyPath: m_ActionEvents.Array.data[11].m_ActionId
+      value: a91a217c-4959-4503-9627-736fda251982
+      objectReference: {fileID: 0}
+    - target: {fileID: 7267870841138018750, guid: f4d25aca64c9ac545a9fd437005855fa, type: 3}
+      propertyPath: m_ActionEvents.Array.data[12].m_ActionId
+      value: 971d90c1-cf37-4568-801a-431a7ecd3241
+      objectReference: {fileID: 0}
+    - target: {fileID: 7267870841138018750, guid: f4d25aca64c9ac545a9fd437005855fa, type: 3}
+      propertyPath: m_ActionEvents.Array.data[13].m_ActionId
+      value: 94db5e6f-bf3f-413c-9fe6-429c0221bbb2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7267870841138018750, guid: f4d25aca64c9ac545a9fd437005855fa, type: 3}
+      propertyPath: m_ActionEvents.Array.data[14].m_ActionId
+      value: a62b2195-0fee-42c3-96d5-840ac477078f
+      objectReference: {fileID: 0}
+    - target: {fileID: 7267870841138018750, guid: f4d25aca64c9ac545a9fd437005855fa, type: 3}
+      propertyPath: m_ActionEvents.Array.data[1].m_ActionName
+      value: Player maps/Escape[/Keyboard/escape]
+      objectReference: {fileID: 0}
+    - target: {fileID: 7267870841138018750, guid: f4d25aca64c9ac545a9fd437005855fa, type: 3}
+      propertyPath: m_ActionEvents.Array.data[2].m_ActionName
+      value: Player maps/Interact[/Keyboard/e]
+      objectReference: {fileID: 0}
+    - target: {fileID: 7267870841138018750, guid: f4d25aca64c9ac545a9fd437005855fa, type: 3}
+      propertyPath: m_ActionEvents.Array.data[3].m_ActionName
+      value: Player maps/OpenStats[/Keyboard/tab]
+      objectReference: {fileID: 0}
+    - target: {fileID: 7267870841138018750, guid: f4d25aca64c9ac545a9fd437005855fa, type: 3}
+      propertyPath: m_ActionEvents.Array.data[4].m_ActionName
+      value: Player maps/Spell 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7267870841138018750, guid: f4d25aca64c9ac545a9fd437005855fa, type: 3}
+      propertyPath: m_ActionEvents.Array.data[5].m_ActionName
+      value: Player maps/Spell 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7267870841138018750, guid: f4d25aca64c9ac545a9fd437005855fa, type: 3}
+      propertyPath: m_ActionEvents.Array.data[6].m_ActionName
+      value: SpellCastingMap/SpellCastingMap
+      objectReference: {fileID: 0}
+    - target: {fileID: 7267870841138018750, guid: f4d25aca64c9ac545a9fd437005855fa, type: 3}
+      propertyPath: m_ActionEvents.Array.data[7].m_ActionName
+      value: Player maps/Spell 2[/Keyboard/c]
+      objectReference: {fileID: 0}
+    - target: {fileID: 7267870841138018750, guid: f4d25aca64c9ac545a9fd437005855fa, type: 3}
+      propertyPath: m_ActionEvents.Array.data[8].m_ActionName
+      value: Player maps/Spell 3[/Keyboard/space]
+      objectReference: {fileID: 0}
+    - target: {fileID: 7267870841138018750, guid: f4d25aca64c9ac545a9fd437005855fa, type: 3}
+      propertyPath: m_ActionEvents.Array.data[9].m_ActionName
+      value: Player maps/Spell 4[/Keyboard/r]
+      objectReference: {fileID: 0}
+    - target: {fileID: 7267870841138018750, guid: f4d25aca64c9ac545a9fd437005855fa, type: 3}
+      propertyPath: m_ActionEvents.Array.data[10].m_ActionName
+      value: Player maps/Spell 5[/Keyboard/f]
+      objectReference: {fileID: 0}
+    - target: {fileID: 7267870841138018750, guid: f4d25aca64c9ac545a9fd437005855fa, type: 3}
+      propertyPath: m_ActionEvents.Array.data[11].m_ActionName
+      value: Player maps/Spell 6[/Keyboard/q]
+      objectReference: {fileID: 0}
+    - target: {fileID: 7267870841138018750, guid: f4d25aca64c9ac545a9fd437005855fa, type: 3}
+      propertyPath: m_ActionEvents.Array.data[12].m_ActionName
+      value: Player maps/Spell 7[/Keyboard/z]
+      objectReference: {fileID: 0}
+    - target: {fileID: 7267870841138018750, guid: f4d25aca64c9ac545a9fd437005855fa, type: 3}
+      propertyPath: m_ActionEvents.Array.data[13].m_ActionName
+      value: Player maps/Spell 8[/Keyboard/x]
+      objectReference: {fileID: 0}
+    - target: {fileID: 7267870841138018750, guid: f4d25aca64c9ac545a9fd437005855fa, type: 3}
+      propertyPath: m_ActionEvents.Array.data[14].m_ActionName
+      value: Player maps/Run[/Keyboard/leftShift]
+      objectReference: {fileID: 0}
+    - target: {fileID: 7267870841138018750, guid: f4d25aca64c9ac545a9fd437005855fa, type: 3}
       propertyPath: m_ActionEvents.Array.data[0].m_PersistentCalls.m_Calls.Array.size
       value: 0
       objectReference: {fileID: 0}
@@ -1145,6 +1282,82 @@ PrefabInstance:
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: f4d25aca64c9ac545a9fd437005855fa, type: 3}
+--- !u!1 &506939960
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 506939961}
+  - component: {fileID: 506939963}
+  - component: {fileID: 506939962}
+  m_Layer: 5
+  m_Name: Badge
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &506939961
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 506939960}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 61376721}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0.00012589, y: -48}
+  m_SizeDelta: {x: 46.5912, y: 46.5912}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &506939962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 506939960}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 2073123614, guid: ba9905d728b80a94e9c4a7387b42811d, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &506939963
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 506939960}
+  m_CullTransparentMesh: 1
 --- !u!1 &514918418
 GameObject:
   m_ObjectHideFlags: 0
@@ -75890,18 +76103,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c73a604a4c38e649b6bcbe604934df3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Tooltip: {fileID: 1820517429}
+  upgrade: 1
   UpgradeName: Upgrade gear 5
   description: 
   cost: 0
   currentLevel: 0
   maxLevel: 0
+  upgradeAmount: 0
+  badgeImage: {fileID: 0}
   state: 1
+  badgeState: 0
   manager: {fileID: 51977056}
   nextUpgrades:
   - {fileID: 740108694}
   - {fileID: 1924010033}
   connections: []
+  IncompatibleUpgrades: 
 --- !u!114 &643274984
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -76108,16 +76325,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c73a604a4c38e649b6bcbe604934df3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Tooltip: {fileID: 1820517429}
+  upgrade: 1
   UpgradeName: Upgrade 3
   description: 
   cost: 0
   currentLevel: 0
   maxLevel: 0
+  upgradeAmount: 0
+  badgeImage: {fileID: 0}
   state: 0
+  badgeState: 0
   manager: {fileID: 51977056}
   nextUpgrades: []
   connections: []
+  IncompatibleUpgrades: 
 --- !u!114 &740108695
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -76499,16 +76720,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c73a604a4c38e649b6bcbe604934df3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Tooltip: {fileID: 1820517429}
+  upgrade: 1
   UpgradeName: Upgrade 4
   description: 
   cost: 0
   currentLevel: 0
   maxLevel: 0
+  upgradeAmount: 0
+  badgeImage: {fileID: 0}
   state: 1
+  badgeState: 0
   manager: {fileID: 51977056}
   nextUpgrades: []
   connections: []
+  IncompatibleUpgrades: 
 --- !u!114 &873410985
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -76624,6 +76849,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 937776635}
+  - {fileID: 905329235}
   m_Father: {fileID: 1708171330}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -76644,17 +76870,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c73a604a4c38e649b6bcbe604934df3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Tooltip: {fileID: 1820517429}
+  upgrade: 1
   UpgradeName: Upgrade gear 2 mugiwara
   description: 
   cost: 0
   currentLevel: 0
-  maxLevel: 0
+  maxLevel: 10
+  upgradeAmount: 0.5
+  badgeImage: {fileID: 905329233}
   state: 2
+  badgeState: 0
   manager: {fileID: 51977056}
   nextUpgrades:
   - {fileID: 873410984}
   connections: []
+  IncompatibleUpgrades: 00000000
 --- !u!114 &893916228
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -76698,7 +76928,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 893916229}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 893916227}
+        m_TargetAssemblyTypeName: BraceletUpgradeButton, Assembly-CSharp
+        m_MethodName: Upgrade
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &893916229
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -76872,6 +77114,82 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 899960959}
   m_CullTransparentMesh: 1
+--- !u!1 &905329232
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 905329235}
+  - component: {fileID: 905329234}
+  - component: {fileID: 905329233}
+  m_Layer: 5
+  m_Name: Badge
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &905329233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 905329232}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 2073123614, guid: ba9905d728b80a94e9c4a7387b42811d, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &905329234
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 905329232}
+  m_CullTransparentMesh: 1
+--- !u!224 &905329235
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 905329232}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 893916226}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -0.00000023842, y: -55}
+  m_SizeDelta: {x: 46.5912, y: 46.5912}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &937776634
 GameObject:
   m_ObjectHideFlags: 0
@@ -80164,17 +80482,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c73a604a4c38e649b6bcbe604934df3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Tooltip: {fileID: 1820517429}
+  upgrade: 1
   UpgradeName: Upgrade 4
   description: bitch ass long dsescriptignf i abandonned writing stuff that make
     sense
   cost: 69
   currentLevel: 0
   maxLevel: 0
+  upgradeAmount: 0
+  badgeImage: {fileID: 0}
   state: 0
+  badgeState: 0
   manager: {fileID: 51977056}
   nextUpgrades: []
   connections: []
+  IncompatibleUpgrades: 
 --- !u!114 &1924010034
 MonoBehaviour:
   m_ObjectHideFlags: 0
