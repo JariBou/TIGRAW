@@ -23,13 +23,15 @@ namespace PlayerBundle
         public static event Action<InputAction.CallbackContext> KeyPressedEvent;
 
         public bool canCastSpells = true;
-    
+        private GameManager _gm;
+
         private void Awake()
         {
             bindingLinks = new Dictionary<string, Delegate>();
             spellLinks = new Dictionary<string, int>();
             playerActions = new PlayerActions();
             bindingLinks.Add("A", new Action<InputAction.CallbackContext>(Move));
+            _gm = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
             
             // bindingLinks.Add("RightClick", new Action<InputAction.CallbackContext, int>(SpellCasting.CastSpell));
             // bindingLinks["A"].DynamicInvoke(new InputAction.CallbackContext());
@@ -84,7 +86,6 @@ namespace PlayerBundle
 
         private void Start()
         {
-            Debug.Log("PlayerInputHandler Start method Called");
             player.animator.SetFloat(Speed, 0);
             player.animator.SetInteger(player.Facing, 6); // facing downwards
             // Debug.Log($"Player Animator: {player.animator}");
@@ -109,7 +110,11 @@ namespace PlayerBundle
         
         private void Move(InputAction.CallbackContext context) 
         {
-            Vector2 moveVector = context.ReadValue<Vector2>().normalized;
+            Move(context.ReadValue<Vector2>());
+        }
+        
+        private void Move(Vector2 moveVector) 
+        {
             //Debug.Log($"moveVector= {moveVector}");
             player.SetMoveVector(moveVector);
             
@@ -173,6 +178,7 @@ namespace PlayerBundle
                     try
                     {
                         col.GetComponent<Interactable>().Interact();
+                        Move(Vector2.zero);
                     }
                     catch (Exception e)
                     {
@@ -206,7 +212,12 @@ namespace PlayerBundle
         {
             //string functionName = bindingLinks[action.bindings[0].name].Method.Name;
             string actionName = context.action.name; // This returns the good thing
-        
+
+            if (_gm.isInMenu)
+            {
+                if (actionName is "Escape" or "Interact") {TryInteracting(context);}
+                return;
+            }
 
             //actionName = "Move";
             // This works biatch

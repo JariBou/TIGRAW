@@ -1,29 +1,30 @@
-using PathFinding;
+﻿using PathFinding;
 using PlayerBundle;
 using UnityEngine;
 using Grid = PathFinding.Grid;
 
 namespace Enemies.EnemiesAI
 {
-    public class AIMeleeScript : AIDad
+    public class AIFlyingScript : AIDad
     {
-
         private Vector2 _targetPos;
         private Vector2 _previousPos;
 
         private Vector3 _currentPosition;
-        private BreadCrumb _path;
         [SerializeField]
         private float updateFrameCount;
 
         private EnemyInterface _enemyInstance;
     
         public Rigidbody2D rb;
+        private Animator _animator;
+        private static readonly int Attack = Animator.StringToHash("Attack");
 
         private void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
             _enemyInstance = GetComponent<EnemyInterface>();
+            _animator = GetComponent<Animator>();
         }
 
         // Start is called before the first frame update
@@ -63,7 +64,7 @@ namespace Enemies.EnemiesAI
             else
             {
                 Debug.Log("ATTACKING FUCKER");
-
+                _animator.SetTrigger(Attack);
                 targetEntity.GetComponent<Player>().Damage(_enemyInstance.attack);
                 _enemyInstance.InitInteractionTimer();
             }
@@ -130,23 +131,9 @@ namespace Enemies.EnemiesAI
 
         private void UpdatePath()
         {
-            Vector3 positionOffseted = transform.position - new Vector3(0, 0.86f, 0);
-            Point start = new Point(Grid.WorldToGrid(positionOffseted));
-            Point end = new Point(
-                Grid.WorldToGrid(targetEntity.transform.position - new Vector3(0, 0.88f, 0))); /* Try and make it less... Arbitrary ; Use a collider.offset*/
-            _path = PathFinder.FindPath(Grid.Instance, start, end);
-
-            try
-            {
-                _targetPos = Grid.GridToWorld(_path.Next.Position);
-                Vector2 direction = _targetPos - new Vector2(positionOffseted.x, positionOffseted.y);
-                rb.velocity = direction.normalized * _enemyInstance.Speed;
-            }
-            catch
-            {
-                
-            }
-            
+            Vector2 direction = (targetEntity.transform.position - transform.position);
+            rb.velocity = direction.normalized * _enemyInstance.Speed;
+            _enemyInstance.renderer.flipX = direction.x < 0;
         }
 
         private void OnCollisionEnter2D(Collision2D col)

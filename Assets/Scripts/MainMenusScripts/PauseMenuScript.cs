@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace MainMenusScripts
 {
+
     public class PauseMenuScript : MonoBehaviour
     {
         
@@ -19,7 +20,7 @@ namespace MainMenusScripts
         {
             Time.timeScale = 1;
             canvas.enabled = false;
-            _gm.LoadScene(4);
+            _gm.LoadScene(SceneBuildIndex.Lobby);
         }
 
         public void GoToSettings()
@@ -36,7 +37,7 @@ namespace MainMenusScripts
         {
             Time.timeScale = 1;
             canvas.enabled = false;
-            _gm.LoadScene(1);
+            _gm.LoadScene(SceneBuildIndex.MainMenu);
         }
     }
 }

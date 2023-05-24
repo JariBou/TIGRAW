@@ -24,6 +24,8 @@ public class AutoEnemySpawning : MonoBehaviour
     
     private GameManager _gm;
 
+    public bool AutoClampValues;
+
     private void Awake()
     {
         _gm = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
@@ -35,10 +37,23 @@ public class AutoEnemySpawning : MonoBehaviour
         timer = 0f;
         player =  GameObject.FindGameObjectWithTag("Player");
         enemyPrefabs.Sort((a, b) => a.Weight.CompareTo(b.Weight));
+    }
+
+    public void ClampValues()
+    {
+        
         float maxValue = enemyPrefabs.Sum(e => e.Weight);
         foreach (var enemySpawn in enemyPrefabs)
         {
             enemySpawn.Weight = Clamp01Relatively(enemySpawn.Weight, maxValue);
+        }
+    }
+
+    private void OnValidate()
+    {
+        if (AutoClampValues)
+        {
+            ClampValues();
         }
     }
 
@@ -60,7 +75,7 @@ public class AutoEnemySpawning : MonoBehaviour
             Transform spawningPoint = spawningPoints[Random.Range(0, spawningPoints.Count)];
             GameObject enemy = Instantiate(DetermineSpawningEnemy(), spawningPoint.position,
                 Quaternion.identity, spawningPoint);
-            AIMeleeScript script = enemy.GetComponent<AIMeleeScript>();
+            AIDad script = enemy.GetComponent<AIDad>();
             script.targetEntity = player;
             script.updateRate = _gm.UpdateRate;
         }

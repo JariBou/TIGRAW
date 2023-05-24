@@ -1,19 +1,17 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using Enemies;
-using PathFinding;
 using PlayerBundle;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class MeleeBossAI : EnemyInterface
 {
 
     public CircleCollider2D playerDetection;
     
-    public float speed = 2f;
     public GameObject targetEntity;
 
-    private EnemyInterface _enemyInstance;
     private Animator _animator;
     private SpriteRenderer _renderer;
         
@@ -24,13 +22,20 @@ public class MeleeBossAI : EnemyInterface
     public GameObject particle;
     public Vector2 particlePosition;
 
+    [SerializeField]
+    private bool canSummon;
+    private float summonTimer = 2f;
+
+    private bool canMove = true;
+    [SerializeField]
+    private List<GameObject> weaklings;
+
     private float timer;
 
     // Start is called before the first frame update
     void Start()
     {
         targetEntity = GameObject.FindGameObjectWithTag("Player");
-        ;
         self = gameObject;
         _animator = GetComponent<Animator>();
         _renderer = GetComponent<SpriteRenderer>();
@@ -65,12 +70,22 @@ public class MeleeBossAI : EnemyInterface
     {
         base.Awake();
         rb = GetComponent<Rigidbody2D>();
-        _enemyInstance = GetComponent<EnemyInterface>();
     }
 
 
     private new void FixedUpdate()
     {
+        
+        if (!canMove)
+        {
+            return;
+        }
+        
+        if (summonTimer > 0)
+        {
+            summonTimer -= Time.fixedDeltaTime;}
+
+       
 
         if (health <= 2f / 3f * MaxHealth)
         {
@@ -93,7 +108,18 @@ public class MeleeBossAI : EnemyInterface
 
         _renderer.flipX = direction.x < 0;
         
-        rb.velocity = direction * (speed * Time.fixedDeltaTime);
+        rb.velocity = direction * (speed * Time.fixedDeltaTime); // This one is actually in a fixed update so keep it like that
+
+        if (canSummon)
+        {
+            if (summonTimer <= 0)
+            {
+                _animator.SetTrigger("Summon");
+                SummonWeaklings();
+                summonTimer = Random.Range(7, 20);
+            }
+        }
+        
         
         if (isInRange)
         {
@@ -101,9 +127,18 @@ public class MeleeBossAI : EnemyInterface
         }
     }
 
+    private void SummonWeaklings()
+    {
+        rb.velocity = Vector2.zero;
+        foreach (var thing in weaklings)
+        {
+            Instantiate(thing, transform.position + new Vector3(Random.Range(-2, 2), Random.Range(-2, 2), 0), Quaternion.identity, transform);
+        }
+    }
+
     private void AttackPlayer()
     {
-        if (_enemyInstance.DmgInteractionTimer > 0)
+        if (DmgInteractionTimer > 0)
         {
             return;
         }
@@ -113,8 +148,8 @@ public class MeleeBossAI : EnemyInterface
             
             _animator.SetTrigger(Attack);
 
-            targetEntity.GetComponent<Player>().Damage(_enemyInstance.attack);
-            _enemyInstance.InitInteractionTimer();
+            targetEntity.GetComponent<Player>().Damage(attack);
+            InitInteractionTimer();
         }
 
     }

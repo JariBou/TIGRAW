@@ -8,10 +8,13 @@ namespace MainMenusScripts
     {
         public Image image;
 
+        public Sprite IdleSprite;
         public Sprite[] spriteArray;
         public int frameRate = 5;
 
+        public bool StartAnimOnLoad = true;
         private int spriteIndex;
+        private bool isRunning;
 
         Coroutine corotineAnim;
 
@@ -20,7 +23,17 @@ namespace MainMenusScripts
         private void Start()
         {
             image = GetComponent<Image>();
-            corotineAnim = StartCoroutine(PlayAnim());
+            if (StartAnimOnLoad)
+            {
+                StartAnim();
+            }
+            else
+            {
+                if (IdleSprite)
+                {
+                    image.sprite = IdleSprite;
+                }
+            }
         }
 
         IEnumerator PlayAnim()
@@ -33,8 +46,38 @@ namespace MainMenusScripts
             }
             image.sprite = spriteArray[spriteIndex];
             spriteIndex += 1;
-            if (IsDone == false)
-                corotineAnim = StartCoroutine(PlayAnim());
+            corotineAnim = StartCoroutine(PlayAnim());
+        }
+
+        public void StartAnim()
+        {
+            if (isRunning) return;
+            isRunning = true;
+            corotineAnim = StartCoroutine(PlayAnim());
+        }
+
+        public void StopAnim()
+        {
+            if (!isRunning) return;
+            StopCoroutine(corotineAnim);
+            isRunning = false;
+            if (IdleSprite)
+            {
+                image.sprite = IdleSprite;
+            }
+        }
+
+        public void Toggle()
+        {
+            switch (isRunning)
+            {
+                case true:
+                    StopAnim();
+                    break;
+                case false:
+                    StartAnim();
+                    break;
+            }
         }
     }
 }

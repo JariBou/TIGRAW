@@ -21,12 +21,12 @@ namespace MainMenusScripts
 
         public void Play()
         {
-            _gm.LoadScene(4);
+            _gm.LoadScene(SceneBuildIndex.Lobby);
         }
 
         public void Options()
         {
-            SceneManager.LoadScene(2, LoadSceneMode.Additive);
+            SceneManager.LoadScene((int)SceneBuildIndex.OptionsMenu, LoadSceneMode.Additive);
         }
     
     }

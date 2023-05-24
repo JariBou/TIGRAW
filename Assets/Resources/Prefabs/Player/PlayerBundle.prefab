@@ -1020,6 +1020,7 @@ GameObject:
   - component: {fileID: 7267870841138018907}
   - component: {fileID: 7267870841138018750}
   - component: {fileID: 7267870841138018739}
+  - component: {fileID: 2982866429975229022}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1152,6 +1153,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: debb37eb1dfdd124aaa8d53456ffa188, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  baseHeatRecoveryRate: 2
+  baseBonusHeatRecoveryRate: 2
+  heatAmount: 0
+  baseMaxHeat: 100
 --- !u!114 &7267870841138018724
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1185,10 +1190,7 @@ MonoBehaviour:
   interactionRange: 1.4
   circleColliderOffset: {x: 0, y: 0, z: 0}
   sprite: {fileID: 0}
-  baseHeatRecoveryRate: 2
-  heatAmount: 0
-  baseMaxHeat: 100
-  infiniteHeat: 0
+  heatManager: {fileID: 0}
 --- !u!114 &7267870841138018907
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1404,6 +1406,22 @@ CircleCollider2D:
   m_Offset: {x: 0, y: -0.88}
   serializedVersion: 2
   m_Radius: 0.27383488
+--- !u!114 &2982866429975229022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7267870841138018725}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: debb37eb1dfdd124aaa8d53456ffa188, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseHeatRecoveryRate: 2
+  baseBonusHeatRecoveryRate: 2
+  heatAmount: 0
+  baseMaxHeat: 100
 --- !u!1 &7277503719397141903
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,4 +1,6 @@
 using System;
+using System.Globalization;
+using TMPro;
 using UnityEngine;
 
 public class TimerRoomLogic : MonoBehaviour
@@ -7,6 +9,7 @@ public class TimerRoomLogic : MonoBehaviour
     public float time;
     public float startDelay;
     private bool started = false;
+    public TMP_Text timerText;
     
     private float timer;
     private AutoEnemySpawning _autoEnemySpawning;
@@ -35,6 +38,7 @@ public class TimerRoomLogic : MonoBehaviour
             started = true;
             doCountdown = true;
             _autoEnemySpawning.spawn = true;
+            timerText.text = Math.Round(timer, 1).ToString(CultureInfo.InvariantCulture);
         }
         else if (obj == Flag.UnlockTeleporter)
         {
@@ -56,6 +60,7 @@ public class TimerRoomLogic : MonoBehaviour
             return;
         }
         timer -= Time.fixedDeltaTime;
+        timerText.text = Math.Round(timer, 1).ToString(CultureInfo.InvariantCulture);
         if (timer <= 0)
         {
             _autoEnemySpawning.spawn = false;

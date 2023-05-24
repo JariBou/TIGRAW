@@ -1,7 +1,10 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using MainMenusScripts;
 using PlayerBundle.BraceletUpgrade;
 using PlayerBundle.PlayerUpgrades;
+using Spells;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
@@ -18,7 +21,6 @@ namespace PlayerBundle
         [FormerlySerializedAs("movespeed")]
         [Header("Movement Variables")]
         [SaveVariable] public int baseMovespeed; // Modified by bracelet potentially
-        [FormerlySerializedAs("sprintspeed")] [SaveVariable] public int baseSprintspeed; // Modified by bracelet potentially
         [SaveVariable] public bool canSprint; // Modified by bracelet potentially
         private Vector2 moveVector;
         [HideInInspector]
@@ -27,17 +29,21 @@ namespace PlayerBundle
         
 
         [Header("Stats Variables")] 
-        public float health = 50f;  // Only variable that needs to be passed between scenes but doesn't get saved :sob:
-        [FormerlySerializedAs("maxHealth")] [SaveVariable] public float baseMaxHealth = 50f; // Modified by Upgrades
         [FormerlySerializedAs("atkMultiplier")] [SaveVariable] public float baseAtkMultiplier = 0.9f; // Modified by Upgrades
+        public float health => playerData.health;  // Only variable that needs to be passed between scenes but doesn't get saved :sob:
         [FormerlySerializedAs("armor")] [SaveVariable] public int baseArmor; // Modified by Upgrades
+
+        private PlayerData playerData;
+
+        // public List<StatusEffect> Statuses;
 
         public float AtkMultiplier =>
             baseAtkMultiplier +
-            _gm.PlayerUpgradesHandler.GetUpgradedAmount(PlayerUpgrades.PlayerUpgrades.AtkMultiplier);
+            _gm.PlayerUpgradesHandler.GetUpgradedAmount(PlayerUpgrades.PlayerUpgrades.AtkMultiplier) +
+            _gm.BraceletUpgradesHandler.GetUpgradedAmount(BraceletUpgrades.BonusDmgOnHeatLvl) * heatManager.GetHeatLvl();
 
         public float MaxHealth =>
-            baseMaxHealth +
+            playerData.MaxHealth +
             _gm.PlayerUpgradesHandler.GetUpgradedAmount(PlayerUpgrades.PlayerUpgrades.Health);
 
 
@@ -62,7 +68,7 @@ namespace PlayerBundle
         [HideInInspector] public float interactionRange;
         [HideInInspector] public Vector3 circleColliderOffset;
         [HideInInspector] public SpriteRenderer sprite;
-        public Animator animator { get; set; }
+        public Animator animator;
         public readonly int Facing = Animator.StringToHash("facing");
         
         // ============================
@@ -96,7 +102,8 @@ namespace PlayerBundle
             circleCollider = GetComponent<CircleCollider2D>();
             heatManager = GetComponent<HeatManager>();
             circleColliderOffset = new Vector3(circleCollider.offset.x, circleCollider.offset.y, 0);
-            
+            playerData = _gm.playerData;
+
             // _playerUpgradesHandler = new PlayerUpgradesHandler();
             // _braceletUpgrades = new BraceletUpgrades();
 
@@ -124,16 +131,17 @@ namespace PlayerBundle
 
         public void Damage(float amount)
         {
-            health -= amount;
+            if (isTeleporting) {return;} // if player is teleporting lets give him Iframes for now, might remove it still tho
+            playerData.health -= amount;
+            _gm.currentRunData.playerHealth = playerData.health; // Should be useless
         }
-
-        // Start is called before the first frame update
-        void Start()
+        
+        public void Heal(float amount)
         {
-            
+            playerData.health += amount;
+            _gm.currentRunData.playerHealth = health;
         }
-
-
+        
         public void SetMoveVector(Vector2 vector)
         {
             moveVector = vector;
@@ -146,8 +154,28 @@ namespace PlayerBundle
 
         private void FixedUpdate()
         {
+            if (playerData.health <= 0)
+            {
+                _gm.LoadScene(SceneBuildIndex.DeathScreen);
+                return;
+            }
+
+
+            // foreach (var statusEffect in Statuses)
+            // {
+            //     playerData.health -= statusEffect.Tick();
+            //     if (statusEffect.Duration <= 0)
+            //     {
+            //         Statuses.Remove(statusEffect);
+            //     }
+            // }
             
-            body.velocity = new Vector2(moveVector.x, moveVector.y) * ((running ? baseSprintspeed : baseMovespeed) * Time.fixedDeltaTime);
+            
+            
+            body.velocity = new Vector2(moveVector.x, moveVector.y) * (baseMovespeed * Time.fixedDeltaTime);
+            
+            
+            
         }
 
         public Vector2 GetMoveVector() {

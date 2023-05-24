@@ -33,9 +33,13 @@ public class BraceletUpgradeManager : MonoBehaviour
 
     public GameManager gameManager;
 
-    private void Start()
+    private void Awake()
     {
         gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
+    }
+
+    private void Start()
+    {
         StartCoroutine(firstUpgrade.InitConnections());
     }
 

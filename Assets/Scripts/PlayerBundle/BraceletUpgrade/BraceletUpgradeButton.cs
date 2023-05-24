@@ -34,6 +34,7 @@ public class BraceletUpgradeButton : MonoBehaviour, IPointerEnterHandler, IPoint
 
     private Image _buttonImage;
     private RectTransform _rectTransform;
+    private GameManager _gm;
     public Image badgeImage;
 
     public BraceletUpgradeState state = BraceletUpgradeState.Hidden;
@@ -43,6 +44,7 @@ public class BraceletUpgradeButton : MonoBehaviour, IPointerEnterHandler, IPoint
 
     public BraceletUpgradeButton[] nextUpgrades;
     public List<BraceletUpgradeConnection> connections = new(8);
+    public BraceletUpgradeConnection prevConnection;
     
     public List<BraceletUpgrades> IncompatibleUpgrades;
     
@@ -54,21 +56,14 @@ public class BraceletUpgradeButton : MonoBehaviour, IPointerEnterHandler, IPoint
     {
         _buttonImage = GetComponent<Button>().image;
         _rectTransform = GetComponent<RectTransform>();
+        _gm = manager.gameManager;
     }
 
     private void Start()
     {
         OnBraceletUpgrade += OnOtherBraceletUpgrade;
-        
-        if (manager.gameManager.BraceletUpgradesHandler.UpgradesAmount.ContainsKey(upgrade))
-        {
-            manager.gameManager.BraceletUpgradesHandler.UpgradesAmount[upgrade] = upgradeAmount;
-        }
-        else
-        {
-            manager.gameManager.BraceletUpgradesHandler.UpgradesAmount.Add(upgrade, upgradeAmount);
-        }
 
+        _gm.BraceletUpgradesHandler.UpgradesAmount[upgrade] = upgradeAmount;
     }
 
     private void OnDestroy()
@@ -163,6 +158,7 @@ public class BraceletUpgradeButton : MonoBehaviour, IPointerEnterHandler, IPoint
             }
             
             connections.Add(connection);
+            upgradeButton.prevConnection = connection;
 
             StartCoroutine(upgradeButton.InitConnections());
         }
@@ -190,10 +186,23 @@ public class BraceletUpgradeButton : MonoBehaviour, IPointerEnterHandler, IPoint
             Debug.Log($"Cannot upgrade! state={state} || level={currentLevel}/{maxLevel}");
             return;
         }
-        
-        manager.gameManager.BraceletUpgradesHandler.Upgrade(upgrade);
 
+        if (_gm.currentSave.playerSouls < cost)
+        {
+            return;
+        }
+
+
+        _gm.currentSave.playerSouls -= cost;
+        _gm.BraceletUpgradesHandler.Upgrade(upgrade);
         InvokeBraceletUpgrade(upgrade);
+        NotifyNeighbours();
+
+        if (prevConnection != null)
+        {
+            Debug.Log("Changing prev connection sprite");
+            prevConnection.SetSprite(manager.connectionUnlocked);
+        }
         
         currentLevel++;
         if (currentLevel == maxLevel)

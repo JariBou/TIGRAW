@@ -48,7 +48,9 @@ namespace Spells.SpellBehavior
                 try
                 {
                     if (_results[i].isTrigger) {continue;}
-                    _results[i].GetComponent<EnemyInterface>().Damage(spell.Damage);
+                    EnemyInterface enemy = _results[i].GetComponent<EnemyInterface>();
+                    enemy.Damage(spell.Damage);
+                    spell.ApplyStatus(enemy);
                 }
                 catch (Exception e)
                 {
@@ -73,12 +75,33 @@ namespace Spells.SpellBehavior
                 return;
             }
             
-            if (!col.CompareTag("Enemy")) return;
-            if(col.isTrigger) {return;}
-            
-            EnemyInterface enemyScript = col.GetComponent<EnemyInterface>();
+            EnemyInterface enemyScript = null;
+            if (col.CompareTag("Enemy"))
+            {
+                // Debug.Log("HIT ENNEMY!");
+                enemyScript = col.GetComponent<EnemyInterface>();
+            }
+
+            if (col.isTrigger)
+            {
+                if (col.CompareTag("Enemy Hitbox"))
+                {
+                    Debug.Log("Enemy Additional Hitbox");
+                    enemyScript = col.GetComponentInParent<EnemyInterface>();
+                }
+                else
+                {
+                    return;
+                }
+            }
+
+            if (enemyScript == null)
+            {
+                return;
+            }
             
             enemyScript.TryDamage(spell.Damage, spell);
+            spell.ApplyStatus(enemyScript);
             
         }
 
@@ -88,13 +111,34 @@ namespace Spells.SpellBehavior
             {
                 return;
             }
-            if(col.isTrigger) {return;}
             
-            if (!col.CompareTag("Enemy")) return;
-            
-            EnemyInterface enemyScript = col.GetComponent<EnemyInterface>();
+            EnemyInterface enemyScript = null;
+            if (col.CompareTag("Enemy"))
+            {
+                // Debug.Log("HIT ENNEMY!");
+                enemyScript = col.GetComponent<EnemyInterface>();
+            }
+
+            if (col.isTrigger)
+            {
+                if (col.CompareTag("Enemy Hitbox"))
+                {
+                    Debug.Log("Enemy Additional Hitbox");
+                    enemyScript = col.GetComponentInParent<EnemyInterface>();
+                }
+                else
+                {
+                    return;
+                }
+            }
+
+            if (enemyScript == null)
+            {
+                return;
+            }
             
             enemyScript.TryDamage(spell.Damage, spell);
+            spell.ApplyStatus(enemyScript);
         }
 
 

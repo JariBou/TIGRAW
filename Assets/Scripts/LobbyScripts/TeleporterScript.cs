@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace LobbyScripts
 {
@@ -8,15 +10,15 @@ namespace LobbyScripts
         private bool _playerInRange;
 
         public int SceneToLoadId;
-        
+
         public static TeleporterScript Instance;
         private GameManager _gm;
+        
 
         private void Awake()
         {
             Instance = this;
             _gm = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
-
         }
         
 

@@ -35,18 +35,18 @@ namespace PlayerBundle.PlayerUpgrades
             return (float)Math.Round(UpgradesLvl[upgrade] * UpgradesAmount[upgrade], 3);
         }
 
-        public static ref float GetPlayerRef(PlayerUpgrades upgrade) // This is useless for now and probably forever
-        {
-            switch (upgrade)
-            {
-                case PlayerUpgrades.AtkMultiplier:
-                    return ref Player.Instance.baseAtkMultiplier;
-                case PlayerUpgrades.Health:
-                    return ref Player.Instance.baseMaxHealth;
-            }
-
-            throw new NotImplementedException($"Upgrade '{upgrade}' is not implemented!");
-        }
+        // public static ref float GetPlayerRef(PlayerUpgrades upgrade) // This is useless for now and probably forever
+        // {
+        //     switch (upgrade)
+        //     {
+        //         case PlayerUpgrades.AtkMultiplier:
+        //             return ref Player.Instance.baseAtkMultiplier;
+        //         case PlayerUpgrades.Health:
+        //             return ref Player.Instance.baseMaxHealth;
+        //     }
+        //
+        //     throw new NotImplementedException($"Upgrade '{upgrade}' is not implemented!");
+        // }
 
 
         public void Upgrade(PlayerUpgrades upgrade)
@@ -76,11 +76,11 @@ namespace PlayerBundle.PlayerUpgrades
         // multiple stats, maybe return an array of refs and iterate
         // through them since we can get the upgrade amounts for
         // each.... seems hard tho
-        public void Upgrade2(PlayerUpgrades upgrade) 
-        {
-            GetPlayerRef(upgrade) += UpgradesAmount[upgrade];
-            
-            UpgradesLvl[upgrade] = (int)UpgradesLvl[upgrade] + 1;
-        }
+        // public void Upgrade2(PlayerUpgrades upgrade) 
+        // {
+        //     GetPlayerRef(upgrade) += UpgradesAmount[upgrade];
+        //     
+        //     UpgradesLvl[upgrade] = (int)UpgradesLvl[upgrade] + 1;
+        // }
     }
 }

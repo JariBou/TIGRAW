@@ -46,14 +46,36 @@ namespace Spells.SpellBehavior
         {
         
             if(_hasCollided) {return;}
-            
-            if(col.isTrigger) {return;}
-        
-        
-            if (col.CompareTag("Enemy") )
+
+            EnemyInterface enemyScript = null;
+            if (col.CompareTag("Enemy"))
             {
                 // Debug.Log("HIT ENNEMY!");
-                EnemyInterface enemyScript = col.GetComponent<EnemyInterface>();
+                enemyScript = col.GetComponent<EnemyInterface>();
+            }
+
+            if (col.isTrigger)
+            {
+                if (col.CompareTag("Enemy Hitbox"))
+                {
+                    Debug.Log("Enemy Additional Hitbox");
+                    enemyScript = col.GetComponentInParent<EnemyInterface>();
+                }
+                else
+                {
+                    return;
+                }
+            }
+
+            if (enemyScript == null)
+            {
+                return;
+            }
+        
+        
+            if (col.CompareTag("Enemy") || col.CompareTag("Enemy Hitbox"))
+            {
+                // Debug.Log("HIT ENNEMY!");
                 if (collidedEnnemiesId.Contains(enemyScript.id))
                 {
                     return;
@@ -62,6 +84,7 @@ namespace Spells.SpellBehavior
                 collidedEnnemiesId.Add(enemyScript.id);
                 StartCoroutine(DelayedRemoval(spell.interactionInterval, enemyScript.id));
                 enemyScript.Damage(spell.Damage);
+                spell.ApplyStatus(enemyScript);
                 if (spell.hasOnHitEffect)
                 {
                     Instantiate(spell.onHitEffect, transform.position, transform.rotation);

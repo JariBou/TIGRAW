@@ -10,9 +10,6 @@ namespace LoadingScripts
     {
         public Slider slider;
         
-        
-        // TODO: Ask maybe going to a lightweight loading screen not asycly scene that loads asyncly the scene we want to load?
-        
         public void LoadScene(int sceneId)
         {
             StartCoroutine(LoadSceneAsync(sceneId));
@@ -25,10 +22,10 @@ namespace LoadingScripts
             while (!operation.isDone)
             {
                 float progressValue = Mathf.Clamp01(operation.progress / 0.9f);
-
+//                Debug.Log(progressValue);
                 slider.value = progressValue;
 
-                yield return null;
+                yield return new WaitForEndOfFrame();
             }
 
         }

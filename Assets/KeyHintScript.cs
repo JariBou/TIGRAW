@@ -12,7 +12,7 @@ public class KeyHintScript : MonoBehaviour
     void Start()
     {
         floatingText.SetActive(false);
-        floatingText.GetComponent<Renderer>().sortingOrder = 9;
+        floatingText.GetComponent<Renderer>().sortingOrder = 17;
 
         if (!linkedObject)
         {

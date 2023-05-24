@@ -1,4 +1,5 @@
 using System;
+using Enemies;
 using PlayerBundle;
 using Spells.SpellBehavior;
 using Unity.VisualScripting;
@@ -33,6 +34,9 @@ namespace Spells
         public LayerMask wallLayer;
 
         internal Tilemap GroundTilemap;
+
+        [SerializeField]
+        public StatusEffect StatusEffect = new StatusEffect(StatusType.Null, 0, 0);
 
     
         [HideInInspector]
@@ -79,12 +83,15 @@ namespace Spells
 
         [HideInInspector] public int Id;
 
-        // Start is called before the first frame update
-        void Start()
+        private void Awake()
         {
             Id = gameObject.GetInstanceID();
             player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>(); // What's the difference with FindWithTag
-            
+        }
+
+        // Start is called before the first frame update
+        void Start()
+        {
             GroundTilemap = player.groundTilemap;
             damageZone = GetComponent<CircleCollider2D>();
         
@@ -151,6 +158,26 @@ namespace Spells
 
         public float GetHeat() {
             return heatProduction;
+        }
+
+        public void ApplyStatus(EnemyInterface enemy)
+        {
+            if (enemy == null) {return;}
+            if (StatusEffect.StatusType == StatusType.Null)
+            {
+                return;
+            }
+
+            if (enemy.StatusEffects.ContainsKey(StatusEffect.StatusType))
+            {
+                StatusEffect stat = enemy.StatusEffects[StatusEffect.StatusType];
+                enemy.StatusEffects[StatusEffect.StatusType] = StatusEffect.BestOf(stat, StatusEffect.Copy());
+            }
+            else
+            {
+                enemy.StatusEffects[StatusEffect.StatusType] = StatusEffect.Copy();
+            }
+            
         }
     
     }

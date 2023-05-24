@@ -50,7 +50,11 @@ namespace Spells.SpellBehavior
             {
                 try
                 {
-                    _results[i].GetComponent<EnemyInterface>().Damage(spell.Damage);
+                    if (!_results[i].CompareTag("Enemy")) continue; // If enemy additional hitbox basically
+                    
+                    EnemyInterface enemy = _results[i].GetComponent<EnemyInterface>();
+                    enemy.Damage(spell.Damage);
+                    spell.ApplyStatus(enemy);
                 }
                 catch (Exception e)
                 {

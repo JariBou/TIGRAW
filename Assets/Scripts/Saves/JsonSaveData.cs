@@ -4,6 +4,7 @@ using PlayerBundle.PlayerUpgrades;
 using Saves.JsonDictionaryHelpers;
 using Spells;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Saves
 {
@@ -18,7 +19,7 @@ namespace Saves
         public List<int> unlockedSpellsId;
 
         public int playerGold; // Might replace with souls to make more sense
-        public int playerCrystals;
+        public int playerSouls;
 
         // relic from when I worked on this while filming an AD for MEUPORG
 
@@ -35,7 +36,8 @@ namespace Saves
                 {
                     items = new EnumFloatItem[gm.PlayerUpgradesHandler.UpgradesAmount.Count]
                 },
-                unlockedSpellsId = SpellsList.unlockedSpellsId
+                unlockedSpellsId = SpellsList.unlockedSpellsId,
+                playerSouls = 0
             };
 
             int i = 0;
