@@ -5,10 +5,12 @@ using UnityEngine;
 
 public enum Flag
 {
+    StartRun,
     StartLevel,
     EndLevel,
     CancelLevel,
     PlayerDeath,
+    PlayerWon,
     UnlockTeleporter, // Might be same as endLevel but lets keep it separated for now
 }
 

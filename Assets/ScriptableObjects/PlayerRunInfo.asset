@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f373961b33292348b41ef4b89830ad4, type: 3}
   m_Name: PlayerRunInfo
   m_EditorClassIdentifier: 
-  maxHealth: 50
-  health: 0
+  maxHealth: 50000000
+  health: 49999770
   gold: 0
   crystals: 0

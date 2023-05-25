@@ -211,8 +211,14 @@ namespace PlayerBundle
         private void ResolveKeyPressed(InputAction.CallbackContext context)
         {
             //string functionName = bindingLinks[action.bindings[0].name].Method.Name;
-            string actionName = context.action.name; // This returns the good thing
 
+            if (player.isTeleporting)
+            {
+                return;
+            }
+
+            string actionName = context.action.name; // This returns the good thing
+            
             if (_gm.isInMenu)
             {
                 if (actionName is "Escape" or "Interact") {TryInteracting(context);}

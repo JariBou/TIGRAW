@@ -24,12 +24,12 @@ EditorBuildSettings:
     path: Assets/Scenes/Lobby.unity
     guid: 57f66271c6666ef42895a6d4b8776dd2
   - enabled: 1
-    path: Assets/Scenes/Level1.unity
+    path: Assets/Scenes/Arenas/Level1.unity
     guid: 4b89ab2bc00b6174b83df428291cecd9
   - enabled: 1
-    path: Assets/Scenes/Reaper_lvl2.unity
+    path: Assets/Scenes/Bosses/Boss1_lvl2.unity
     guid: 40a35acec80e12a419124fab6672b272
   - enabled: 1
-    path: Assets/Scenes/Level2.unity
+    path: Assets/Scenes/Bosses/Boss1_lvl1.unity
     guid: 850bc39873fec4f45b11fa17d2fbc537
   m_configObjects: {}

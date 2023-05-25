@@ -13,9 +13,7 @@ namespace Enemies.EnemiesAI
         private Vector3 _currentPosition;
         [SerializeField]
         private float updateFrameCount;
-
-        private EnemyInterface _enemyInstance;
-    
+        
         public Rigidbody2D rb;
         private Animator _animator;
         private static readonly int Attack = Animator.StringToHash("Attack");
@@ -24,14 +22,13 @@ namespace Enemies.EnemiesAI
         {
             rb = GetComponent<Rigidbody2D>();
             _enemyInstance = GetComponent<EnemyInterface>();
-            _animator = GetComponent<Animator>();
+            targetPlayer = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         }
 
         // Start is called before the first frame update
         void Start()
         {
-            targetEntity = GameObject.FindGameObjectWithTag("Player");
-
+            _animator = _enemyInstance.animator;
             var position = transform.position;
             _targetPos = position;
             _previousPos = position;
@@ -65,7 +62,7 @@ namespace Enemies.EnemiesAI
             {
                 Debug.Log("ATTACKING FUCKER");
                 _animator.SetTrigger(Attack);
-                targetEntity.GetComponent<Player>().Damage(_enemyInstance.attack);
+                targetPlayer.Damage(_enemyInstance.attack);
                 _enemyInstance.InitInteractionTimer();
             }
 
@@ -131,7 +128,7 @@ namespace Enemies.EnemiesAI
 
         private void UpdatePath()
         {
-            Vector2 direction = (targetEntity.transform.position - transform.position);
+            Vector2 direction = (targetPlayer.transform.position - transform.position);
             rb.velocity = direction.normalized * _enemyInstance.Speed;
             _enemyInstance.renderer.flipX = direction.x < 0;
         }

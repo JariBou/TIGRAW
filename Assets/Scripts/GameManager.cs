@@ -13,6 +13,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 
 public enum SceneBuildIndex
@@ -46,12 +47,20 @@ public class GameManager : MonoBehaviour
     private Player player;
     public bool isInMenu;
 
+    private int currLevel = 0;
+
+    public int numberOfArenas;
+    public int numberOfBosses;
+
+    public float LocalDifficulty;
+
     
     private void Awake()
     {
         _instance = this;
         SceneManager.sceneLoaded += OnSceneLoaded;
         Loot.LootPickup += OnLootPickup;
+        EventManager.FlagEvent += OnFlagEvent;
         DontDestroyOnLoad(gameObject);
         currentRunData = new RunData();
         PlayerUpgradesHandler = new PlayerUpgradesHandler();
@@ -98,6 +107,33 @@ public class GameManager : MonoBehaviour
         playerData.ResetRun();
     }
 
+    private void OnFlagEvent(Flag flag)
+    {
+        if (flag == Flag.EndLevel)
+        {
+            currLevel++;
+            UpdateLocalDifficulty();
+            if (currLevel % 2 == 0)
+            {
+                LoadScene(GetSceneBuildIndex($"Bosses/Boss{Random.Range(1, numberOfBosses)}_lvl1"));
+            }
+            else
+            {
+                LoadScene(GetSceneBuildIndex($"Arenas/Level{Random.Range(1, numberOfArenas)}"));
+            }
+        }  
+        else if (flag == Flag.PlayerDeath)
+        {
+            LoadScene(SceneBuildIndex.DeathScreen);
+            currLevel = 0;
+        }
+    }
+
+    private void UpdateLocalDifficulty()
+    {
+        LocalDifficulty = (currLevel * currLevel + 10 * currLevel + 89) / 100f;
+    }
+
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         try
@@ -118,10 +154,9 @@ public class GameManager : MonoBehaviour
             ResetRun();
             // This is lobby so no run data theoretically
         }
+        
 
-        
-        
-        
+
         //sceneLoader = GameObject.Find("LoadingScreen").GetComponent<SceneLoader>();
 
         #region Tests for saving
@@ -177,6 +212,8 @@ public class GameManager : MonoBehaviour
     private void OnDestroy()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
+        EventManager.FlagEvent -= OnFlagEvent;
+        Loot.LootPickup -= OnLootPickup;
     }
 
     public int GetSceneBuildIndex(String sceneName)

@@ -16,21 +16,22 @@ namespace Enemies.EnemiesAI
         [SerializeField]
         private float updateFrameCount;
 
-        private EnemyInterface _enemyInstance;
-    
+        private Animator _animator;
+        private static readonly int Attack = Animator.StringToHash("Attack");
+
         public Rigidbody2D rb;
 
         private void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
             _enemyInstance = GetComponent<EnemyInterface>();
+            targetPlayer = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         }
 
         // Start is called before the first frame update
         void Start()
         {
-            targetEntity = GameObject.FindGameObjectWithTag("Player");
-
+            _animator = _enemyInstance.animator;
             var position = transform.position;
             _targetPos = position;
             _previousPos = position;
@@ -63,8 +64,9 @@ namespace Enemies.EnemiesAI
             else
             {
                 Debug.Log("ATTACKING FUCKER");
-
-                targetEntity.GetComponent<Player>().Damage(_enemyInstance.attack);
+                
+                _animator.SetTrigger(Attack);
+                targetPlayer.Damage(_enemyInstance.attack);
                 _enemyInstance.InitInteractionTimer();
             }
 
@@ -133,7 +135,7 @@ namespace Enemies.EnemiesAI
             Vector3 positionOffseted = transform.position - new Vector3(0, 0.86f, 0);
             Point start = new Point(Grid.WorldToGrid(positionOffseted));
             Point end = new Point(
-                Grid.WorldToGrid(targetEntity.transform.position - new Vector3(0, 0.88f, 0))); /* Try and make it less... Arbitrary ; Use a collider.offset*/
+                Grid.WorldToGrid(targetPlayer.transform.position - new Vector3(0, 0.88f, 0))); /* Try and make it less... Arbitrary ; Use a collider.offset*/
             _path = PathFinder.FindPath(Grid.Instance, start, end);
 
             try
@@ -149,7 +151,7 @@ namespace Enemies.EnemiesAI
             
         }
 
-        private void OnCollisionEnter2D(Collision2D col)
+        private void OnCollisionExit2D(Collision2D col)
         {
             if (col.gameObject.CompareTag("Enemy")) {return;}
 

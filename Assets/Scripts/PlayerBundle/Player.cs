@@ -67,7 +67,7 @@ namespace PlayerBundle
         private PlayerActions playerActions;
         [HideInInspector] public float interactionRange;
         [HideInInspector] public Vector3 circleColliderOffset;
-        [HideInInspector] public SpriteRenderer sprite;
+        [FormerlySerializedAs("sprite")] [HideInInspector] public SpriteRenderer spriteRenderer;
         public Animator animator;
         public readonly int Facing = Animator.StringToHash("facing");
         
@@ -90,14 +90,13 @@ namespace PlayerBundle
         
     
         void Awake() {
-            Debug.Log("AWAKENING PLAYER");
             Instance = this;
             enabled = true;
 
             _gm = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
             playerActions = new PlayerActions();
             body = GetComponent<Rigidbody2D>();
-            sprite = GetComponent<SpriteRenderer>();
+            spriteRenderer = GetComponent<SpriteRenderer>();
             animator = GetComponent<Animator>();
             circleCollider = GetComponent<CircleCollider2D>();
             heatManager = GetComponent<HeatManager>();
@@ -134,8 +133,18 @@ namespace PlayerBundle
             if (isTeleporting) {return;} // if player is teleporting lets give him Iframes for now, might remove it still tho
             playerData.health -= amount;
             _gm.currentRunData.playerHealth = playerData.health; // Should be useless
+
+            StartCoroutine(TakeDmgAnim());
+
         }
-        
+
+        private IEnumerator TakeDmgAnim()
+        {
+            spriteRenderer.color = Color.red;
+            yield return new WaitForSeconds(0.1f);
+            spriteRenderer.color = Color.white;
+        }
+
         public void Heal(float amount)
         {
             playerData.health += amount;
@@ -156,7 +165,7 @@ namespace PlayerBundle
         {
             if (playerData.health <= 0)
             {
-                _gm.LoadScene(SceneBuildIndex.DeathScreen);
+                Kill();
                 return;
             }
 
@@ -196,6 +205,11 @@ namespace PlayerBundle
         {
             Gizmos.color = Color.white;
             Gizmos.DrawWireSphere(transform.position + new Vector3(0f, -0.88f, 0f), interactionRange);
+        }
+
+        public void Kill()
+        {
+            EventManager.InvokeFlagEvent(Flag.PlayerDeath);
         }
     }
 }

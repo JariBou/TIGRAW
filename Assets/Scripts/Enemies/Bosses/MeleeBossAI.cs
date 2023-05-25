@@ -11,10 +11,8 @@ public class MeleeBossAI : EnemyInterface
     public CircleCollider2D playerDetection;
     
     public GameObject targetEntity;
-
-    private Animator _animator;
-    private SpriteRenderer _renderer;
-        
+    private Player _player;
+    
     public Rigidbody2D rb;
     private static readonly int Attack = Animator.StringToHash("Attack");
 
@@ -32,14 +30,14 @@ public class MeleeBossAI : EnemyInterface
 
     private float timer;
 
+    public float TimeToExecute = 3f;
+    private float executeTimer;
+
     // Start is called before the first frame update
     void Start()
     {
         targetEntity = GameObject.FindGameObjectWithTag("Player");
-        self = gameObject;
-        _animator = GetComponent<Animator>();
-        _renderer = GetComponent<SpriteRenderer>();
-        Instance = this;
+        _player = targetEntity.GetComponent<Player>();
     }
 
     private void OnTriggerEnter2D(Collider2D col)
@@ -91,7 +89,7 @@ public class MeleeBossAI : EnemyInterface
         {
             if (timer <= 0)
             {
-                Instantiate(particle, transform.position+new Vector3(particlePosition.x * (_renderer.flipX ? -1 : 1), particlePosition.y), Quaternion.identity, transform);
+                Instantiate(particle, transform.position+new Vector3(particlePosition.x * (renderer.flipX ? -1 : 1), particlePosition.y), Quaternion.identity, transform);
                 timer = 1;
             }
             else
@@ -106,7 +104,7 @@ public class MeleeBossAI : EnemyInterface
         Vector2 direction = (targetEntity.transform.position - transform.position);
         direction /= direction.magnitude;
 
-        _renderer.flipX = direction.x < 0;
+        renderer.flipX = direction.x < 0;
         
         rb.velocity = direction * (speed * Time.fixedDeltaTime); // This one is actually in a fixed update so keep it like that
 
@@ -114,16 +112,25 @@ public class MeleeBossAI : EnemyInterface
         {
             if (summonTimer <= 0)
             {
-                _animator.SetTrigger("Summon");
+                animator.SetTrigger("Summon");
                 SummonWeaklings();
                 summonTimer = Random.Range(7, 20);
             }
         }
         
-        
+        Debug.Log($"ExecuteTimer:{executeTimer} || TimeToExecute:{TimeToExecute}");
         if (isInRange)
         {
+            executeTimer += Time.fixedDeltaTime;
+            if (executeTimer >= TimeToExecute)
+            {
+                _player.Kill();
+            }
             AttackPlayer();
+        }
+        else
+        {
+            executeTimer = 0;
         }
     }
 
@@ -146,9 +153,9 @@ public class MeleeBossAI : EnemyInterface
         {
             Debug.Log("ATTACKING FUCKER");
             
-            _animator.SetTrigger(Attack);
+            animator.SetTrigger(Attack);
 
-            targetEntity.GetComponent<Player>().Damage(attack);
+            _player.Damage(attack);
             InitInteractionTimer();
         }
 

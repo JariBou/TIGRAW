@@ -13,7 +13,7 @@ public class AutoEnemySpawning : MonoBehaviour
     public List<Transform> spawningPoints;
     public GameObject enemyPrefab;
     public List<EnemySpawn> enemyPrefabs;
-    private GameObject player;
+    private Player player;
 
     [FormerlySerializedAs("Spawn")] public bool spawn = false;
     public int mobCap = 20;
@@ -29,17 +29,17 @@ public class AutoEnemySpawning : MonoBehaviour
     private void Awake()
     {
         _gm = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
+        player =  GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
     }
 
     // Start is called before the first frame update
     void Start()
     {
         timer = 0f;
-        player =  GameObject.FindGameObjectWithTag("Player");
         enemyPrefabs.Sort((a, b) => a.Weight.CompareTo(b.Weight));
     }
 
-    public void ClampValues()
+    private void ClampValues()
     {
         
         float maxValue = enemyPrefabs.Sum(e => e.Weight);
@@ -75,9 +75,10 @@ public class AutoEnemySpawning : MonoBehaviour
             Transform spawningPoint = spawningPoints[Random.Range(0, spawningPoints.Count)];
             GameObject enemy = Instantiate(DetermineSpawningEnemy(), spawningPoint.position,
                 Quaternion.identity, spawningPoint);
-            AIDad script = enemy.GetComponent<AIDad>();
-            script.targetEntity = player;
-            script.updateRate = _gm.UpdateRate;
+            AIDad aiScript = enemy.GetComponent<AIDad>();
+            aiScript.targetPlayer = player;
+            aiScript._enemyInstance.localDifficulty = _gm.LocalDifficulty;
+            aiScript.updateRate = _gm.UpdateRate;
         }
     }
 
@@ -102,12 +103,11 @@ public class AutoEnemySpawning : MonoBehaviour
             currentMax += enemyPrefabs[i].Weight;
             if (randomValue <= currentMax)
             {
-                Debug.Log($"Spawning {enemyPrefabs[i].NAME}");
+                // Debug.Log($"Spawning {enemyPrefabs[i].NAME}");
 
                 return enemyPrefabs[i].EnemyPrefab;
             }
         }
-        Debug.LogError("WTF IS THIS");
         return enemyPrefab;
     }
     

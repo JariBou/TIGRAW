@@ -1,4 +1,6 @@
+using System;
 using LobbyScripts;
+using PlayerBundle;
 using UnityEngine;
 
 public class KeyHintScript : MonoBehaviour
@@ -8,9 +10,21 @@ public class KeyHintScript : MonoBehaviour
     public Interactable linkedObject;
     public GameObject floatingText;
 
+    private Player _player;
+    private CircleCollider2D rangeDetector;
+
+    private void Awake()
+    {
+        _player = GameObject.FindWithTag("Player").GetComponent<Player>();
+        rangeDetector = GetComponent<CircleCollider2D>();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
+        rangeDetector.radius = _player.interactionRange * 2;
+        
+        
         floatingText.SetActive(false);
         floatingText.GetComponent<Renderer>().sortingOrder = 17;
 

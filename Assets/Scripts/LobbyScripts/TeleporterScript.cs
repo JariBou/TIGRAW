@@ -44,7 +44,10 @@ namespace LobbyScripts
             Debug.Log($"Interacting with {name}");
             //SceneManager.LoadScene(4);
             //SceneLoader.instance.LoadScene(4);
-            _gm.LoadScene(SceneToLoadId);
+            
+            EventManager.InvokeFlagEvent(Flag.EndLevel);
+            
+            //_gm.LoadScene(SceneToLoadId);
             isUsable = false;
         }
 

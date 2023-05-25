@@ -24,10 +24,11 @@ namespace Spells.SpellBehavior
             }
         
             spell.player.isTeleporting = true;
-            spell.player.sprite.enabled = false;
+            spell.player.spriteRenderer.enabled = false;
             spell.player.SetVelocity(Vector2.zero);
 
             spell.player.heatManager.AddHeat(spell.heatProduction);
+            spell.player.SetMoveVector(Vector2.zero);
 
             GameObject thingy = Instantiate(spell.startParticles, spell.player.transform.position, Quaternion.identity);
             //Destroy(thingy.gameObject, 0.5f);
@@ -76,7 +77,7 @@ namespace Spells.SpellBehavior
             //Destroy(thingy.gameObject, 0.5f);
 
             spell.player.isTeleporting = false;
-            spell.player.sprite.enabled = true;
+            spell.player.spriteRenderer.enabled = true;
             if (spell.Damage > 0)
             {
                 DealDamage();

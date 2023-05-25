@@ -47,10 +47,16 @@ public class OverdriveDisplayScript : MonoBehaviour
             int diff = _heatManager.GetHeatLevel() - HeatLevel; // 1 = we light one up, -1 = we turn one off
             if (diff == 1)
             {
-                flammes[HeatLevel].Toggle();
+                if (flammes[HeatLevel].isActiveAndEnabled)
+                {
+                    flammes[HeatLevel].Toggle();
+                }
             } else if (diff == -1)
             {
-                flammes[HeatLevel-1].Toggle();
+                if (flammes[HeatLevel].isActiveAndEnabled)
+                {
+                    flammes[HeatLevel-1].Toggle();
+                }
             }
             HeatLevel += diff;
         }

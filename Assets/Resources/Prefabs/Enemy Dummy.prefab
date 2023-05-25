@@ -127,7 +127,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: -0.86}
   serializedVersion: 2
-  m_Radius: 0.3957463
+  m_Radius: 0.38
 --- !u!114 &902154081949910568
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -142,6 +142,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetEntity: {fileID: 0}
   updateRate: 30
+  _enemyInstance: {fileID: 0}
   updateFrameCount: 0
   rb: {fileID: 0}
 --- !u!114 &902154081949910571
@@ -162,7 +163,6 @@ MonoBehaviour:
   speed: 0
   MaxHealth: 20
   health: 20
-  self: {fileID: 0}
   isInRange: 0
   DmgInteractionDelay: 2
   DmgInteractionTimer: 0
@@ -171,6 +171,7 @@ MonoBehaviour:
   renderer: {fileID: 0}
   lootGameObject: {fileID: 4735221231987900530, guid: 1fac27e1cb1621b4d84738f3db592af1, type: 3}
   lootChance: 30
+  localDifficulty: 0
   playerDetection: {fileID: 902154081949910570}
 --- !u!58 &902154081949910570
 CircleCollider2D:

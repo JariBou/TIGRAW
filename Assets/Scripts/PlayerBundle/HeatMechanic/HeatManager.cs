@@ -40,11 +40,14 @@ public class HeatManager: MonoBehaviour
     private float reduceHeatCooldown = 5f;
     private float reduceHeatTimer;
 
+    private RedVignetteScript _redVignetteScript;
+
 
     private void Awake()
     {
         player = GetComponent<Player>();
         _gm = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
+        _redVignetteScript = GameObject.FindWithTag("UIController").GetComponent<UIController>().RedVignetteScript;
         reduceHeatTimer = reduceHeatCooldown;
     }
     
@@ -62,6 +65,7 @@ public class HeatManager: MonoBehaviour
         {
             if (_gm.BraceletUpgradesHandler.GetUpgradedAmount(BraceletUpgrades.ReduceHeatLvl) > 0 && heatLevel>0 && reduceHeatTimer <= 0)
             {
+                _redVignetteScript.ApplyVignette();
                 heatLevel -= 1;
                 heatAmount = 75;
             }
@@ -82,6 +86,7 @@ public class HeatManager: MonoBehaviour
         if (heatAmount - graceMargin > MaxHeat)
         {
             heatLevel++;
+            _redVignetteScript.ApplyVignette();
             heatAmount -= heatAmount + graceMargin;
             reduceHeatTimer = reduceHeatCooldown;
             if (heatLevel == 3)

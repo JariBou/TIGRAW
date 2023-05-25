@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Spells;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 namespace Enemies
 {
@@ -18,9 +20,7 @@ namespace Enemies
 
         public float MaxHealth;
         public float health;
-        public GameObject self;
         public bool isInRange;
-        public static EnemyInterface Instance;
 
         public float DmgInteractionDelay = 2f;
         public float DmgInteractionTimer = 0f;
@@ -33,21 +33,28 @@ namespace Enemies
         public List<int> collidedSpellsId;
         private static readonly int IsDead = Animator.StringToHash("isDead");
         public SpriteRenderer renderer;
-        private Animator _animator;
+        public Animator animator;
 
         [FormerlySerializedAs("lootGameOBject")] [FormerlySerializedAs("loot")] [Header("Loot")] public GameObject lootGameObject;
         public int lootChance;
         private static readonly int Hurt = Animator.StringToHash("Hurt");
         public float Speed => speed / 100;
+        public float localDifficulty;
 
 
         public void Awake()
         {
             id = gameObject.GetInstanceID();
             renderer = GetComponent<SpriteRenderer>();
-            _animator = GetComponent<Animator>();
-            health = MaxHealth;
+            animator = GetComponent<Animator>();
             speed = baseSpeed;
+        }
+
+        private void Start()
+        {
+            MaxHealth *= localDifficulty;
+            attack *= localDifficulty;
+            health = MaxHealth;
         }
 
         public void Kill(bool ignoreLoot = false)
@@ -69,7 +76,7 @@ namespace Enemies
             Debug.Log($"Enemy with id {id} took {amount}DMG || shocked={shocked}");
             StartCoroutine(FlashOnDmg());
             health -= amount;
-            _animator.SetTrigger(Hurt);
+            animator.SetTrigger(Hurt);
         }
 
         private IEnumerator FlashOnDmg()
@@ -87,7 +94,6 @@ namespace Enemies
                 return;
             }
             
-            Debug.Log($"Dictionary size: {StatusEffects.Count}");
             foreach (var keyValuePair in StatusEffects)
             {
                 StatusEffect statusEffect = keyValuePair.Value;
