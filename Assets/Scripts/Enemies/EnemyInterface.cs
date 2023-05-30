@@ -1,8 +1,7 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
+using PlayerBundle.BraceletUpgrade;
 using Spells;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
@@ -37,14 +36,18 @@ namespace Enemies
 
         [FormerlySerializedAs("lootGameOBject")] [FormerlySerializedAs("loot")] [Header("Loot")] public GameObject lootGameObject;
         public int lootChance;
+        public int lootNumber = 1;
         private static readonly int Hurt = Animator.StringToHash("Hurt");
         public float Speed => speed / 100;
-        public float localDifficulty;
+        public float localDifficulty = 1f;
+
+        private GameManager _gm;
 
 
         public void Awake()
         {
             id = gameObject.GetInstanceID();
+            _gm = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
             renderer = GetComponent<SpriteRenderer>();
             animator = GetComponent<Animator>();
             speed = baseSpeed;
@@ -59,7 +62,8 @@ namespace Enemies
 
         public void Kill(bool ignoreLoot = false)
         {
-            Instantiate(deathObj, transform.position, Quaternion.identity);
+            GameObject deadObj = Instantiate(deathObj, transform.position, Quaternion.identity);
+            deadObj.transform.localScale = transform.localScale;
 
             if (!ignoreLoot)
             {
@@ -72,7 +76,16 @@ namespace Enemies
 
         public void Damage(float amount)
         {
-            amount = shocked ? amount * 2 : amount;
+            if (amount <= 0)
+            {
+                return;
+            }
+
+            if (shocked)
+            {
+                amount *= 1 + _gm.BraceletUpgradesHandler.GetUpgradedAmount(BraceletUpgrades.StatikDmgIncrease);
+            } 
+            
             Debug.Log($"Enemy with id {id} took {amount}DMG || shocked={shocked}");
             StartCoroutine(FlashOnDmg());
             health -= amount;
@@ -94,33 +107,7 @@ namespace Enemies
                 return;
             }
             
-            foreach (var keyValuePair in StatusEffects)
-            {
-                StatusEffect statusEffect = keyValuePair.Value;
-                StatusType type = keyValuePair.Key;
-                
-
-                health -= statusEffect.Tick();
-                if (type == StatusType.Ice)
-                {
-                    speed = baseSpeed/2;
-                } else if (type == StatusType.Electric)
-                {
-                    shocked = true;
-                }
-                if (statusEffect.Duration <= 0)
-                {
-                    if (type == StatusType.Ice)
-                    {
-                        speed = baseSpeed;
-                    } else if (type == StatusType.Electric)
-                    {
-                        shocked = false;
-                    }
-
-                    statusEffect.Duration = 0;
-                }
-            }
+            ResolveStatusEffects();
 
             if (DmgInteractionTimer > 0)
             {
@@ -133,11 +120,53 @@ namespace Enemies
             }
         }
 
+        private void ResolveStatusEffects()
+        {
+            foreach (var keyValuePair in StatusEffects)
+            {
+                StatusEffect statusEffect = keyValuePair.Value;
+                StatusType type = keyValuePair.Key;
+
+                if (statusEffect.isActive())
+                {
+                    statusEffect.Duration -= Time.fixedDeltaTime;
+                    if (type == StatusType.Ice)
+                    {
+                        speed = (float)(baseSpeed * (0.9 - _gm.BraceletUpgradesHandler.GetUpgradedAmount(BraceletUpgrades.IceSlowIncrease)));
+                    } else if (type == StatusType.Electric)
+                    {
+                        shocked = true;
+                    } else if (type == StatusType.Fire)
+                    {
+                        health -= statusEffect.Dps * Time.fixedDeltaTime * (1 +
+                                                                            _gm.BraceletUpgradesHandler
+                                                                                .GetUpgradedAmount(BraceletUpgrades
+                                                                                    .FireEffectDmgIncrease)) ;
+                    }
+                }
+                if (!statusEffect.isActive())
+                {
+                    if (type == StatusType.Ice)
+                    {
+                        speed = baseSpeed;
+                    } else if (type == StatusType.Electric)
+                    {
+                        shocked = false;
+                    }
+
+                    statusEffect.Duration = 0;
+                }
+            }
+        }
+
         private void CalculateLoot()
         {
-            if (Random.Range(0, 100) < lootChance)
+            if (Random.Range(0, 100) <= lootChance)
             {
-                Instantiate(lootGameObject, transform.position, Quaternion.identity);
+                for (int i = 0; i < lootNumber; i++)
+                {
+                    Instantiate(lootGameObject, transform.position, Quaternion.identity);
+                }
             }
         }
 

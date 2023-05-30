@@ -283,6 +283,23 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &631918184 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8078604622743268930, guid: 75bd672e660d33140a8f412e0587b654, type: 3}
+  m_PrefabInstance: {fileID: 1410244969}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &631918189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 631918184}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c20ec469c2d643b291cca5dcffd305c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &856982217
 GameObject:
   m_ObjectHideFlags: 0
@@ -679,17 +696,41 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8078604622743268941, guid: 75bd672e660d33140a8f412e0587b654, type: 3}
+      propertyPath: nullSpell
+      value: 
+      objectReference: {fileID: 11400000, guid: 20ca600112c302d41847b597ee350762, type: 2}
+    - target: {fileID: 8078604622743268941, guid: 75bd672e660d33140a8f412e0587b654, type: 3}
       propertyPath: playerData
       value: 
       objectReference: {fileID: 11400000, guid: 4e0657bd70d42d4489c5eb9cba915aff, type: 2}
     - target: {fileID: 8078604622743268941, guid: 75bd672e660d33140a8f412e0587b654, type: 3}
+      propertyPath: spellListSO
+      value: 
+      objectReference: {fileID: 11400000, guid: d702ca5068dca384d9032f53b741d094, type: 2}
+    - target: {fileID: 8078604622743268941, guid: 75bd672e660d33140a8f412e0587b654, type: 3}
+      propertyPath: NumberOfSpells
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 8078604622743268941, guid: 75bd672e660d33140a8f412e0587b654, type: 3}
       propertyPath: numberOfArenas
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8078604622743268941, guid: 75bd672e660d33140a8f412e0587b654, type: 3}
       propertyPath: numberOfBosses
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8078604622743268941, guid: 75bd672e660d33140a8f412e0587b654, type: 3}
+      propertyPath: baseUnlockedSkills.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8078604622743268941, guid: 75bd672e660d33140a8f412e0587b654, type: 3}
+      propertyPath: baseUnlockedSkills.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: d5798e4e4166f6647952e2395f735900, type: 2}
+    - target: {fileID: 8078604622743268941, guid: 75bd672e660d33140a8f412e0587b654, type: 3}
+      propertyPath: baseUnlockedSkills.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: a95a08e1561b6244284f5f977530208c, type: 2}
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 75bd672e660d33140a8f412e0587b654, type: 3}

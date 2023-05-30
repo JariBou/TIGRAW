@@ -2,8 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Enemies;
-using Enemies.EnemyScript;
-using PlayerBundle;
 using UnityEngine;
 
 // Cast will be used for AOE Attacks around player AND AOE Targeted Attacks
@@ -14,9 +12,10 @@ namespace Spells.SpellBehavior
         public Spell spell;
         // ReSharper disable once FieldCanBeMadeReadOnly.Local
         private Collider2D[] _results = new Collider2D[32];
+        
+        public List<int> collidedEnnemiesId;
 
 
-    
         // Start is called before the first frame update
         void Start()
         {
@@ -95,10 +94,13 @@ namespace Spells.SpellBehavior
                 }
             }
 
-            if (enemyScript == null)
+            if (enemyScript == null || collidedEnnemiesId.Contains(enemyScript.id))
             {
                 return;
             }
+            
+            collidedEnnemiesId.Add(enemyScript.id);
+            StartCoroutine(DelayedRemoval(spell.interactionInterval, enemyScript.id));
             
             enemyScript.TryDamage(spell.Damage, spell);
             spell.ApplyStatus(enemyScript);
@@ -132,13 +134,22 @@ namespace Spells.SpellBehavior
                 }
             }
 
-            if (enemyScript == null)
+            if (enemyScript == null || collidedEnnemiesId.Contains(enemyScript.id))
             {
                 return;
             }
             
+            collidedEnnemiesId.Add(enemyScript.id);
+            StartCoroutine(DelayedRemoval(spell.interactionInterval, enemyScript.id));
+            
             enemyScript.TryDamage(spell.Damage, spell);
             spell.ApplyStatus(enemyScript);
+        }
+        
+        IEnumerator DelayedRemoval(float delay, int id)
+        {
+            yield return new WaitForSeconds(delay);
+            collidedEnnemiesId.Remove(id);
         }
 
 

@@ -1,9 +1,11 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
-using LoadingScripts;
-using Saves;
+using ScriptableObjects;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 namespace PlayerBundle
 {
@@ -15,7 +17,9 @@ namespace PlayerBundle
         public Dictionary<string, Delegate> bindingLinks; // Dictionnary of <InputAction.name>
         // TODO: Problem if is composite like wasd, using InputAction.name should resolve that
     
-        public Dictionary<string, int> spellLinks;
+        [FormerlySerializedAs("spellLinks")] public Dictionary<string, int> spellIdLinks;
+        public Dictionary<string, SpellSO> spellSoLinks;
+
         private static readonly int XMovement = Animator.StringToHash("xMovement");
         private static readonly int YMovement = Animator.StringToHash("yMovement");
         private static readonly int Speed = Animator.StringToHash("speed");
@@ -25,13 +29,16 @@ namespace PlayerBundle
         public bool canCastSpells = true;
         private GameManager _gm;
 
+        private List<string> lastInputs = new(16);
+
         private void Awake()
         {
             bindingLinks = new Dictionary<string, Delegate>();
-            spellLinks = new Dictionary<string, int>();
+            spellIdLinks = new Dictionary<string, int>();
             playerActions = new PlayerActions();
             bindingLinks.Add("A", new Action<InputAction.CallbackContext>(Move));
             _gm = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
+            _gm.PlayerInputsHandler = this;
             
             // bindingLinks.Add("RightClick", new Action<InputAction.CallbackContext, int>(SpellCasting.CastSpell));
             // bindingLinks["A"].DynamicInvoke(new InputAction.CallbackContext());
@@ -76,12 +83,13 @@ namespace PlayerBundle
                         bindingLinks[action.name] = new Action<InputAction.CallbackContext>(Run);
                         break;
                     case not null when action.name.StartsWith("Spell"):
-                        spellLinks[action.name] = int.Parse(action.name.Substring(action.name.Length-1, 1)); // Get the number of the spell, won't work with 2 digits tho so need to change
-                        bindingLinks[action.name] = new Action<InputAction.CallbackContext>(ResolveSpellCasted);
+                        spellIdLinks[action.name] = int.Parse(action.name.Substring(action.name.Length-1, 1)); // Get the number of the spell, won't work with 2 digits tho so need to change
+                        bindingLinks[action.name] = new Action<InputAction.CallbackContext>(ResolveSpellCastedBySo);
                         break;
                 }
             }
-            player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+            player = GameObject.FindWithTag("Player").GetComponent<Player>();
+
         }
 
         private void Start()
@@ -117,7 +125,7 @@ namespace PlayerBundle
         {
             //Debug.Log($"moveVector= {moveVector}");
             player.SetMoveVector(moveVector);
-            
+
             // if ((int)moveVector.x == 1 && (int)moveVector.y == 0)
             // {
             //     player.animator.SetInteger(player.Facing, 3);
@@ -151,8 +159,6 @@ namespace PlayerBundle
         {
             if (context.canceled) return;
             
-            Debug.Log("its here");
-            
             //For Testing only ======================
             // SaveManager.SaveToJson(JsonSaveData.Initialise());
             // SaveManager.LoadFromJson();
@@ -168,7 +174,7 @@ namespace PlayerBundle
         public void TryInteracting(InputAction.CallbackContext context)
         {
             if (context.canceled) {return;}
-        
+            Debug.Log("Trying to interact");
             Collider2D[] results = Physics2D.OverlapCircleAll(player.GetPosition(), player.interactionRange, player.interactableLayers);
 
             foreach (Collider2D col in results)
@@ -200,11 +206,32 @@ namespace PlayerBundle
             }
         }
 
-        private void ResolveSpellCasted(InputAction.CallbackContext context)
+        // OLD
+        private void ResolveSpellCastedByID(InputAction.CallbackContext context)
         {
             if (context.canceled || !canCastSpells) {return;}
-            int spellId = spellLinks[context.action.name];
+            int spellId = spellIdLinks[context.action.name];
             player.heatManager.CastSpell(context, spellId);
+        }
+        
+        // NEW
+        private void ResolveSpellCastedBySo(InputAction.CallbackContext context)
+        {
+            if (!context.performed || !canCastSpells) {return;}
+
+            string actionName = context.action.name;
+            if (lastInputs.Contains(actionName)) {return;}
+
+            StartCoroutine(DoubleCastPrevent(actionName));
+            
+            Debug.Log(context.started);
+            SpellSO spellSo = _gm.spellBindingsSo[actionName];
+            Debug.Log($"SpellSo: {spellSo.spellName} VIA {actionName}");
+            if (spellSo.spellTypeId == -1) // null spell
+            {
+                return;
+            }
+            player.heatManager.CastSpell(context, spellSo);
         }
 
 
@@ -221,14 +248,26 @@ namespace PlayerBundle
             
             if (_gm.isInMenu)
             {
-                if (actionName is "Escape" or "Interact") {TryInteracting(context);}
+
+                if (actionName is "Escape" or "Interact")
+                {
+                    Debug.Log("InMenu!");
+                    TryInteracting(context);
+                }
                 return;
             }
 
             //actionName = "Move";
-            // This works biatch
 
             bindingLinks[context.action.name].DynamicInvoke(context);
+        }
+
+        // Workaround for Left click triggering twice.. thanks Unity, small indie company right?
+        IEnumerator DoubleCastPrevent(string actionName)
+        {
+            lastInputs.Add(actionName);
+            yield return new WaitForSeconds(0.1f);
+            lastInputs.Remove(actionName);
         }
     
         public void OnKeyPressedTriggerEvent(InputAction.CallbackContext context)

@@ -1,6 +1,5 @@
 using System;
 using Enemies;
-using PlayerBundle;
 using UnityEngine;
 
 namespace Spells.SpellBehavior
@@ -28,7 +27,6 @@ namespace Spells.SpellBehavior
             spell.player.SetVelocity(Vector2.zero);
 
             spell.player.heatManager.AddHeat(spell.heatProduction);
-            spell.player.SetMoveVector(Vector2.zero);
 
             GameObject thingy = Instantiate(spell.startParticles, spell.player.transform.position, Quaternion.identity);
             //Destroy(thingy.gameObject, 0.5f);

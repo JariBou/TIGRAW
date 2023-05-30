@@ -7,10 +7,11 @@ namespace Spells
 {
     public class SpellsList : MonoBehaviour
     {
+        
+        // TODO: Move into GameManager stuff, not monobehavior
         // ReSharper disable once FieldCanBeMadeReadOnly.Local
         private static List<GameObject> _spells = new();
 
-        public static List<int> unlockedSpellsId = new(){0, 1, 2, 3};
 
         [FormerlySerializedAs("LoadSpells")] public bool loadSpells = true;
         public string path = "Prefabs/Spells";

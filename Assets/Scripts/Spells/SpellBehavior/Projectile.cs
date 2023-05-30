@@ -1,8 +1,6 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using Enemies;
-using PlayerBundle;
 using UnityEngine;
 
 namespace Spells.SpellBehavior
@@ -27,6 +25,11 @@ namespace Spells.SpellBehavior
                 StartCoroutine(DelayedDestroy(spell.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length));
             }
 
+            if (spell.phantom)
+            {
+                StartCoroutine(DelayedDestroy(20)); // To make sure that you cant have an inf amount of phantom spells running around
+            }
+
         
         
             gameObject.transform.position += new Vector3(spell.Direction.x, spell.Direction.y, 0); // Offset so it casts a bit in front of you
@@ -46,6 +49,19 @@ namespace Spells.SpellBehavior
         {
         
             if(_hasCollided) {return;}
+            if (col.CompareTag("Wall") )
+            {
+                // Debug.Log("Hits wall!!!");
+                if (spell.phantom) return;
+                
+                if (spell.hasOnHitEffect)
+                {
+                    Instantiate(spell.onHitEffect, transform.position, transform.rotation);
+                }
+                // Debug.Log("No phantom fucker");
+                _hasCollided = true;
+                Destroy(gameObject, 0.01f); // Actually only destroy if hasCollided
+            }
 
             EnemyInterface enemyScript = null;
             if (col.CompareTag("Enemy"))
@@ -67,10 +83,11 @@ namespace Spells.SpellBehavior
                 }
             }
 
-            if (enemyScript == null)
-            {
-                return;
-            }
+            // Otherwise if wall it doesn't get destroyed i think
+            // if (enemyScript == null)
+            // {
+            //     return;
+            // }
         
         
             if (col.CompareTag("Enemy") || col.CompareTag("Enemy Hitbox"))
@@ -89,26 +106,13 @@ namespace Spells.SpellBehavior
                 {
                     Instantiate(spell.onHitEffect, transform.position, transform.rotation);
                 }
-                if (!spell.isInfPierce)
-                {
-                    _hasCollided = true;
-                    
-                    Destroy(gameObject, 0.1f); // Actually only destroy if hasCollided
 
-                }
-            } else if (col.CompareTag("Wall") )
-            {
-                // Debug.Log("Hits wall!!!");
-                if (!spell.phantom)
-                {
-                    if (spell.hasOnHitEffect)
-                    {
-                        Instantiate(spell.onHitEffect, transform.position, transform.rotation);
-                    }
-                    // Debug.Log("No phantom fucker");
-                    _hasCollided = true;
-                    Destroy(gameObject, 0.01f); // Actually only destroy if hasCollided
-                }
+                if (spell.isInfPierce) return;
+                if (collidedEnnemiesId.Count < spell.pierce) return;
+                
+                _hasCollided = true;
+                    
+                Destroy(gameObject, 0.1f); // Actually only destroy if hasCollided
             }
         
         

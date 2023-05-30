@@ -1,6 +1,7 @@
 using System;
 using Enemies;
 using PlayerBundle;
+using PlayerBundle.BraceletUpgrade;
 using Spells.SpellBehavior;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -24,8 +25,8 @@ namespace Spells
     {
         public float projectileSpeed = 2f;
         [FormerlySerializedAs("damage")] public float baseDamage = 10;
-        [Serialize] public float Damage => baseDamage * player.AtkMultiplier;
-        public int id;
+        [Serialize] public float Damage => (baseDamage + _gm.BraceletUpgradesHandler.GetUpgradedAmount(BraceletUpgrades.AttackIncrease)) * player.AtkMultiplier;
+        public int id; // Useless except for Spell List
         public float heatProduction = 2f;
 
         public float interactionInterval;
@@ -80,6 +81,7 @@ namespace Spells
         internal Vector3 MousePos;
 
         public Player player;
+        private GameManager _gm;
 
         [HideInInspector] public int Id;
 
@@ -87,6 +89,7 @@ namespace Spells
         {
             Id = gameObject.GetInstanceID();
             player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>(); // What's the difference with FindWithTag
+            _gm = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>(); 
         }
 
         // Start is called before the first frame update
@@ -116,21 +119,31 @@ namespace Spells
             
                 case SpellsType.Projectile :
 
-                    RaycastHit2D hit = Physics2D.Raycast(player.GetPosition(), Direction,
-                        new Vector2(Direction.x, Direction.y).sqrMagnitude, wallLayer);
-        
-                    Debug.DrawRay(new Vector3(player.GetPosition().x, player.GetPosition().y, 0), new Vector3(Direction.x, Direction.y, 0), Color.red, 1f);
-                    if (hit)
+                    if (!phantom)
                     {
-                        if (hit.transform.gameObject != null)
+                        RaycastHit2D hit = Physics2D.Raycast(player.GetPosition(), Direction,
+                            new Vector2(Direction.x, Direction.y).sqrMagnitude, wallLayer);
+
+                        Debug.DrawRay(new Vector3(player.GetPosition().x, player.GetPosition().y, 0),
+                            new Vector3(Direction.x, Direction.y, 0), Color.red, 1f);
+                        if (hit)
                         {
-                            if (hit.transform.gameObject.CompareTag("Wall"))
+                            if (hit.transform.gameObject != null)
                             {
-                                Destroy(gameObject);
+                                if (hit.transform.gameObject.CompareTag("Wall"))
+                                {
+                                    Destroy(gameObject);
+                                }
                             }
                         }
                     }
-                    
+
+                    if (Direction.x < 0)
+                    {
+                        GetComponent<SpriteRenderer>().flipY = true;
+                        GetComponent<CircleCollider2D>().offset *= new Vector2(1, -1);
+                    }
+
                     float angle = Mathf.Atan2(Direction.y, Direction.x) * Mathf.Rad2Deg;
                     transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
                 

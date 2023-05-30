@@ -1,10 +1,9 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using MainMenusScripts;
 using PlayerBundle;
 using PlayerBundle.BraceletUpgrade;
+using ScriptableObjects;
 using Spells;
+using UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -30,7 +29,7 @@ public class HeatManager: MonoBehaviour
 
     public float MaxHeat => baseMaxHeat + _gm.BraceletUpgradesHandler.GetUpgradedAmount(
         BraceletUpgrades.BonusMaxHeat);
-    private bool infiniteHeat;
+    public bool infiniteHeat;
 
     private int heatLevel = 0;
     
@@ -41,7 +40,7 @@ public class HeatManager: MonoBehaviour
     private float reduceHeatTimer;
 
     private RedVignetteScript _redVignetteScript;
-
+    
 
     private void Awake()
     {
@@ -49,6 +48,7 @@ public class HeatManager: MonoBehaviour
         _gm = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
         _redVignetteScript = GameObject.FindWithTag("UIController").GetComponent<UIController>().RedVignetteScript;
         reduceHeatTimer = reduceHeatCooldown;
+        heatLevel = _gm.heatLevelSave;
     }
     
     public void ResetTimer() {
@@ -118,7 +118,6 @@ public class HeatManager: MonoBehaviour
     
     public void CastSpell(InputAction.CallbackContext context, int spellId)
     {
-        Player player = GameObject.FindWithTag("Player").GetComponent<Player>();
         if (player.isTeleporting) return;
         if (!context.performed) return;
         if (player.gamePaused) return;
@@ -134,6 +133,22 @@ public class HeatManager: MonoBehaviour
             Console.WriteLine(e);
             return;
         }
+
+        Debug.Log($"Casting Spell: {spellPrefab.name}");
+        //Spell spellPrefabScript = spellPrefab.GetComponent<Spell>();
+
+        ResetTimer();
+        Instantiate(spellPrefab);
+        
+    }
+    
+    public void CastSpell(InputAction.CallbackContext context, SpellSO spellSo)
+    {
+        if (player.isTeleporting) return;
+        if (!context.performed) return;
+        if (player.gamePaused) return;
+        
+        GameObject spellPrefab = spellSo.spellPrefab;
 
         Debug.Log($"Casting Spell: {spellPrefab.name}");
         //Spell spellPrefabScript = spellPrefab.GetComponent<Spell>();

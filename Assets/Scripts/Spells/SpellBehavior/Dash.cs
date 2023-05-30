@@ -1,4 +1,3 @@
-using PlayerBundle;
 using UnityEngine;
 
 namespace Spells.SpellBehavior
@@ -8,15 +7,17 @@ namespace Spells.SpellBehavior
         public Spell spell;
 
         private Vector2 _testVec;
+
+        private Vector2 savedMoveVector;
         // Start is called before the first frame update
         void Start()
         {
-            Vector2 moveVector = spell.player.GetMoveVector();
+            savedMoveVector = spell.player.GetMoveVector();
         
             // Problem when dashing towards positive x
             // Player's body velocity set to 0 when pressing spacebar somehow?? and only affecting towards positive x
-            Debug.LogWarning($"moveVector={moveVector}");
-            _testVec = new Vector2(moveVector.x, moveVector.y) * spell.dashDistance * Time.fixedDeltaTime;
+            Debug.LogWarning($"moveVector={savedMoveVector}");
+            _testVec = new Vector2(savedMoveVector.x, savedMoveVector.y) * spell.dashDistance * Time.fixedDeltaTime;
             Debug.LogWarning($"testVec={_testVec}");
             spell.player.ApplyForce(_testVec);
             Invoke("EndDash", 0.25f);

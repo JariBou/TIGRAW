@@ -1,4 +1,3 @@
-using PlayerBundle;
 using UnityEngine;
 
 namespace Enemies.EnemyScript

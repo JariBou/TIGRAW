@@ -1,39 +1,39 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class ChaliceScript : Interactable
+namespace LobbyScripts
 {
-    public Canvas canvas;
+    public class ChaliceScript : Interactable
+    {
+        public Canvas canvas;
 
-    private GameManager _gm;
-    // Start is called before the first frame update
-    private void Awake()
-    {
-        _gm = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
-    }
-
-    void Start()
-    {
-        canvas.enabled = false;
-    }
-        
-    public override void Interact()
-    {
-        if (canvas.enabled)
+        private GameManager _gm;
+        // Start is called before the first frame update
+        private void Awake()
         {
-            canvas.enabled = false;
-            _gm.isInMenu = false;
-            return;
+            _gm = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
         }
 
-        _gm.isInMenu = true;
-        canvas.enabled = true;
-    }
+        void Start()
+        {
+            canvas.enabled = false;
+        }
+        
+        public override void Interact()
+        {
+            if (canvas.enabled)
+            {
+                canvas.enabled = false;
+                _gm.isInMenu = false;
+                return;
+            }
 
-    protected override void OnFlagEvent(Flag flag)
-    {
+            _gm.isInMenu = true;
+            canvas.enabled = true;
+        }
+
+        protected override void OnFlagEvent(Flag flag)
+        {
             
+        }
     }
 }

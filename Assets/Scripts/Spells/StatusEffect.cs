@@ -26,21 +26,14 @@ namespace Spells
             Duration = duration;
         }
 
-        public float Tick() // Returns amount of health to remove, needs to be called in a fixed update
-        {
-            if (Duration == 0)
-            {
-                return 0;
-            }
-            float time = Mathf.Min(Time.fixedDeltaTime, Duration); // So that you dont take more dmg than needed
-
-            Duration -= time;
-            return Dps * time;
-        }
-//bebou <3
         public StatusEffect Copy()
         {
             return new StatusEffect(StatusType, Dps, Duration);
+        }
+
+        public bool isActive()
+        {
+            return Duration > 0;
         }
 
         public static StatusEffect BestOf(StatusEffect effect1, StatusEffect effect2)

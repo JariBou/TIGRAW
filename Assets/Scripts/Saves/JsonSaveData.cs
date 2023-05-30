@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using PlayerBundle.BraceletUpgrade;
 using PlayerBundle.PlayerUpgrades;
 using Saves.JsonDictionaryHelpers;
 using Spells;
@@ -12,11 +13,13 @@ namespace Saves
     public class JsonSaveData
     {
         // Save the object on Game Manager to not load from scene to scene but still save it to file
-
-        public EnumIntDictionary playerUpgradesLvl = new();
+        public string saveName = "Save 1";
+        
+        public EnumIntDictionary braceletUpgradesLvl = new();
         public EnumFloatDictionary upgradeAmount = new();
+        public StringStringDictionary bindedSpells = new();
 
-        public List<int> unlockedSpellsId;
+        public List<string> unlockedSpellsSoName = new();
 
         public int playerGold; // Might replace with souls to make more sense
         public int playerSouls;
@@ -28,35 +31,46 @@ namespace Saves
             GameManager gm = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
             JsonSaveData data = new JsonSaveData
             {
-                playerUpgradesLvl =
+                braceletUpgradesLvl =
                 {
-                    items = new EnumIntItem[gm.PlayerUpgradesHandler.UpgradesLvl.Count]
+                    items = new EnumIntItem[gm.BraceletUpgradesHandler.UpgradesLvl.Count]
                 },
                 upgradeAmount =
                 {
-                    items = new EnumFloatItem[gm.PlayerUpgradesHandler.UpgradesAmount.Count]
+                    items = new EnumFloatItem[gm.BraceletUpgradesHandler.UpgradesAmount.Count]
                 },
-                unlockedSpellsId = SpellsList.unlockedSpellsId,
-                playerSouls = 0
+                bindedSpells =
+                {
+                    items = new StringStringItem[gm.spellBindingsSo.Count]
+                },
+                playerSouls = gm.currentSave.playerSouls,
+                unlockedSpellsSoName = gm.SpellBuyingHandler.GetUnlockedSpellsName(),
+                saveName = "Save 1"
             };
 
             int i = 0;
-            foreach (var keyValuePair in gm.PlayerUpgradesHandler.UpgradesLvl)
+            foreach (var keyValuePair in gm.BraceletUpgradesHandler.UpgradesLvl)
             {
-                data.playerUpgradesLvl.items[i] = new EnumIntItem { key = Enum.GetName(typeof(PlayerUpgrades), keyValuePair.Key), value = keyValuePair.Value };
+                data.braceletUpgradesLvl.items[i] = new EnumIntItem { key = Enum.GetName(typeof(BraceletUpgrades), keyValuePair.Key), value = keyValuePair.Value };
                 i++;
             }
             
             i = 0;
-            foreach (var keyValuePair in gm.PlayerUpgradesHandler.UpgradesAmount)
+            foreach (var keyValuePair in gm.BraceletUpgradesHandler.UpgradesAmount)
             {
-                data.upgradeAmount.items[i] = new EnumFloatItem { key = Enum.GetName(typeof(PlayerUpgrades), keyValuePair.Key), value = keyValuePair.Value};
+                data.upgradeAmount.items[i] = new EnumFloatItem { key = Enum.GetName(typeof(BraceletUpgrades), keyValuePair.Key), value = keyValuePair.Value};
                 i++;
             }
-
-
+            
+            i = 0;
+            foreach (var keyValuePair in gm.spellBindingsSo)
+            {
+                data.bindedSpells.items[i] = new StringStringItem { key = keyValuePair.Key, value = keyValuePair.Value.name};
+                i++;
+            }
+            
+            
             return data;
         }
-        
     }
 }

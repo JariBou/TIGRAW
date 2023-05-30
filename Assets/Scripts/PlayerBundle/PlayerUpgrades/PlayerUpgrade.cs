@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Globalization;
 using TMPro;
 using UnityEngine;
@@ -18,18 +17,17 @@ namespace PlayerBundle.PlayerUpgrades
 
         private void Awake()
         {
-            player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
             _gm = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+            player = GameObject.FindWithTag("Player").GetComponent<Player>();
         }
 
 
         // Start is called before the first frame update
         void Start()
         {
-            
-            if (_gm.PlayerUpgradesHandler.UpgradesAmount.ContainsKey(upgrade))
+            if (_gm.PlayerUpgradesHandler.UpgradesAmount.TryGetValue(upgrade, out var value))
             {
-                upgradeAmount = _gm.PlayerUpgradesHandler.UpgradesAmount[upgrade];
+                upgradeAmount = value;
             }
             else
             {

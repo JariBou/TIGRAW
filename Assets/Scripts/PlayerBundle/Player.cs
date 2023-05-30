@@ -1,10 +1,6 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using MainMenusScripts;
 using PlayerBundle.BraceletUpgrade;
 using PlayerBundle.PlayerUpgrades;
-using Spells;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
@@ -40,11 +36,13 @@ namespace PlayerBundle
         public float AtkMultiplier =>
             baseAtkMultiplier +
             _gm.PlayerUpgradesHandler.GetUpgradedAmount(PlayerUpgrades.PlayerUpgrades.AtkMultiplier) +
+            _gm.BraceletUpgradesHandler.GetUpgradedAmount(BraceletUpgrades.AttackMultiplierIncrease) +
             _gm.BraceletUpgradesHandler.GetUpgradedAmount(BraceletUpgrades.BonusDmgOnHeatLvl) * heatManager.GetHeatLvl();
 
         public float MaxHealth =>
             playerData.MaxHealth +
-            _gm.PlayerUpgradesHandler.GetUpgradedAmount(PlayerUpgrades.PlayerUpgrades.Health);
+            _gm.PlayerUpgradesHandler.GetUpgradedAmount(PlayerUpgrades.PlayerUpgrades.Health) +
+            _gm.BraceletUpgradesHandler.GetUpgradedAmount(BraceletUpgrades.HealthIncrease);
 
 
         [Header("Teleportation Variables")]
@@ -54,8 +52,10 @@ namespace PlayerBundle
         public LayerMask interactableLayers;
         
         
-        [Header("Menus")]
+        [HideInInspector]
         public Canvas pauseMenuCanvas;
+        [Header("Menus")]
+        public GameObject pauseMenuPrefab;
         public bool gamePaused;
         public StatsWindow.StatsWindow playerStatsScript;
         
@@ -102,6 +102,7 @@ namespace PlayerBundle
             heatManager = GetComponent<HeatManager>();
             circleColliderOffset = new Vector3(circleCollider.offset.x, circleCollider.offset.y, 0);
             playerData = _gm.playerData;
+            pauseMenuCanvas = Instantiate(pauseMenuPrefab).GetComponent<Canvas>();
 
             // _playerUpgradesHandler = new PlayerUpgradesHandler();
             // _braceletUpgrades = new BraceletUpgrades();
@@ -180,7 +181,7 @@ namespace PlayerBundle
             // }
             
             
-            
+            if (isTeleporting || isDashing) {return;}
             body.velocity = new Vector2(moveVector.x, moveVector.y) * (baseMovespeed * Time.fixedDeltaTime);
             
             

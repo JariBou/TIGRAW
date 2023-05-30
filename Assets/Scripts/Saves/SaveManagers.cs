@@ -51,6 +51,7 @@ namespace Saves
         
         public static void SaveToJson(JsonSaveData data, string filename)
         {
+            data.saveName = filename;
             string jsonData = JsonUtility.ToJson(data);
             string filepath = Application.persistentDataPath + "/" + filename + (filename.EndsWith(".json") ? ""
                 : ".json");

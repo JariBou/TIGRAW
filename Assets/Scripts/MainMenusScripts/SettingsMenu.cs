@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using LoadingScripts;
 using Saves;
 using TMPro;
 using UnityEngine;
@@ -15,11 +14,19 @@ namespace MainMenusScripts
 
         public AudioMixer audioMixer;
         public TMP_Dropdown resolutionDropdown;
+        public TMP_Dropdown saveDropdown;
         public Toggle fullscreenToggle;
         public Slider volumeSlider;
 
         private Resolution[] _resolutions;
-    
+        private List<String> saves = new();
+        private GameManager _gm;
+
+        private void Awake()
+        {
+            _gm = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
+        }
+
         void Start()
         {
             _resolutions = Screen.resolutions;
@@ -46,11 +53,20 @@ namespace MainMenusScripts
                     currentResolutionIndex = i;
                 }
             }
-
+            
             SetResolution(currentResolutionIndex);
             resolutionDropdown.AddOptions(options);
             resolutionDropdown.value = currentResolutionIndex;
             resolutionDropdown.RefreshShownValue();
+
+            for (int i = 1; i < 4; i++)
+            {
+                saves.Add($"Save {i}");
+            }
+            
+            saveDropdown.AddOptions(saves);
+            saveDropdown.value = 0;
+            saveDropdown.RefreshShownValue();
         }
 
         public void SetVolume(float volume)
@@ -75,7 +91,6 @@ namespace MainMenusScripts
 
         public void SetResolution(int resolutionIndex)
         {
-
             Resolution resolution = _resolutions[resolutionIndex];
         
             Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen, resolution.refreshRate);
@@ -83,7 +98,11 @@ namespace MainMenusScripts
             SimpleSaveManager.SaveInt("screenWidth", resolution.width);
             SimpleSaveManager.SaveInt("screenHeight", resolution.height);
             SimpleSaveManager.SaveInt("screenRefreshRate", resolution.refreshRate);
-        
+        }
+
+        public void SetSave(int saveIndex)
+        {
+            _gm.currentSave = SaveManager.LoadFromJson(saves[saveIndex]);
         }
 
         public Resolution GetSavedResolution()

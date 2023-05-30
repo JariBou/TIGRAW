@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using LoadingScripts;
-using Saves;
-using TMPro;
+﻿using Saves;
 using UnityEngine;
 using UnityEngine.Audio;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 namespace MainMenusScripts
 {

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Enemies;
 using PlayerBundle;
@@ -38,6 +37,7 @@ public class MeleeBossAI : EnemyInterface
     {
         targetEntity = GameObject.FindGameObjectWithTag("Player");
         _player = targetEntity.GetComponent<Player>();
+        health = MaxHealth;
     }
 
     private void OnTriggerEnter2D(Collider2D col)
@@ -118,7 +118,6 @@ public class MeleeBossAI : EnemyInterface
             }
         }
         
-        Debug.Log($"ExecuteTimer:{executeTimer} || TimeToExecute:{TimeToExecute}");
         if (isInRange)
         {
             executeTimer += Time.fixedDeltaTime;

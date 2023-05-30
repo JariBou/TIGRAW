@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 
 namespace Saves.JsonDictionaryHelpers
 {
@@ -10,8 +11,12 @@ namespace Saves.JsonDictionaryHelpers
     }
     
     [Serializable]
-    public class EnumIntDictionary
+    public class EnumIntDictionary : IEnumerable
     {
         public EnumIntItem[] items;
+        public IEnumerator GetEnumerator()
+        {
+            return items.GetEnumerator();
+        }
     }
 }

@@ -1,41 +1,37 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class RedVignetteScript : MonoBehaviour
+namespace UI
 {
-    private Image image;
-
-    private void Awake()
+    public class RedVignetteScript : MonoBehaviour
     {
-        image = GetComponent<Image>();
-    }
+        private Image image;
 
-    void Start()
-    {
-        Color color = image.color;
-        color.a = 0f;
-        image.color = color;
-    }
+        private void Awake()
+        {
+            image = GetComponent<Image>();
+        }
+
+        void Start()
+        {
+            image.color = ColorUtils.ColorWithAlpha(image.color, 0f);
+        }
 
     
-    void FixedUpdate()
-    {
-        Color color = image.color;
-
-        if (color.a > 0)
+        void FixedUpdate()
         {
-            color.a -= Time.fixedDeltaTime;
-            image.color = color;   
-        }
-    }
+            Color color = image.color;
 
-    public void ApplyVignette(float alphaValue = 0.8f)
-    {
-        Color color = image.color;
-        color.a = alphaValue;
-        image.color = color;
+            if (color.a > 0)
+            {
+                color.a -= Time.fixedDeltaTime;
+                image.color = color;   
+            }
+        }
+
+        public void ApplyVignette(float alphaValue = 0.8f)
+        {
+            image.color = ColorUtils.ColorWithAlpha(image.color, alphaValue);
+        }
     }
 }

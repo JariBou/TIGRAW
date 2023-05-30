@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
+using Saves;
+using Saves.JsonDictionaryHelpers;
 
 namespace PlayerBundle.BraceletUpgrade
 {
@@ -11,15 +12,28 @@ namespace PlayerBundle.BraceletUpgrade
         BonusMaxHeat,
         BonusDmgOnHeatLvl,
         ReduceHeatLvl,
+        FireEffectDmgIncrease,
+        IceSlowIncrease,
+        StatikDmgIncrease,
+        IncreaseSoulDrop,
+        AllowBraceletUpStats,
+        HealthIncrease,
+        AttackIncrease, // Adds to the base damage of spells
+        AttackMultiplierIncrease, // Increases the multiplier
     }
 
     public class BraceletUpgradesHandler
     {
-        private Dictionary<BraceletUpgrades, int> UpgradesLvl; 
+        public Dictionary<BraceletUpgrades, int> UpgradesLvl; 
         public Dictionary<BraceletUpgrades, float> UpgradesAmount;
         
 
         public BraceletUpgradesHandler()
+        {
+            Init();
+        }
+
+        private void Init()
         {
             UpgradesLvl = new Dictionary<BraceletUpgrades, int>();
             UpgradesAmount = new Dictionary<BraceletUpgrades, float>();
@@ -31,6 +45,20 @@ namespace PlayerBundle.BraceletUpgrade
                 // This means some buttons will have to start with lvl 1 to make it easier for some effects maybe
                 UpgradesLvl.Add(upgrade, 0); // Defaults to lvl 0
                 UpgradesAmount.Add(upgrade, 0.1f); // Defaults to 0.1 upgrading
+            }
+        }
+
+        public BraceletUpgradesHandler(JsonSaveData data)
+        {
+            Init();
+
+            foreach (EnumIntItem enumIntItem in data.braceletUpgradesLvl)
+            {
+                UpgradesLvl[Enum.Parse<BraceletUpgrades>(enumIntItem.key)] = enumIntItem.value;
+            }
+            foreach (EnumFloatItem enumIntItem in data.upgradeAmount)
+            {
+                UpgradesAmount[Enum.Parse<BraceletUpgrades>(enumIntItem.key)] = enumIntItem.value;
             }
         }
 

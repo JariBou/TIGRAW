@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Enemies.EnemiesAI;
 using PlayerBundle;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
@@ -11,7 +10,7 @@ using Random = UnityEngine.Random;
 public class AutoEnemySpawning : MonoBehaviour
 {
     public List<Transform> spawningPoints;
-    public GameObject enemyPrefab;
+    [FormerlySerializedAs("enemyPrefab")] public GameObject enemyFallbackPrefab;
     public List<EnemySpawn> enemyPrefabs;
     private Player player;
 
@@ -29,7 +28,7 @@ public class AutoEnemySpawning : MonoBehaviour
     private void Awake()
     {
         _gm = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
-        player =  GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+        player = GameObject.FindWithTag("Player").GetComponent<Player>();
     }
 
     // Start is called before the first frame update
@@ -64,7 +63,7 @@ public class AutoEnemySpawning : MonoBehaviour
         if (!spawn) {return;}
 
         timer += respawnTime * Time.fixedDeltaTime;
-        if (!(timer > respawnTime)) return;
+        if (timer < respawnTime) return;
 
         int count = GetCurrentMobCap() + packSize;
         
@@ -108,7 +107,7 @@ public class AutoEnemySpawning : MonoBehaviour
                 return enemyPrefabs[i].EnemyPrefab;
             }
         }
-        return enemyPrefab;
+        return enemyFallbackPrefab;
     }
     
     private float Clamp01Relatively(float value, float maxValue)

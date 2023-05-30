@@ -1155,8 +1155,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseHeatRecoveryRate: 2
   baseBonusHeatRecoveryRate: 2
+  graceMargin: 3
   heatAmount: 0
   baseMaxHeat: 100
+  infiniteHeat: 0
 --- !u!114 &7267870841138018724
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1170,12 +1172,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseMovespeed: 400
-  baseSprintspeed: 800
   canSprint: 0
   running: 0
   isDashing: 0
-  health: 50
-  baseMaxHealth: 50
   baseAtkMultiplier: 0.9
   baseArmor: 0
   isTeleporting: 0
@@ -1184,12 +1183,14 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   pauseMenuCanvas: {fileID: 0}
+  pauseMenuPrefab: {fileID: 6903353541053280862, guid: 4acfa2b861901a24aba4fad5d702f1e8, type: 3}
   gamePaused: 0
   playerStatsScript: {fileID: 5395115190937182697}
   cameraObj: {fileID: 7267870839923698903}
   interactionRange: 1.4
   circleColliderOffset: {x: 0, y: 0, z: 0}
-  sprite: {fileID: 0}
+  spriteRenderer: {fileID: 0}
+  animator: {fileID: 0}
   heatManager: {fileID: 0}
 --- !u!114 &7267870841138018907
 MonoBehaviour:
@@ -1420,8 +1421,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseHeatRecoveryRate: 2
   baseBonusHeatRecoveryRate: 2
+  graceMargin: 3
   heatAmount: 0
   baseMaxHeat: 100
+  infiniteHeat: 0
 --- !u!1 &7277503719397141903
 GameObject:
   m_ObjectHideFlags: 0

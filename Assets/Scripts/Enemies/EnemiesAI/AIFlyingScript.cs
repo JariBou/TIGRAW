@@ -1,7 +1,5 @@
-﻿using PathFinding;
-using PlayerBundle;
+﻿using PlayerBundle;
 using UnityEngine;
-using Grid = PathFinding.Grid;
 
 namespace Enemies.EnemiesAI
 {

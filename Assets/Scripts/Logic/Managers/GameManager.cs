@@ -1,19 +1,16 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
 using LoadingScripts;
-using MainMenusScripts;
+using Logic;
 using PlayerBundle;
 using PlayerBundle.BraceletUpgrade;
 using PlayerBundle.PlayerUpgrades;
 using Saves;
-using Unity.VisualScripting;
+using Saves.JsonDictionaryHelpers;
+using ScriptableObjects;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
-using UnityEngine.UI;
-using Random = UnityEngine.Random;
 
 
 public enum SceneBuildIndex
@@ -22,14 +19,12 @@ public enum SceneBuildIndex
     OptionsMenu = 2,
     LoadingScene = 3,
     DeathScreen = 4,
-    Lobby = 5,
+    WinScreen = 5,
+    Lobby = 6,
 }
 
 public class GameManager : MonoBehaviour
 {
-    
-    private static GameManager _instance;
-
     [Range(1, 512)]
     public int UpdateRate = 30; // Frame update rate of enemy pathfinding set in settings according to performance
 
@@ -39,6 +34,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] public PlayerData playerData;
 
     public JsonSaveData currentSave;
+    public string currSaveName;
+    
     public PlayerUpgradesHandler PlayerUpgradesHandler;
     public BraceletUpgradesHandler BraceletUpgradesHandler;
     public RunData currentRunData; // I don't think I'll use this , nvm still need to diferenciate both
@@ -49,22 +46,99 @@ public class GameManager : MonoBehaviour
 
     private int currLevel = 0;
 
-    public int numberOfArenas;
-    public int numberOfBosses;
+    // ==================================================================================================================
+    public int numberOfArenas; // Number of arenas Implemented in the game
+    public int numberOfBosses; // Number of Bosses implemented in the game
+    // Might convert this part into an SO with all scenes inside
+    public int RoomAmountBeforeBoss = 2; // number of rooms before a boss
+    public int PatternNumberRep = 2; // Number of patter repetition (number of bosses) (also equals max lvl of boss)
+    // ==================================================================================================================
+    private RoomPathGenerator _roomPathGenerator;
 
     public float LocalDifficulty;
+    public SpellList spellListSO;
+    public List<SpellSO> baseUnlockedSkills;
+    public PlayerInputsHandler PlayerInputsHandler;
+    public Dictionary<String, int> spellBindings = new ();
+    public Dictionary<String, SpellSO> spellBindingsSo = new ();
+    public SpellBuyingHandler SpellBuyingHandler;
 
-    
+    [SerializeField] private SpellSO nullSpell;
+
+    [SerializeField]
+    private int NumberOfSpells = 9;
+
+    public int heatLevelSave = 0;
+
+
     private void Awake()
     {
-        _instance = this;
         SceneManager.sceneLoaded += OnSceneLoaded;
         Loot.LootPickup += OnLootPickup;
         EventManager.FlagEvent += OnFlagEvent;
+        SpellShopManager.SpellReassigned += OnSpellReassigned;
         DontDestroyOnLoad(gameObject);
         currentRunData = new RunData();
         PlayerUpgradesHandler = new PlayerUpgradesHandler();
-        BraceletUpgradesHandler = new BraceletUpgradesHandler();
+        JsonSaveData data = null;
+        try
+        {
+            currentSave = SaveManager.LoadFromJson("Save 1");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+
+        if (currentSave != null)
+        {
+            BraceletUpgradesHandler = new BraceletUpgradesHandler(currentSave);
+            SpellBuyingHandler = new SpellBuyingHandler(this, currentSave);
+
+            foreach (StringStringItem KeyValuePair in currentSave.bindedSpells)
+            {
+                Debug.Log($"Putting {KeyValuePair.value} at {KeyValuePair.key}");
+                spellBindingsSo[KeyValuePair.key] = spellListSO.Find(KeyValuePair.value, nullSpell);
+            }
+            
+        }
+        else
+        {
+            currentSave = JsonSaveData.Initialise();
+            BraceletUpgradesHandler = new BraceletUpgradesHandler();
+            SpellBuyingHandler = new SpellBuyingHandler(this);
+        }
+
+        _roomPathGenerator = new RoomPathGenerator(this, RoomAmountBeforeBoss, PatternNumberRep);
+        
+        //Just in case
+        for (int i = 0; i < NumberOfSpells; i++)
+        {
+            Debug.Log($"spellBindingsSo.ContainsKey(Spell {i}) = {spellBindingsSo.ContainsKey($"Spell {i}")}");
+            if (!spellBindingsSo.ContainsKey($"Spell {i}"))
+            {
+                Debug.Log($"/!\\ [Preventing Missing Values] Setting nullSpell to Spell {i}");
+                spellBindingsSo[$"Spell {i}"] = nullSpell;
+            }
+        }
+        
+        // TEMP:
+        // for (int i = 0; i < NumberOfSpells; i++)
+        // {
+        //     if (i >= spellListSO.Size)
+        //     {
+        //         spellBindingsSo[$"Spell {i}"] = nullSpell;
+        //         continue;
+        //     }
+        //     Debug.Log($"Spell {i} assigned to {spellListSO[i].spellName}");
+        //     spellBindingsSo[$"Spell {i}"] = spellListSO[i];
+        // }
+    }
+
+    private void OnSpellReassigned(string actionName, SpellSO spellSo)
+    {
+        Debug.Log($"Putting {spellSo.spellName} in {actionName}");
+        spellBindingsSo[actionName] = spellSo;
     }
 
     private void OnLootPickup(Loot loot)
@@ -77,7 +151,7 @@ public class GameManager : MonoBehaviour
         switch (loot.type)
         {
             case LootType.Soul:
-                currentSave.playerSouls += loot.value;
+                currentSave.playerSouls += (int)Math.Round( loot.value * (1 + BraceletUpgradesHandler.GetUpgradedAmount(BraceletUpgrades.IncreaseSoulDrop)));
                 break;
             case LootType.Coin:
                 break;
@@ -90,7 +164,6 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         //player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
-
     }
 
     private void Update()
@@ -98,11 +171,15 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F1))
         {
             currentSave.playerSouls = 9999;
+        } else if (Input.GetKeyDown(KeyCode.F3))
+        {
+            EventManager.InvokeFlagEvent(Flag.EndLevel);
         }
     }
 
     private void ResetRun()
     {
+        currLevel = 0;
         // Save stuff here
         playerData.ResetRun();
     }
@@ -111,16 +188,21 @@ public class GameManager : MonoBehaviour
     {
         if (flag == Flag.EndLevel)
         {
+            if (currLevel != 0) // if this was not lobby
+            {
+                heatLevelSave = player.heatManager.GetHeatLevel();
+            }
             currLevel++;
             UpdateLocalDifficulty();
-            if (currLevel % 2 == 0)
-            {
-                LoadScene(GetSceneBuildIndex($"Bosses/Boss{Random.Range(1, numberOfBosses)}_lvl1"));
-            }
-            else
-            {
-                LoadScene(GetSceneBuildIndex($"Arenas/Level{Random.Range(1, numberOfArenas)}"));
-            }
+            // if (currLevel % 2 == 0)
+            // {
+            //     LoadScene(GetSceneBuildIndex($"Bosses/Boss{Random.Range(1, numberOfBosses+1)}_lvl1"));
+            // }
+            // else
+            // {
+            //     LoadScene(GetSceneBuildIndex($"Arenas/Level{Random.Range(1, numberOfArenas+1)}"));
+            // }
+            LoadScene(GetSceneBuildIndex(_roomPathGenerator.Next()));
         }  
         else if (flag == Flag.PlayerDeath)
         {
@@ -149,8 +231,11 @@ public class GameManager : MonoBehaviour
         
         if(!player) {return;}
 
+        //PlayerInputsHandler.spellLinks = spellBindings;
+        
         if (scene.name == "Lobby")
         {
+            _roomPathGenerator.Regenerate();
             ResetRun();
             // This is lobby so no run data theoretically
         }
@@ -206,19 +291,25 @@ public class GameManager : MonoBehaviour
 
         sceneLoader.LoadScene(sceneId);
     }
-
-    // Start is called before the first frame update
-
+    
     private void OnDestroy()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
         EventManager.FlagEvent -= OnFlagEvent;
         Loot.LootPickup -= OnLootPickup;
+        SpellShopManager.SpellReassigned -= OnSpellReassigned;
     }
 
     public int GetSceneBuildIndex(String sceneName)
     {
+        Debug.Log($"Trying to load Scene: 'Assets/Scenes/{sceneName}.unity'");
         return SceneUtility.GetBuildIndexByScenePath($"Assets/Scenes/{sceneName}.unity");
+    }
+
+    private void OnApplicationQuit()
+    {
+        // Should Update the current save instead of creating a new JsonSaveData
+        SaveManager.SaveToJson(JsonSaveData.Initialise(), currentSave.saveName);
     }
 }
 

@@ -31,11 +31,11 @@ public class Tooltip : MonoBehaviour
         IsActive = active;
     }
 
-    public void PassData(string upgradeName, string description, int cost)
+    public void PassData(string title, string description, string lineInfo)
     {
-        NameField.text = upgradeName;
+        NameField.text = title;
         DescriptionField.text = description;
-        CostField.text = $"Cost: {cost}";
+        CostField.text = lineInfo;
     }
 
     // Update is called once per frame
