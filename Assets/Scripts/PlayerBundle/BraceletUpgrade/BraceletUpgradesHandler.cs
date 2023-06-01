@@ -20,6 +20,9 @@ namespace PlayerBundle.BraceletUpgrade
         HealthIncrease,
         AttackIncrease, // Adds to the base damage of spells
         AttackMultiplierIncrease, // Increases the multiplier
+        IFramesWhileDashing,
+        NewOverdriveLevel,
+        NewOverdriveLevels,
     }
 
     public class BraceletUpgradesHandler
@@ -85,6 +88,11 @@ namespace PlayerBundle.BraceletUpgrade
             
             UpgradesLvl[upgrade] = (int)UpgradesLvl[upgrade] + 1;
 
+        }
+
+        public void Reset()
+        {
+            Init();
         }
         
     

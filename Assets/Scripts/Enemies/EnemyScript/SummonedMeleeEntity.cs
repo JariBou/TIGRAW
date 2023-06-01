@@ -10,12 +10,14 @@ public class SummonedMeleeEntity : EnemyInterface
 
     private Transform targetEntity;
 
+    [SerializeField]
     private bool destroyOnContact = false;
 
     private Rigidbody2D rb;
     // Start is called before the first frame update
     void Start()
     {
+        base.Start();
         StartCoroutine(EndSummoningSequence(GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length));
         targetEntity = GameObject.FindWithTag("Player").gameObject.transform;
         rb = GetComponent<Rigidbody2D>();

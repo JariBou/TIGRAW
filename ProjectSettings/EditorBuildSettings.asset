@@ -21,6 +21,9 @@ EditorBuildSettings:
     path: Assets/Scenes/DeathScreen.unity
     guid: a7639879067eb1e4883224a3a75e6d48
   - enabled: 1
+    path: Assets/Scenes/WinScreen.unity
+    guid: cbfb9dd1da8c0e74596b027a438d02a0
+  - enabled: 1
     path: Assets/Scenes/Lobby.unity
     guid: 57f66271c6666ef42895a6d4b8776dd2
   - enabled: 1
@@ -38,4 +41,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Arenas/Level3.unity
     guid: 35cefc18921af8346aaa7d1a4d85fa2f
+  - enabled: 1
+    path: Assets/Scenes/Arenas/Level4.unity
+    guid: c99cc453aef8ce24791e2b014533d2b8
+  - enabled: 1
+    path: Assets/Scenes/Arenas/Level5.unity
+    guid: 71ec4fbf11beeff448d3e0422c6daa1d
   m_configObjects: {}

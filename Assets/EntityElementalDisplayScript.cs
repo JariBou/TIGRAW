@@ -35,7 +35,7 @@ public class EntityElementalDisplayScript : MonoBehaviour
         {
             if (keyValuePair.Key != StatusType.Null)
             {
-                statusTypeSpriteRenderers[keyValuePair.Key].enabled = keyValuePair.Value.isActive();
+                statusTypeSpriteRenderers[keyValuePair.Key].enabled = keyValuePair.Value.IsActive();
             }
         }
     }

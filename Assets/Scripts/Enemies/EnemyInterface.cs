@@ -27,7 +27,7 @@ namespace Enemies
         public int id;
         public Dictionary<StatusType, StatusEffect> StatusEffects = new();
 
-        private bool shocked; // for now to know if ennemy has electric status effect
+        protected bool shocked; // for now to know if ennemy has electric status effect
 
         public List<int> collidedSpellsId;
         private static readonly int IsDead = Animator.StringToHash("isDead");
@@ -37,11 +37,12 @@ namespace Enemies
         [FormerlySerializedAs("lootGameOBject")] [FormerlySerializedAs("loot")] [Header("Loot")] public GameObject lootGameObject;
         public int lootChance;
         public int lootNumber = 1;
-        private static readonly int Hurt = Animator.StringToHash("Hurt");
+        protected static readonly int Hurt = Animator.StringToHash("Hurt");
         public float Speed => speed / 100;
         public float localDifficulty = 1f;
 
-        private GameManager _gm;
+        protected GameManager _gm;
+        public bool Invincible = false;
 
 
         public void Awake()
@@ -53,7 +54,7 @@ namespace Enemies
             speed = baseSpeed;
         }
 
-        private void Start()
+        protected void Start()
         {
             MaxHealth *= localDifficulty;
             attack *= localDifficulty;
@@ -74,9 +75,9 @@ namespace Enemies
         }
 
 
-        public void Damage(float amount)
+        public virtual void Damage(float amount)
         {
-            if (amount <= 0)
+            if (amount <= 0 || Invincible)
             {
                 return;
             }
@@ -86,20 +87,22 @@ namespace Enemies
                 amount *= 1 + _gm.BraceletUpgradesHandler.GetUpgradedAmount(BraceletUpgrades.StatikDmgIncrease);
             } 
             
-            Debug.Log($"Enemy with id {id} took {amount}DMG || shocked={shocked}");
+            // Debug.Log($"Enemy with id {id} took {amount}DMG || shocked={shocked}");
             StartCoroutine(FlashOnDmg());
             health -= amount;
             animator.SetTrigger(Hurt);
         }
 
-        private IEnumerator FlashOnDmg()
+        protected IEnumerator FlashOnDmg()
         {
+            //Invincible = true;
             renderer.color = Color.red;
             yield return new WaitForSeconds(0.2f);
+            //Invincible = false;
             renderer.color = Color.white;
         }
 
-        protected void FixedUpdate()
+        public void FixedUpdate()
         {
             if (health <= 0)
             {
@@ -120,31 +123,31 @@ namespace Enemies
             }
         }
 
-        private void ResolveStatusEffects()
+        protected void ResolveStatusEffects()
         {
             foreach (var keyValuePair in StatusEffects)
             {
                 StatusEffect statusEffect = keyValuePair.Value;
                 StatusType type = keyValuePair.Key;
 
-                if (statusEffect.isActive())
+                if (statusEffect.IsActive())
                 {
-                    statusEffect.Duration -= Time.fixedDeltaTime;
+                    statusEffect.Tick(Time.fixedDeltaTime);
                     if (type == StatusType.Ice)
                     {
-                        speed = (float)(baseSpeed * (0.9 - _gm.BraceletUpgradesHandler.GetUpgradedAmount(BraceletUpgrades.IceSlowIncrease)));
+                        speed = (baseSpeed * Mathf.Clamp01((float)(0.9 - _gm.BraceletUpgradesHandler.GetUpgradedAmount(BraceletUpgrades.IceSlowIncrease))));
                     } else if (type == StatusType.Electric)
                     {
                         shocked = true;
                     } else if (type == StatusType.Fire)
                     {
-                        health -= statusEffect.Dps * Time.fixedDeltaTime * (1 +
+                        health -= statusEffect.value * Time.fixedDeltaTime * (1 +
                                                                             _gm.BraceletUpgradesHandler
                                                                                 .GetUpgradedAmount(BraceletUpgrades
                                                                                     .FireEffectDmgIncrease)) ;
                     }
                 }
-                if (!statusEffect.isActive())
+                if (!statusEffect.IsActive())
                 {
                     if (type == StatusType.Ice)
                     {

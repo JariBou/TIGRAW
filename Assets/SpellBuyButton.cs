@@ -100,7 +100,7 @@ public class SpellBuyButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     
     public void OnPointerEnter(PointerEventData eventData)
     {
-        manager.Tooltip.PassData(spellSo.spellName, spellSo.spellDescription, $"{spellSo.spellCost}");
+        manager.Tooltip.PassData(spellSo.spellName, spellSo.spellDescription, $"Cost: {spellSo.spellCost} || Overdrive cost: {spellSo.spellOverdriveCost}");
         manager.Tooltip.SetActive(true);
     }
 
@@ -116,7 +116,7 @@ public class SpellBuyButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     
     private void OnDisable()
     {
-        SpellBuyingHandler.SpellBought += OnSpellBought;
+        SpellBuyingHandler.SpellBought -= OnSpellBought;
     }
 
     private void OnSpellBought(SpellSO obj)

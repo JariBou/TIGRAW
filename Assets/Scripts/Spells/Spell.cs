@@ -16,7 +16,8 @@ namespace Spells
         Teleport,
         Projectile,
         AoeCast,
-        AoePlayer
+        AoePlayer,
+        Null
     }
 
 
@@ -25,7 +26,7 @@ namespace Spells
     {
         public float projectileSpeed = 2f;
         [FormerlySerializedAs("damage")] public float baseDamage = 10;
-        [Serialize] public float Damage => (baseDamage + _gm.BraceletUpgradesHandler.GetUpgradedAmount(BraceletUpgrades.AttackIncrease)) * player.AtkMultiplier;
+        [Serialize] public float Damage => (baseDamage + gm.BraceletUpgradesHandler.GetUpgradedAmount(BraceletUpgrades.AttackIncrease)) * player.AtkMultiplier;
         public int id; // Useless except for Spell List
         public float heatProduction = 2f;
 
@@ -81,7 +82,7 @@ namespace Spells
         internal Vector3 MousePos;
 
         public Player player;
-        private GameManager _gm;
+        [FormerlySerializedAs("_gm")] public GameManager gm;
 
         [HideInInspector] public int Id;
 
@@ -89,7 +90,7 @@ namespace Spells
         {
             Id = gameObject.GetInstanceID();
             player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>(); // What's the difference with FindWithTag
-            _gm = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>(); 
+            gm = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>(); 
         }
 
         // Start is called before the first frame update
@@ -103,8 +104,8 @@ namespace Spells
             transform.position = player.GetPosition();
             Direction = (MousePos - player.GetPosition());
             Direction /= Direction.magnitude;
-            
-            
+
+
 
             switch (spellType)
             {
@@ -141,7 +142,7 @@ namespace Spells
                     if (Direction.x < 0)
                     {
                         GetComponent<SpriteRenderer>().flipY = true;
-                        GetComponent<CircleCollider2D>().offset *= new Vector2(1, -1);
+                        GetComponent<Collider2D>().offset *= new Vector2(1, -1);
                     }
 
                     float angle = Mathf.Atan2(Direction.y, Direction.x) * Mathf.Rad2Deg;

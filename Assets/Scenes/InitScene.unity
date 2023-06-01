@@ -295,7 +295,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 631918184}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c20ec469c2d643b291cca5dcffd305c0, type: 3}
   m_Name: 
@@ -647,6 +647,34 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1675560712, guid: 75bd672e660d33140a8f412e0587b654, type: 3}
+      propertyPath: BossMusics.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1675560712, guid: 75bd672e660d33140a8f412e0587b654, type: 3}
+      propertyPath: ArenaMusics.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1675560712, guid: 75bd672e660d33140a8f412e0587b654, type: 3}
+      propertyPath: LobbyMusics.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1675560712, guid: 75bd672e660d33140a8f412e0587b654, type: 3}
+      propertyPath: BossMusics.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: 180be3ca9d28d4449aa455b8eb587c8f, type: 3}
+    - target: {fileID: 1675560712, guid: 75bd672e660d33140a8f412e0587b654, type: 3}
+      propertyPath: ArenaMusics.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: a78525cf011f2b24cb8038d3d577890b, type: 3}
+    - target: {fileID: 1675560712, guid: 75bd672e660d33140a8f412e0587b654, type: 3}
+      propertyPath: ArenaMusics.Array.data[1]
+      value: 
+      objectReference: {fileID: 8300000, guid: f399828b4ae45824685456bf784138fc, type: 3}
+    - target: {fileID: 1675560712, guid: 75bd672e660d33140a8f412e0587b654, type: 3}
+      propertyPath: LobbyMusics.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: 315eb2a44c4735d47bbd4f14b54f8cce, type: 3}
     - target: {fileID: 8078604622743268930, guid: 75bd672e660d33140a8f412e0587b654, type: 3}
       propertyPath: m_Name
       value: GameManager
@@ -713,15 +741,35 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8078604622743268941, guid: 75bd672e660d33140a8f412e0587b654, type: 3}
       propertyPath: numberOfArenas
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8078604622743268941, guid: 75bd672e660d33140a8f412e0587b654, type: 3}
       propertyPath: numberOfBosses
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8078604622743268941, guid: 75bd672e660d33140a8f412e0587b654, type: 3}
+      propertyPath: HeatMaluses.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8078604622743268941, guid: 75bd672e660d33140a8f412e0587b654, type: 3}
       propertyPath: baseUnlockedSkills.Array.size
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8078604622743268941, guid: 75bd672e660d33140a8f412e0587b654, type: 3}
+      propertyPath: HeatMaluses.Array.data[0].value
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8078604622743268941, guid: 75bd672e660d33140a8f412e0587b654, type: 3}
+      propertyPath: HeatMaluses.Array.data[1].value
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8078604622743268941, guid: 75bd672e660d33140a8f412e0587b654, type: 3}
+      propertyPath: HeatMaluses.Array.data[2].value
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8078604622743268941, guid: 75bd672e660d33140a8f412e0587b654, type: 3}
+      propertyPath: HeatMaluses.Array.data[3].value
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8078604622743268941, guid: 75bd672e660d33140a8f412e0587b654, type: 3}
       propertyPath: baseUnlockedSkills.Array.data[0]
@@ -731,6 +779,54 @@ PrefabInstance:
       propertyPath: baseUnlockedSkills.Array.data[1]
       value: 
       objectReference: {fileID: 11400000, guid: a95a08e1561b6244284f5f977530208c, type: 2}
+    - target: {fileID: 8078604622743268941, guid: 75bd672e660d33140a8f412e0587b654, type: 3}
+      propertyPath: HeatMaluses.Array.data[0].StatusType
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8078604622743268941, guid: 75bd672e660d33140a8f412e0587b654, type: 3}
+      propertyPath: HeatMaluses.Array.data[1].StatusType
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8078604622743268941, guid: 75bd672e660d33140a8f412e0587b654, type: 3}
+      propertyPath: HeatMaluses.Array.data[2].StatusType
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8078604622743268941, guid: 75bd672e660d33140a8f412e0587b654, type: 3}
+      propertyPath: HeatMaluses.Array.data[3].StatusType
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8078604622743268941, guid: 75bd672e660d33140a8f412e0587b654, type: 3}
+      propertyPath: currentSave.bindedSpells.items.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8078604622743268941, guid: 75bd672e660d33140a8f412e0587b654, type: 3}
+      propertyPath: currentSave.unlockedSpellsSoName.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8078604622743268941, guid: 75bd672e660d33140a8f412e0587b654, type: 3}
+      propertyPath: currentSave.unlockedSpellsSoName.Array.data[0]
+      value: FireFreesby
+      objectReference: {fileID: 0}
+    - target: {fileID: 8078604622743268941, guid: 75bd672e660d33140a8f412e0587b654, type: 3}
+      propertyPath: currentSave.unlockedSpellsSoName.Array.data[1]
+      value: ThunderStrike
+      objectReference: {fileID: 0}
+    - target: {fileID: 8078604622743268941, guid: 75bd672e660d33140a8f412e0587b654, type: 3}
+      propertyPath: currentSave.bindedSpells.items.Array.data[0].key
+      value: Spell 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8078604622743268941, guid: 75bd672e660d33140a8f412e0587b654, type: 3}
+      propertyPath: currentSave.bindedSpells.items.Array.data[1].key
+      value: Spell 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8078604622743268941, guid: 75bd672e660d33140a8f412e0587b654, type: 3}
+      propertyPath: currentSave.bindedSpells.items.Array.data[0].value
+      value: FireFreesby
+      objectReference: {fileID: 0}
+    - target: {fileID: 8078604622743268941, guid: 75bd672e660d33140a8f412e0587b654, type: 3}
+      propertyPath: currentSave.bindedSpells.items.Array.data[1].value
+      value: ThunderStrike
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 75bd672e660d33140a8f412e0587b654, type: 3}

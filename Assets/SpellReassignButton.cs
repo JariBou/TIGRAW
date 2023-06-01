@@ -28,7 +28,12 @@ public class SpellReassignButton : MonoBehaviour, IPointerClickHandler, IPointer
         icon.sprite = _spellSo.icon;
         icon.gameObject.SetActive(true);
     }
-    
+
+    private void OnDisable()
+    {
+        manager.Tooltip.SetActive(false);
+    }
+
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (_spellSo.spellTypeId == -1) {return;}

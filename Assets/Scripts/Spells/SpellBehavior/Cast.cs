@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Enemies;
+using Unity.VisualScripting;
 using UnityEngine;
 
 // Cast will be used for AOE Attacks around player AND AOE Targeted Attacks
@@ -12,8 +13,8 @@ namespace Spells.SpellBehavior
         public Spell spell;
         // ReSharper disable once FieldCanBeMadeReadOnly.Local
         private Collider2D[] _results = new Collider2D[32];
-        
-        public List<int> collidedEnnemiesId;
+
+        public List<int> collidedEnnemiesId = new (32);
 
 
         // Start is called before the first frame update
@@ -40,16 +41,54 @@ namespace Spells.SpellBehavior
 
         private void DealDamage()
         {
+            // Debug.Log("DEALING DMG");
             var size = Physics2D.OverlapCircleNonAlloc(transform.position + spell.centerOffset, spell.damageRadius, _results, spell.enemyLayer);
-
             for (int i = 0; i < size; i++)
             {
+                Debug.Log(_results[i].gameObject.name);
                 try
                 {
-                    if (_results[i].isTrigger) {continue;}
-                    EnemyInterface enemy = _results[i].GetComponent<EnemyInterface>();
+                    EnemyInterface enemy;
+                    if (_results[i].isTrigger)
+                    {
+                        if (_results[i].CompareTag("Enemy Hitbox"))
+                        {
+                            // Debug.Log("Ennemy Hitbox!!");
+                            enemy = _results[i].GetComponentInParent<EnemyInterface>();
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                    }
+                    else
+                    {
+                        if (_results[i].CompareTag("Enemy"))
+                        {
+                            // Debug.Log("Ennemy!!");
+                            enemy = _results[i].GetComponent<EnemyInterface>();
+                        } else {
+                            continue;
+                        }
+                    }
+
+                    if (enemy == null)
+                    {
+                        // Debug.Log("Ennemy script null");
+                        continue;
+                    }
+                    if (collidedEnnemiesId.Contains(enemy.id)){continue;}
+                    
+                    collidedEnnemiesId.Add(enemy.id);
+                    StartCoroutine(DelayedRemoval(spell.interactionInterval>0 ? spell.interactionInterval : 5f, enemy.id));
+                    
+                    Debug.Log($"Dealing Damage to {enemy.gameObject.name}");
                     enemy.Damage(spell.Damage);
                     spell.ApplyStatus(enemy);
+                    if (spell.hasOnHitEffect)
+                    {
+                        Instantiate(spell.onHitEffect, _results[i].transform.position, transform.rotation);
+                    }
                 }
                 catch (Exception e)
                 {
@@ -104,7 +143,10 @@ namespace Spells.SpellBehavior
             
             enemyScript.TryDamage(spell.Damage, spell);
             spell.ApplyStatus(enemyScript);
-            
+            if (spell.hasOnHitEffect)
+            {
+                Instantiate(spell.onHitEffect, col.transform.position, transform.rotation);
+            }
         }
 
         private void OnTriggerStay2D(Collider2D col)
@@ -125,7 +167,6 @@ namespace Spells.SpellBehavior
             {
                 if (col.CompareTag("Enemy Hitbox"))
                 {
-                    Debug.Log("Enemy Additional Hitbox");
                     enemyScript = col.GetComponentInParent<EnemyInterface>();
                 }
                 else
@@ -144,6 +185,10 @@ namespace Spells.SpellBehavior
             
             enemyScript.TryDamage(spell.Damage, spell);
             spell.ApplyStatus(enemyScript);
+            if (spell.hasOnHitEffect)
+            {
+                Instantiate(spell.onHitEffect, col.transform.position, transform.rotation);
+            }
         }
         
         IEnumerator DelayedRemoval(float delay, int id)

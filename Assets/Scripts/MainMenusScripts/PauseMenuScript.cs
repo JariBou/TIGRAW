@@ -1,6 +1,7 @@
 using PlayerBundle;
 using Saves;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace MainMenusScripts
 {
@@ -33,10 +34,11 @@ namespace MainMenusScripts
             player.pauseMenuCanvas.enabled = player.gamePaused;
         }
 
-        public void GoToSettings()
+        public void Options()
         {
-            
+            SceneManager.LoadScene((int)SceneBuildIndex.OptionsMenu, LoadSceneMode.Additive);
         }
+        
         [ContextMenu("SaveData")]
         public void Save()
         {

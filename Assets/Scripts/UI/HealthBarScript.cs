@@ -17,7 +17,7 @@ public class HealthBarScript : MonoBehaviour
     void FixedUpdate()
     {
         // Maybe create event when player's health changes
-        float playerMaxHealth = player.MaxHealth;
+        float playerMaxHealth = player.GetMaxHealth();
         float playerHealth = player.health;
 
 

@@ -1,3 +1,4 @@
+using PlayerBundle.BraceletUpgrade;
 using UnityEngine;
 
 namespace Spells.SpellBehavior
@@ -13,7 +14,11 @@ namespace Spells.SpellBehavior
         void Start()
         {
             savedMoveVector = spell.player.GetMoveVector();
-        
+            
+            Debug.LogWarning(spell.gm.BraceletUpgradesHandler.GetUpgradedAmount(BraceletUpgrades.IFramesWhileDashing));
+            spell.player.heatManager.heatAmount +=
+                spell.gm.BraceletUpgradesHandler.GetUpgradedAmount(BraceletUpgrades.IFramesWhileDashing);
+
             // Problem when dashing towards positive x
             // Player's body velocity set to 0 when pressing spacebar somehow?? and only affecting towards positive x
             Debug.LogWarning($"moveVector={savedMoveVector}");

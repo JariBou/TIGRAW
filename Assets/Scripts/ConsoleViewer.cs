@@ -4,6 +4,7 @@ namespace DefaultNamespace
 {
     public class ConsoleViewer: MonoBehaviour
     {
+        // Need to comment it to be able to disable it for building without it
         //#if !UNITY_EDITOR
         static string myLog = "";
         private string output;

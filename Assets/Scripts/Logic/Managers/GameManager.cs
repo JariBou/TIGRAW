@@ -8,6 +8,7 @@ using PlayerBundle.PlayerUpgrades;
 using Saves;
 using Saves.JsonDictionaryHelpers;
 using ScriptableObjects;
+using Spells;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
@@ -33,7 +34,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] public PlayerData playerData;
 
-    public JsonSaveData currentSave;
+    public JsonSaveData currentSave; // There is always a default save
     public string currSaveName;
     
     public PlayerUpgradesHandler PlayerUpgradesHandler;
@@ -69,6 +70,10 @@ public class GameManager : MonoBehaviour
     private int NumberOfSpells = 9;
 
     public int heatLevelSave = 0;
+    public List<StatusEffect> HeatMaluses;
+    public List<GameObject> HeatMalusesDisplay;
+
+    public UIController uiController;
 
 
     private void Awake()
@@ -77,6 +82,7 @@ public class GameManager : MonoBehaviour
         Loot.LootPickup += OnLootPickup;
         EventManager.FlagEvent += OnFlagEvent;
         SpellShopManager.SpellReassigned += OnSpellReassigned;
+        BraceletUpgradeButton.OnBraceletUpgrade += OnBraceletUpgrade;
         DontDestroyOnLoad(gameObject);
         currentRunData = new RunData();
         PlayerUpgradesHandler = new PlayerUpgradesHandler();
@@ -89,32 +95,20 @@ public class GameManager : MonoBehaviour
         {
             Console.WriteLine(e);
         }
+        
+        BraceletUpgradesHandler = new BraceletUpgradesHandler(currentSave);
+        SpellBuyingHandler = new SpellBuyingHandler(this, currentSave);
 
-        if (currentSave != null)
+        foreach (StringStringItem KeyValuePair in currentSave.bindedSpells)
         {
-            BraceletUpgradesHandler = new BraceletUpgradesHandler(currentSave);
-            SpellBuyingHandler = new SpellBuyingHandler(this, currentSave);
-
-            foreach (StringStringItem KeyValuePair in currentSave.bindedSpells)
-            {
-                Debug.Log($"Putting {KeyValuePair.value} at {KeyValuePair.key}");
-                spellBindingsSo[KeyValuePair.key] = spellListSO.Find(KeyValuePair.value, nullSpell);
-            }
-            
+            spellBindingsSo[KeyValuePair.key] = spellListSO.Find(KeyValuePair.value, nullSpell);
         }
-        else
-        {
-            currentSave = JsonSaveData.Initialise();
-            BraceletUpgradesHandler = new BraceletUpgradesHandler();
-            SpellBuyingHandler = new SpellBuyingHandler(this);
-        }
-
+        
         _roomPathGenerator = new RoomPathGenerator(this, RoomAmountBeforeBoss, PatternNumberRep);
         
         //Just in case
         for (int i = 0; i < NumberOfSpells; i++)
         {
-            Debug.Log($"spellBindingsSo.ContainsKey(Spell {i}) = {spellBindingsSo.ContainsKey($"Spell {i}")}");
             if (!spellBindingsSo.ContainsKey($"Spell {i}"))
             {
                 Debug.Log($"/!\\ [Preventing Missing Values] Setting nullSpell to Spell {i}");
@@ -133,6 +127,14 @@ public class GameManager : MonoBehaviour
         //     Debug.Log($"Spell {i} assigned to {spellListSO[i].spellName}");
         //     spellBindingsSo[$"Spell {i}"] = spellListSO[i];
         // }
+    }
+
+    private void OnBraceletUpgrade(BraceletUpgrades obj)
+    {
+        if (obj == BraceletUpgrades.HealthIncrease)
+        {
+            playerData.health = player.GetMaxHealth();
+        }
     }
 
     private void OnSpellReassigned(string actionName, SpellSO spellSo)
@@ -206,6 +208,8 @@ public class GameManager : MonoBehaviour
         }  
         else if (flag == Flag.PlayerDeath)
         {
+            heatLevelSave = 0;
+            
             LoadScene(SceneBuildIndex.DeathScreen);
             currLevel = 0;
         }
@@ -213,7 +217,7 @@ public class GameManager : MonoBehaviour
 
     private void UpdateLocalDifficulty()
     {
-        LocalDifficulty = (currLevel * currLevel + 10 * currLevel + 89) / 100f;
+        LocalDifficulty = (currLevel * currLevel + 40 * currLevel + 70) / 100f;
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -221,6 +225,7 @@ public class GameManager : MonoBehaviour
         try
         {
             player = GameObject.FindWithTag("Player").GetComponent<Player>();
+            uiController = GameObject.FindWithTag("UIController").GetComponent<UIController>();
         }
         catch (Exception e)
         {
@@ -235,11 +240,11 @@ public class GameManager : MonoBehaviour
         
         if (scene.name == "Lobby")
         {
+            GetComponent<SoundManager>().PlayRandomLobbyMusic();
             _roomPathGenerator.Regenerate();
             ResetRun();
             // This is lobby so no run data theoretically
         }
-        
 
 
         //sceneLoader = GameObject.Find("LoadingScreen").GetComponent<SceneLoader>();
@@ -279,6 +284,7 @@ public class GameManager : MonoBehaviour
 
     public void LoadScene(SceneBuildIndex sceneId)
     {
+        GetComponent<SoundManager>().StopMusic();
         LoadScene((int)sceneId);
     }
     
@@ -298,6 +304,7 @@ public class GameManager : MonoBehaviour
         EventManager.FlagEvent -= OnFlagEvent;
         Loot.LootPickup -= OnLootPickup;
         SpellShopManager.SpellReassigned -= OnSpellReassigned;
+        BraceletUpgradeButton.OnBraceletUpgrade -= OnBraceletUpgrade;
     }
 
     public int GetSceneBuildIndex(String sceneName)

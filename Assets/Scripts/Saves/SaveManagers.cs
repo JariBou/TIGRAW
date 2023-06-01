@@ -74,7 +74,7 @@ namespace Saves
             string filepath = Application.persistentDataPath + "/" + filename + (filename.EndsWith(".json") ? ""
                 : ".json");
             string jsonData = File.ReadAllText(filepath);
-            Debug.LogWarning(jsonData);
+
 
             JsonSaveData data = JsonUtility.FromJson<JsonSaveData>(jsonData);
             return data;

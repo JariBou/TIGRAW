@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Spells
 {
@@ -10,28 +11,31 @@ namespace Spells
         Ice,
         Poison,
         Electric,
+        Slow,
+        DmgTakenIncrease,
+        HeatReductionRateDecrease,
     }
     
     [Serializable]
     public class StatusEffect
     {
         public StatusType StatusType;
-        public float Dps;
+        [FormerlySerializedAs("Dps")] public float value;
         public float Duration;
-
-        public StatusEffect(StatusType statusType, float dps, float duration)
+        // For Overdrive Maluses if duration is 1 the its active else its not
+        public StatusEffect(StatusType statusType, float Value, float duration)
         {
             StatusType = statusType;
-            Dps = dps;
+            value = Value;
             Duration = duration;
         }
 
         public StatusEffect Copy()
         {
-            return new StatusEffect(StatusType, Dps, Duration);
+            return new StatusEffect(StatusType, value, Duration);
         }
 
-        public bool isActive()
+        public bool IsActive()
         {
             return Duration > 0;
         }
@@ -43,12 +47,16 @@ namespace Spells
                 throw new InvalidOperationException();
             }
             
-            float potential1 = effect1.Dps>0 ? effect1.Duration * effect1.Dps: effect1.Duration;
-            float potential2 = effect2.Dps>0 ? effect2.Duration * effect2.Dps: effect2.Duration;
+            float potential1 = effect1.value>0 ? effect1.Duration * effect1.value: effect1.Duration;
+            float potential2 = effect2.value>0 ? effect2.Duration * effect2.value: effect2.Duration;
 
             return potential1 >= potential2 ? effect1 : effect2;
             
         }
 
+        public void Tick(float fixedDeltaTime)
+        {
+            Duration -= fixedDeltaTime;
+        }
     }
 }

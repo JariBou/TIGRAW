@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using MainMenusScripts;
 using PlayerBundle;
@@ -31,17 +32,29 @@ namespace UI
             BraceletUpgradeButton.OnBraceletUpgrade -= OnBraceletUpgrade;
         }
 
-        void Start()
+        private void Awake()
         {
             _playerScript = GameObject.FindWithTag("Player").GetComponent<Player>();
-            _heatManager = _playerScript.heatManager;
-        
+            _heatManager = GameObject.FindWithTag("Player").GetComponent<HeatManager>();
             baseWidth = container.rect.width; // Height and width are reversed because otherwise shit goes crazy
-            float heatRatio = _heatManager.MaxHeat / _heatManager.baseMaxHeat;
+        }
 
-            container.sizeDelta = new Vector2(baseWidth * heatRatio, container.sizeDelta.y);
+        void Start()
+        {
+            // _playerScript = GameObject.FindWithTag("Player").GetComponent<Player>();
+            // _heatManager = _playerScript.heatManager;
+        
+            
+            OverdriveBarResize();
 
             HeatLevel = _heatManager.GetHeatLevel();
+
+            FlammesReset();
+
+            // for (int i = 0; i < _heatManager.MaxHeatLevel-1; i++)
+            // {
+            //     flammes[i].gameObject.SetActive(true);
+            // }
 
             for (int i = 0; i < HeatLevel; i++)
             {
@@ -51,12 +64,36 @@ namespace UI
 
         void OnBraceletUpgrade(BraceletUpgrades upgrade)
         {
+            // Debug.LogWarning("OnBraceletUpgrade");
             if (upgrade == BraceletUpgrades.BonusMaxHeat)
             {
-                float heatRatio = _heatManager.MaxHeat / _heatManager.baseMaxHeat;
-
-                container.sizeDelta = new Vector2(baseWidth * heatRatio, container.sizeDelta.y);
+                OverdriveBarResize();
+            } else if (upgrade is BraceletUpgrades.NewOverdriveLevel or BraceletUpgrades.NewOverdriveLevels)
+            {
+                FlammesReset();
             }
+        }
+
+        public void OverdriveBarResize()
+        {
+            float heatRatio = _heatManager.GetMaxHeat() / _heatManager.baseMaxHeat;
+
+            container.sizeDelta = new Vector2(baseWidth * heatRatio, container.sizeDelta.y);
+        }
+
+        public void FlammesReset()
+        {
+            Debug.Log("Resetting Flammes");
+            for (int i = 0; i < flammes.Count; i++)
+            {
+                flammes[i].gameObject.SetActive(false);
+
+                if (i < _heatManager.GetMaxHeatLevel()-1)
+                {
+                    flammes[i].gameObject.SetActive(true);
+                }
+            }
+
         }
 
         void FixedUpdate()
@@ -64,6 +101,7 @@ namespace UI
             if (_heatManager.GetHeatLevel() != HeatLevel)
             {
                 int diff = _heatManager.GetHeatLevel() - HeatLevel; // 1 = we light one up, -1 = we turn one off
+                if (HeatLevel>flammes.Count || HeatLevel<0){return;}
                 if (diff == 1)
                 {
                     if (flammes[HeatLevel].isActiveAndEnabled)
@@ -72,7 +110,7 @@ namespace UI
                     }
                 } else if (diff == -1)
                 {
-                    if (flammes[HeatLevel].isActiveAndEnabled)
+                    if (flammes[HeatLevel-1].isActiveAndEnabled)
                     {
                         flammes[HeatLevel-1].Toggle();
                     }
@@ -82,7 +120,7 @@ namespace UI
         
         
             int currHeat = _heatManager.GetHeat();
-            float ratio = currHeat / _heatManager.MaxHeat;
+            float ratio = currHeat / _heatManager.GetMaxHeat();
 
             fillImg.fillAmount = ratio;
         }

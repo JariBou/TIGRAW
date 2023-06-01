@@ -124,7 +124,7 @@ namespace MainMenusScripts
 
         public void Back()
         {
-            SceneManager.UnloadSceneAsync(2);
+            SceneManager.UnloadSceneAsync((int)SceneBuildIndex.OptionsMenu);
         }
     
     }

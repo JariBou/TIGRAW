@@ -104,7 +104,7 @@ namespace Spells.SpellBehavior
                 spell.ApplyStatus(enemyScript);
                 if (spell.hasOnHitEffect)
                 {
-                    Instantiate(spell.onHitEffect, transform.position, transform.rotation);
+                    Instantiate(spell.onHitEffect, col.transform.position, transform.rotation);
                 }
 
                 if (spell.isInfPierce) return;

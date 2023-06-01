@@ -1,4 +1,6 @@
+using System;
 using PlayerBundle.BraceletUpgrade;
+using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -35,9 +37,22 @@ public class BraceletUpgradeManager : MonoBehaviour
 
     private void Start()
     {
-        firstUpgrade.SetInitialState();
+        firstUpgrade.SetInitialState(isFirst: true);
         StartCoroutine(firstUpgrade.InitConnections());
     }
 
-  
+    public void ResetUpgrades()
+    {
+        foreach (Transform connection in connectionsParent.transform)
+        {
+            Destroy(connection.gameObject);
+        }
+        gameManager.BraceletUpgradesHandler.Reset();
+        
+        gameManager.uiController.OverdriveDisplayScript.FlammesReset();
+        gameManager.uiController.OverdriveDisplayScript.OverdriveBarResize();
+        
+        firstUpgrade.SetInitialState(isFirst: true);
+        StartCoroutine(firstUpgrade.InitConnections());
+    }
 }

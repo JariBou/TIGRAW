@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 
 public class SoundManager : MonoBehaviour
 {
@@ -12,6 +13,11 @@ public class SoundManager : MonoBehaviour
 
     private Dictionary<string, List<AudioClip>> audioDict = new();
 
+    public List<AudioClip> LobbyMusics;
+    public List<AudioClip> ArenaMusics;
+    public List<AudioClip> BossMusics;
+    
+
     private AudioSource audioSource;
     private Scene currentScene; 
 
@@ -20,27 +26,56 @@ public class SoundManager : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
         
         
-        foreach (var sceneAudio in audios)
-        {
-            audioDict.Add(sceneAudio.SceneName, sceneAudio.audioSourceList);
-        }
+        // foreach (var sceneAudio in audios)
+        // {
+        //     audioDict.Add(sceneAudio.SceneName, sceneAudio.audioSourceList);
+        // }
 
 
-        SceneManager.sceneLoaded += OnSceneLoaded;
+        // SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    private void OnSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
+    public void StopMusic()
     {
-        currentScene = scene;
-        if (!playMusic) return;
-        audioSource.loop = false;
         audioSource.Stop();
-        if (scene.name == "Lobby")
-        {
-            PlayLoopingMusic(audioDict["Lobby"][0]);
-        }
-        // throw new NotImplementedException();
     }
+
+    public void PlayRandomLobbyMusic()
+    {
+        StopMusic();
+        audioSource.clip = LobbyMusics[Random.Range(0, LobbyMusics.Count)];
+        audioSource.Play();
+        audioSource.loop = true;
+    }
+    
+    public void PlayRandomArenaMusic()
+    {
+        StopMusic();
+        audioSource.clip = ArenaMusics[Random.Range(0, ArenaMusics.Count)];
+        audioSource.Play();
+        audioSource.loop = true;
+    }
+    
+    public void PlayRandomBossMusic()
+    {
+        StopMusic();
+        audioSource.clip = BossMusics[Random.Range(0, BossMusics.Count)];
+        audioSource.Play();
+        audioSource.loop = true;
+    }
+
+    // private void OnSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
+    // {
+    //     currentScene = scene;
+    //     if (!playMusic) return;
+    //     audioSource.loop = false;
+    //     audioSource.Stop();
+    //     if (scene.name == "Lobby")
+    //     {
+    //         PlayLoopingMusic(audioDict["Lobby"][0]);
+    //     }
+    //     // throw new NotImplementedException();
+    // }
     
     IEnumerator PlayLobbyMusic()
     {
@@ -50,7 +85,7 @@ public class SoundManager : MonoBehaviour
         audioSource.loop = true;
     }
 
-    private void PlayLoopingMusic(AudioClip clip)
+    public void PlayLoopingMusic(AudioClip clip)
     {
         audioSource.clip = clip;
         audioSource.Play();

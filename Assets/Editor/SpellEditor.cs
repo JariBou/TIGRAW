@@ -12,7 +12,18 @@ namespace Editor
             base.OnInspectorGUI();
 
             Spell spell = (Spell)target;
-        
+            
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField("Parameters", EditorStyles.boldLabel);
+            
+            spell.hasOnHitEffect = EditorGUILayout.Toggle("Has On Hit Effect", spell.hasOnHitEffect);
+            if (spell.hasOnHitEffect)
+            {
+                EditorGUI.indentLevel++;
+                spell.onHitEffect = EditorGUILayout.ObjectField("On Hit Effect", spell.onHitEffect, typeof(GameObject)) as GameObject;
+                EditorGUI.indentLevel--;
+            }
+
             if (spell.spellType == SpellsType.Projectile)
             {
                 DrawProjectileParameters(spell);
@@ -30,9 +41,6 @@ namespace Editor
 
         private void DrawCastParameters(Spell spell)
         {
-            EditorGUILayout.Space();
-            EditorGUILayout.LabelField("Parameters", EditorStyles.boldLabel);
-
             spell.zoneSpell = EditorGUILayout.Toggle("has Zone Duration", spell.zoneSpell);
 
             if (spell.zoneSpell)
@@ -51,9 +59,6 @@ namespace Editor
 
         private void DrawDashParameters(Spell spell)
         {
-            EditorGUILayout.Space();
-            EditorGUILayout.LabelField("Parameters", EditorStyles.boldLabel);
-
             spell.dashDistance = EditorGUILayout.IntField("Dash Distance", spell.dashDistance);
         
             if (spell.baseDamage > 0)
@@ -96,9 +101,6 @@ namespace Editor
 
         private void DrawTeleportParameters(Spell spell)
         {
-            EditorGUILayout.Space();
-            EditorGUILayout.LabelField("Parameters", EditorStyles.boldLabel);
-
             spell.startParticles = EditorGUILayout.ObjectField("Start Particles" ,spell.startParticles, typeof(GameObject), true) as GameObject;
             spell.endParticles = EditorGUILayout.ObjectField("End Particles" ,spell.endParticles, typeof(GameObject), true) as GameObject;
         
@@ -113,9 +115,6 @@ namespace Editor
 
         private static void DrawProjectileParameters(Spell spell)
         {
-            EditorGUILayout.Space();
-            EditorGUILayout.LabelField("Parameters", EditorStyles.boldLabel);
-
             /* spell.isInfPierce = EditorGUILayout.BeginToggleGroup("Has Inf Piercing", spell.isInfPierce);
         spell.pierce = EditorGUILayout.IntSlider("Pierce Amount", spell.pierce, 1, 256);
         EditorGUILayout.EndToggleGroup(); */
@@ -131,13 +130,7 @@ namespace Editor
                 EditorGUI.indentLevel--;
             }
         
-            spell.hasOnHitEffect = EditorGUILayout.Toggle("Has On Hit Effect", spell.hasOnHitEffect);
-            if (spell.hasOnHitEffect)
-            {
-                EditorGUI.indentLevel++;
-                spell.onHitEffect = EditorGUILayout.ObjectField("On Hit Effect", spell.onHitEffect, typeof(GameObject)) as GameObject;
-                EditorGUI.indentLevel--;
-            }
+           
             spell.phantom = EditorGUILayout.Toggle("Passes through Walls", spell.phantom);
 
         }

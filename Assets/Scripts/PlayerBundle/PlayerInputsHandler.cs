@@ -17,7 +17,6 @@ namespace PlayerBundle
         public Dictionary<string, Delegate> bindingLinks; // Dictionnary of <InputAction.name>
         // TODO: Problem if is composite like wasd, using InputAction.name should resolve that
     
-        [FormerlySerializedAs("spellLinks")] public Dictionary<string, int> spellIdLinks;
         public Dictionary<string, SpellSO> spellSoLinks;
 
         private static readonly int XMovement = Animator.StringToHash("xMovement");
@@ -34,7 +33,6 @@ namespace PlayerBundle
         private void Awake()
         {
             bindingLinks = new Dictionary<string, Delegate>();
-            spellIdLinks = new Dictionary<string, int>();
             playerActions = new PlayerActions();
             bindingLinks.Add("A", new Action<InputAction.CallbackContext>(Move));
             _gm = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
@@ -83,7 +81,6 @@ namespace PlayerBundle
                         bindingLinks[action.name] = new Action<InputAction.CallbackContext>(Run);
                         break;
                     case not null when action.name.StartsWith("Spell"):
-                        spellIdLinks[action.name] = int.Parse(action.name.Substring(action.name.Length-1, 1)); // Get the number of the spell, won't work with 2 digits tho so need to change
                         bindingLinks[action.name] = new Action<InputAction.CallbackContext>(ResolveSpellCastedBySo);
                         break;
                 }
@@ -174,12 +171,12 @@ namespace PlayerBundle
         public void TryInteracting(InputAction.CallbackContext context)
         {
             if (context.canceled) {return;}
-            Debug.Log("Trying to interact");
+            //Debug.Log("Trying to interact");
             Collider2D[] results = Physics2D.OverlapCircleAll(player.GetPosition(), player.interactionRange, player.interactableLayers);
 
             foreach (Collider2D col in results)
             {
-                if (col.CompareTag("Interactable") || col.isTrigger)
+                if (col.CompareTag("Interactable") && col.isTrigger)
                 {
                     try
                     {
@@ -188,7 +185,7 @@ namespace PlayerBundle
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine(e); 
+                        Debug.Log("Exception in TryInteracting script PlayerInputHandler");
                     }
                 }
             }
@@ -206,14 +203,6 @@ namespace PlayerBundle
             }
         }
 
-        // OLD
-        private void ResolveSpellCastedByID(InputAction.CallbackContext context)
-        {
-            if (context.canceled || !canCastSpells) {return;}
-            int spellId = spellIdLinks[context.action.name];
-            player.heatManager.CastSpell(context, spellId);
-        }
-        
         // NEW
         private void ResolveSpellCastedBySo(InputAction.CallbackContext context)
         {
@@ -224,9 +213,8 @@ namespace PlayerBundle
 
             StartCoroutine(DoubleCastPrevent(actionName));
             
-            Debug.Log(context.started);
             SpellSO spellSo = _gm.spellBindingsSo[actionName];
-            Debug.Log($"SpellSo: {spellSo.spellName} VIA {actionName}");
+            //Debug.Log($"SpellSo: {spellSo.spellName} VIA {actionName}");
             if (spellSo.spellTypeId == -1) // null spell
             {
                 return;
@@ -251,7 +239,7 @@ namespace PlayerBundle
 
                 if (actionName is "Escape" or "Interact")
                 {
-                    Debug.Log("InMenu!");
+                    //Debug.Log("InMenu!");
                     TryInteracting(context);
                 }
                 return;

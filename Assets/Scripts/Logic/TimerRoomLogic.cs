@@ -17,6 +17,7 @@ public class TimerRoomLogic : MonoBehaviour
     private void Awake()
     {
         _autoEnemySpawning = GameObject.FindWithTag("SpawnHandler").GetComponent<AutoEnemySpawning>();
+        GameObject.FindWithTag("GameManager").GetComponent<SoundManager>().PlayRandomArenaMusic();
     }
 
     // Start is called before the first frame update

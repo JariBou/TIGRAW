@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using Enemies;
 using UnityEngine;
 
@@ -11,6 +13,7 @@ namespace Spells.SpellBehavior
         
         private Collider2D[] _results = new Collider2D[32];
 
+        public List<int> collidedEnnemiesId = new (32);
 
         // Start is called before the first frame update
         void Start()
@@ -49,11 +52,21 @@ namespace Spells.SpellBehavior
             {
                 try
                 {
-                    if (!_results[i].CompareTag("Enemy")) continue; // If enemy additional hitbox basically
+                    if (!(_results[i].CompareTag("Enemy") || _results[i].CompareTag("Enemy Hitbox"))) continue; 
                     
-                    EnemyInterface enemy = _results[i].GetComponent<EnemyInterface>();
+                    EnemyInterface enemy = _results[i].CompareTag("Enemy") ? _results[i].GetComponent<EnemyInterface>() : _results[i].GetComponentInParent<EnemyInterface>();
+
+                    if (collidedEnnemiesId.Contains(enemy.id)){continue;}
+                    
+                    collidedEnnemiesId.Add(enemy.id);
+                    StartCoroutine(DelayedRemoval(spell.interactionInterval>0 ? spell.interactionInterval : 5f, enemy.id));
                     enemy.Damage(spell.Damage);
                     spell.ApplyStatus(enemy);
+
+                    if (spell.hasOnHitEffect)
+                    {
+                        Instantiate(spell.onHitEffect, _results[i].transform.position, transform.rotation);
+                    }
                 }
                 catch (Exception e)
                 {
@@ -81,6 +94,12 @@ namespace Spells.SpellBehavior
                 DealDamage();
             }
             Destroy(gameObject);
+        }
+        
+        IEnumerator DelayedRemoval(float delay, int id)
+        {
+            yield return new WaitForSeconds(delay);
+            collidedEnnemiesId.Remove(id);
         }
     }
 }

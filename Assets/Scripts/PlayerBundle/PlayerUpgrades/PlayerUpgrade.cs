@@ -45,7 +45,7 @@ namespace PlayerBundle.PlayerUpgrades
                     Refresh(Math.Round(player.AtkMultiplier, 3).ToString(CultureInfo.InvariantCulture));
                     break;
                 case PlayerUpgrades.Health:
-                    Refresh(player.MaxHealth.ToString(CultureInfo.InvariantCulture));
+                    Refresh(player.GetMaxHealth().ToString(CultureInfo.InvariantCulture));
                     break;
             }
         }

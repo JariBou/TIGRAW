@@ -30,7 +30,6 @@ public class MeleeBossAI : EnemyInterface
     private float timer;
 
     public float TimeToExecute = 3f;
-    private float executeTimer;
 
     // Start is called before the first frame update
     void Start()
@@ -120,16 +119,7 @@ public class MeleeBossAI : EnemyInterface
         
         if (isInRange)
         {
-            executeTimer += Time.fixedDeltaTime;
-            if (executeTimer >= TimeToExecute)
-            {
-                _player.Kill();
-            }
             AttackPlayer();
-        }
-        else
-        {
-            executeTimer = 0;
         }
     }
 

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace PlayerBundle.BraceletUpgrade
@@ -44,11 +45,12 @@ namespace PlayerBundle.BraceletUpgrade
 
         public BraceletUpgradeButton[] nextUpgrades;
         public List<BraceletUpgradeConnection> connections = new(8);
-        public BraceletUpgradeConnection prevConnection;
+        public List<BraceletUpgradeConnection> prevConnections = new(8);
     
         public List<BraceletUpgrades> IncompatibleUpgrades;
     
         public static event Action<BraceletUpgrades> OnBraceletUpgrade;
+        public static event Action<BraceletUpgrades, bool> OnBraceletHover;
 
 
 
@@ -57,6 +59,7 @@ namespace PlayerBundle.BraceletUpgrade
             _buttonImage = GetComponent<Button>().image;
             _rectTransform = GetComponent<RectTransform>();
             _gm = manager.gameManager;
+            _gm.BraceletUpgradesHandler.UpgradesAmount[upgrade] = upgradeAmount;
             GetComponent<Button>().onClick.RemoveListener(Upgrade);
 
         }
@@ -64,17 +67,26 @@ namespace PlayerBundle.BraceletUpgrade
         private void Start()
         {
             OnBraceletUpgrade += OnOtherBraceletUpgrade;
+            OnBraceletHover += OnOtherBraceletHover;
             
             GetComponent<Button>().onClick.AddListener(Upgrade);
-
-            _gm.BraceletUpgradesHandler.UpgradesAmount[upgrade] = upgradeAmount;
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
             OnBraceletUpgrade -= OnOtherBraceletUpgrade;
+            OnBraceletHover -= OnOtherBraceletHover;
         }
 
+        private void OnOtherBraceletHover(BraceletUpgrades upgrade, bool enter)
+        {
+            if (IncompatibleUpgrades.Contains(upgrade))
+            {
+                _buttonImage.color = enter ? Color.red : Color.white;
+            }
+        }
+        
+        
         private void OnOtherBraceletUpgrade(BraceletUpgrades upgrade)
         {
             if (IncompatibleUpgrades.Contains(upgrade))
@@ -110,12 +122,17 @@ namespace PlayerBundle.BraceletUpgrade
             }
         }
 
-        public void SetInitialState()
+        public void SetInitialState(bool isFirst = false)
         {
-            BraceletUpgradesHandler handler = manager.gameManager.BraceletUpgradesHandler;
-            upgradeAmount = handler.UpgradesAmount[upgrade];
-            currentLevel = handler.UpgradesLvl[upgrade];
-
+            //BraceletUpgradesHandler handler = manager.gameManager.BraceletUpgradesHandler;
+            currentLevel = manager.gameManager.BraceletUpgradesHandler.UpgradesLvl[upgrade];
+            manager.gameManager.BraceletUpgradesHandler.UpgradesAmount[upgrade] = upgradeAmount;
+            badgeState = BadgeState.Neutral;
+            
+            connections = new List<BraceletUpgradeConnection>(8);
+            
+            prevConnections = new List<BraceletUpgradeConnection>(8);
+            
             if (currentLevel > 0)
             {
                 state = BraceletUpgradeState.Unlocked;
@@ -125,7 +142,20 @@ namespace PlayerBundle.BraceletUpgrade
                     badgeState = BadgeState.MaxedOut;
                 }
             }
-            
+            else
+            {
+                state = isFirst ? BraceletUpgradeState.Locked : BraceletUpgradeState.Hidden;
+                
+                foreach (BraceletUpgrades upgrades in IncompatibleUpgrades)
+                {
+                    if (manager.gameManager.BraceletUpgradesHandler.GetUpgradedAmount(upgrades) > 0)
+                    {
+                        badgeState = BadgeState.Forbidden;
+                        break;
+                    }
+                }
+            }
+            UpdateBadge();
         }
     
         private void UpdateBadge()
@@ -187,7 +217,7 @@ namespace PlayerBundle.BraceletUpgrade
                 }
             
                 connections.Add(connection);
-                upgradeButton.prevConnection = connection;
+                upgradeButton.prevConnections.Add(connection);
 
                 StartCoroutine(upgradeButton.InitConnections());
             }
@@ -215,6 +245,8 @@ namespace PlayerBundle.BraceletUpgrade
                 Debug.Log($"Cannot upgrade! state={state} || level={currentLevel}/{maxLevel}");
                 return;
             }
+            
+            if(state == BraceletUpgradeState.Hidden) {return;}
 
             if (_gm.currentSave.playerSouls < cost)
             {
@@ -224,15 +256,14 @@ namespace PlayerBundle.BraceletUpgrade
 
             _gm.currentSave.playerSouls -= cost;
             _gm.BraceletUpgradesHandler.Upgrade(upgrade);
-            InvokeBraceletUpgrade(upgrade);
             NotifyNeighbours();
 
-            if (prevConnection != null)
+            foreach (BraceletUpgradeConnection prevConnection in prevConnections)
             {
-                Debug.Log("Changing prev connection sprite");
                 prevConnection.SetSprite(manager.connectionUnlocked);
             }
-        
+            InvokeBraceletUpgrade(upgrade);
+
             currentLevel++;
             if (currentLevel == maxLevel)
             {
@@ -249,17 +280,23 @@ namespace PlayerBundle.BraceletUpgrade
         {
             manager.Tooltip.PassData(UpgradeName, description, $"Cost: {cost}  |  {currentLevel}/{maxLevel}");
             manager.Tooltip.SetActive(true);
+            InvokeBraceletHover(upgrade, true);
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
             manager.Tooltip.SetActive(false);
-
+            InvokeBraceletHover(upgrade, false);
         }
     
         public static void InvokeBraceletUpgrade(BraceletUpgrades obj)
         {
             OnBraceletUpgrade?.Invoke(obj);
+        }
+        
+        public static void InvokeBraceletHover(BraceletUpgrades obj, bool enter)
+        {
+            OnBraceletHover?.Invoke(obj, enter);
         }
 
         private void OnValidate()

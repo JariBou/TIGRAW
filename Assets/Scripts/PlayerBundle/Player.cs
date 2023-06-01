@@ -1,6 +1,9 @@
 using System.Collections;
+using System.Collections.Generic;
 using PlayerBundle.BraceletUpgrade;
 using PlayerBundle.PlayerUpgrades;
+using Spells;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
@@ -16,7 +19,8 @@ namespace PlayerBundle
     {
         [FormerlySerializedAs("movespeed")]
         [Header("Movement Variables")]
-        [SaveVariable] public int baseMovespeed; // Modified by bracelet potentially
+        [SaveVariable] public float baseMovespeed; // Modified by bracelet potentially
+        [SaveVariable] public float movespeed; 
         [SaveVariable] public bool canSprint; // Modified by bracelet potentially
         private Vector2 moveVector;
         [HideInInspector]
@@ -29,10 +33,11 @@ namespace PlayerBundle
         public float health => playerData.health;  // Only variable that needs to be passed between scenes but doesn't get saved :sob:
         [FormerlySerializedAs("armor")] [SaveVariable] public int baseArmor; // Modified by Upgrades
 
-        private PlayerData playerData;
+        private PlayerData playerData => _gm.playerData;
 
         // public List<StatusEffect> Statuses;
 
+        // For some reason those donc work... thanks... nvm they work... Sometimes?
         public float AtkMultiplier =>
             baseAtkMultiplier +
             _gm.PlayerUpgradesHandler.GetUpgradedAmount(PlayerUpgrades.PlayerUpgrades.AtkMultiplier) +
@@ -87,11 +92,17 @@ namespace PlayerBundle
         private BraceletUpgrades _braceletUpgrades;
         [SaveVariable]
         private PlayerUpgradesHandler _playerUpgradesHandler;
-        
-    
+
+        private float dmgTakenMultiplier = 1f;
+
+        public List<StatusEffect> StatusEffects = new (8);
+        public float OverdriveMultiplier = 1f;
+
+
         void Awake() {
             Instance = this;
             enabled = true;
+            movespeed = baseMovespeed;
 
             _gm = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
             playerActions = new PlayerActions();
@@ -101,7 +112,6 @@ namespace PlayerBundle
             circleCollider = GetComponent<CircleCollider2D>();
             heatManager = GetComponent<HeatManager>();
             circleColliderOffset = new Vector3(circleCollider.offset.x, circleCollider.offset.y, 0);
-            playerData = _gm.playerData;
             pauseMenuCanvas = Instantiate(pauseMenuPrefab).GetComponent<Canvas>();
 
             // _playerUpgradesHandler = new PlayerUpgradesHandler();
@@ -114,6 +124,13 @@ namespace PlayerBundle
         public Vector3 GetPosition()
         {
             return transform.position + circleColliderOffset;
+        }
+
+        public float GetMaxHealth()
+        {
+            return playerData.MaxHealth +
+                   _gm.PlayerUpgradesHandler.GetUpgradedAmount(PlayerUpgrades.PlayerUpgrades.Health) +
+                   _gm.BraceletUpgradesHandler.GetUpgradedAmount(BraceletUpgrades.HealthIncrease);
         }
 
         // <summary>
@@ -129,14 +146,59 @@ namespace PlayerBundle
             playerActions.Playermaps.Disable();
         }
 
+        // public float GetAtkMultiplier()
+        // {
+        //     Debug.Log($"BraceleUpgrades: {_gm.BraceletUpgradesHandler.GetUpgradedAmount(BraceletUpgrades.AttackMultiplierIncrease)}");
+        //     Debug.Log($"BraceleUpgrades2: {_gm.BraceletUpgradesHandler.GetUpgradedAmount(BraceletUpgrades.BonusDmgOnHeatLvl) * heatManager.GetHeatLvl()}");
+        //     return baseAtkMultiplier +
+        //         _gm.PlayerUpgradesHandler.GetUpgradedAmount(PlayerUpgrades.PlayerUpgrades.AtkMultiplier) +
+        //         _gm.BraceletUpgradesHandler.GetUpgradedAmount(BraceletUpgrades.AttackMultiplierIncrease) +
+        //         _gm.BraceletUpgradesHandler.GetUpgradedAmount(BraceletUpgrades.BonusDmgOnHeatLvl) * heatManager.GetHeatLvl();
+        // }
+
         public void Damage(float amount)
         {
             if (isTeleporting) {return;} // if player is teleporting lets give him Iframes for now, might remove it still tho
-            playerData.health -= amount;
+            if (isDashing && _gm.BraceletUpgradesHandler.GetUpgradedAmount(BraceletUpgrades.IFramesWhileDashing) > 0) {return;}
+            playerData.health -= amount * dmgTakenMultiplier;
             _gm.currentRunData.playerHealth = playerData.health; // Should be useless
 
             StartCoroutine(TakeDmgAnim());
 
+        }
+        
+        void ResolveStatusEffects()
+        {
+            foreach (var statusEffect in StatusEffects)
+            {
+                StatusType type = statusEffect.StatusType;
+                if (statusEffect.IsActive())
+                {
+                    if (type == StatusType.Slow)
+                    {
+                        movespeed = baseMovespeed * statusEffect.value;
+                    } else if (type == StatusType.DmgTakenIncrease)
+                    {
+                        dmgTakenMultiplier = statusEffect.value;
+                    } else if (type == StatusType.HeatReductionRateDecrease)
+                    {
+                        OverdriveMultiplier = statusEffect.value;
+                    }
+                }
+                if (!statusEffect.IsActive())
+                {
+                    if (type == StatusType.Slow)
+                    {
+                        movespeed = baseMovespeed;
+                    } else if (type == StatusType.DmgTakenIncrease)
+                    {
+                        dmgTakenMultiplier = 1f;
+                    }  else if (type == StatusType.HeatReductionRateDecrease)
+                    {
+                        OverdriveMultiplier = 1f;
+                    }
+                }
+            }
         }
 
         private IEnumerator TakeDmgAnim()
@@ -157,8 +219,14 @@ namespace PlayerBundle
             moveVector = vector;
         }
 
-        public bool IsPerformingAction() {
+        public bool IsPerformingAction()
+        {
+            if (_gm.BraceletUpgradesHandler.GetUpgradedAmount(BraceletUpgrades.IFramesWhileDashing) > 0)
+            {
+                return isTeleporting;
+            }
             return isTeleporting || isDashing;
+
             // return isTeleporting;
         }
 
@@ -180,9 +248,11 @@ namespace PlayerBundle
             //     }
             // }
             
+            // Debug.Log($"Movespeed: {movespeed}");
             
+            ResolveStatusEffects();
             if (isTeleporting || isDashing) {return;}
-            body.velocity = new Vector2(moveVector.x, moveVector.y) * (baseMovespeed * Time.fixedDeltaTime);
+            body.velocity = new Vector2(moveVector.x, moveVector.y) * (movespeed * Time.fixedDeltaTime);
             
             
             
