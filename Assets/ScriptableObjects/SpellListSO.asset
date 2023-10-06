@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0459e31b6484540bdbba56dac59aeef, type: 3}
+  m_Name: SpellListSO
+  m_EditorClassIdentifier: 
+  listOfSpells:
+  - {fileID: 11400000, guid: 32b1abfa2bd049a4192ab26120aeac6a, type: 2}
+  - {fileID: 11400000, guid: 7c1de40306887314f902a60a4bee6824, type: 2}
+  - {fileID: 11400000, guid: d5798e4e4166f6647952e2395f735900, type: 2}
+  - {fileID: 11400000, guid: 781b2139a4607864a951ce7694dac002, type: 2}
+  - {fileID: 11400000, guid: a95a08e1561b6244284f5f977530208c, type: 2}
+  - {fileID: 11400000, guid: e8507369450979e44bf4e958af9360bc, type: 2}
+  - {fileID: 11400000, guid: 89c613d3c09754049bf2684c742994c6, type: 2}
+  - {fileID: 11400000, guid: d40c30b9315830a4f8169acc21086b41, type: 2}
+  - {fileID: 11400000, guid: ebdcd5cc702034147a1cedb5e803ea32, type: 2}
+  - {fileID: 11400000, guid: a62de7fe6ce51ec4c80749ee88711fb9, type: 2}
+  - {fileID: 11400000, guid: ee99969e697c2194889cdc6dfcc58f87, type: 2}
+  - {fileID: 11400000, guid: 025da286960d07d4c9c31418d0e0eb2f, type: 2}
+  - {fileID: 11400000, guid: 5d9a4373485fcb546bdae70b204ceba1, type: 2}
